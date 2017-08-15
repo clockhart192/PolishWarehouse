@@ -1,0 +1,58 @@
+﻿@model PolishWarehouse.Models.PolishModel[]
+@{
+    ViewBag.Title = "Polish List";
+}
+
+@Html.Partial("MessageControl")
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a data-toggle="collapse" href=""><h3>Polish List</h3></a>
+            </div>
+            <div class="panel-collapse" id="salescollapse">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            @*<input type="text" onkeyup="SortTable('salestable',this)" />*@
+                            <table class="table table-hover table-condensed datatable" id="polishtable">
+                                <thead>
+                                <th>Brand</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Label</th>
+                                <th>Coats</th>
+                                <th>Tried</th>
+                                <th>Gift</th>
+                                </thead>
+                                <tbody>
+                                    @foreach (var polish in Model)
+                                    {
+                                        <tr>
+                                            <td>@polish.BrandName</td>
+                                            <td>@polish.PolishName</td>
+                                            <td>@polish.Description</td>
+                                            <td>@polish.Label</td>
+                                            <td>@polish.Coats</td>
+                                            <td>@Html.CheckBox("HasBeenTried", @polish.HasBeenTried, new { @class = "checkbox disabled" })</td>
+                                            <td>@Html.CheckBox("WasGift", @polish.WasGift, new { @class = "checkbox disabled" })</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $('#polishtable').dataTable({
+                    "iDisplayLength": 50
+                });
+            });
+        </script>
+    </div>
+</div>
