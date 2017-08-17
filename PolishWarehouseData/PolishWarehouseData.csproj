@@ -63,10 +63,13 @@
     <Compile Include="Polishes_AdditionalInfo.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
-    <Compile Include="Polishes_Extra_Colors.cs">
+    <Compile Include="Polishes_Glitter_Colors.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
     <Compile Include="Polishes_PolishTypes.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Polishes_Secondary_Colors.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
     <Compile Include="PolishType.cs">

@@ -18,16 +18,22 @@ namespace PolishWarehouseData
         public Color()
         {
             this.Polishes = new HashSet<Polish>();
-            this.Polishes_Extra_Colors = new HashSet<Polishes_Extra_Colors>();
+            this.Polishes_Glitter_Colors = new HashSet<Polishes_Glitter_Colors>();
+            this.Polishes_Secondary_Colors = new HashSet<Polishes_Secondary_Colors>();
         }
     
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool IsPrimary { get; set; }
+        public bool IsSecondary { get; set; }
+        public bool IsGlitter { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Polish> Polishes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Polishes_Extra_Colors> Polishes_Extra_Colors { get; set; }
+        public virtual ICollection<Polishes_Glitter_Colors> Polishes_Glitter_Colors { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Polishes_Secondary_Colors> Polishes_Secondary_Colors { get; set; }
     }
 }

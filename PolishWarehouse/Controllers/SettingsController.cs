@@ -1,48 +1,16 @@
-﻿using System;
+﻿using PolishWarehouse.Models;
+using PolishWarehouseData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using PolishWarehouse.Models;
-using PolishWarehouseData;
 
 namespace PolishWarehouse.Controllers
 {
-    public class PolishController : Controller
+    public class SettingsController : Controller
     {
-        public ActionResult Index()
-        {
-            using (var db = new PolishWarehouseEntities())
-            {
-                var polishes = db.Polishes.Select(p=> new PolishModel {
-                    BrandName = p.Brand.Name,
-                    PolishName = p.Name,
-                    ColorName = p.Color.Name,
-                    Description = p.Polishes_AdditionalInfo.Description,
-                    Label = p.Label,
-                    Coats = p.Coats,
-                    Quantity = p.Quantity,
-                    HasBeenTried = p.HasBeenTried,
-                    WasGift = p.WasGift,
-                    GiftFromName = p.Polishes_AdditionalInfo.GiftFromName,
-                    Notes = p.Polishes_AdditionalInfo.Notes,
-
-                }).OrderBy(p => p.BrandName).ToArray();
-                return View(polishes);
-            }
-        }
-
-        public ActionResult Details(int? id)
-        {
-            if (!id.HasValue)
-                return View(new PolishModel());
-
-            return View(new PolishModel(id.Value));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Details(PolishModel polish)
+        public ActionResult Colors()
         {
             using (var db = new PolishWarehouseEntities())
             {
@@ -65,31 +33,50 @@ namespace PolishWarehouse.Controllers
             }
         }
 
-        public ActionResult Import()
+        public ActionResult Brands()
         {
-            return View();
+            using (var db = new PolishWarehouseEntities())
+            {
+                var polishes = db.Polishes.Select(p => new PolishModel
+                {
+                    BrandName = p.Brand.Name,
+                    PolishName = p.Name,
+                    ColorName = p.Color.Name,
+                    Description = p.Polishes_AdditionalInfo.Description,
+                    Label = p.Label,
+                    Coats = p.Coats,
+                    Quantity = p.Quantity,
+                    HasBeenTried = p.HasBeenTried,
+                    WasGift = p.WasGift,
+                    GiftFromName = p.Polishes_AdditionalInfo.GiftFromName,
+                    Notes = p.Polishes_AdditionalInfo.Notes,
+
+                }).OrderBy(p => p.BrandName).ToArray();
+                return View(polishes);
+            }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult UploadFile(HttpPostedFileBase file)
+        public ActionResult PolishTypes()
         {
-            if (file.ContentLength > 0)
+            using (var db = new PolishWarehouseEntities())
             {
-                try
+                var polishes = db.Polishes.Select(p => new PolishModel
                 {
-                    //Do stuff with the file
-                    PolishModel.processCSV(file);
-                }
-                catch (Exception ex)
-                {
-                    TempData["Errors"] = "Error: " + ex.Message;
-                    return RedirectToAction("Import");
-                }
-            }
+                    BrandName = p.Brand.Name,
+                    PolishName = p.Name,
+                    ColorName = p.Color.Name,
+                    Description = p.Polishes_AdditionalInfo.Description,
+                    Label = p.Label,
+                    Coats = p.Coats,
+                    Quantity = p.Quantity,
+                    HasBeenTried = p.HasBeenTried,
+                    WasGift = p.WasGift,
+                    GiftFromName = p.Polishes_AdditionalInfo.GiftFromName,
+                    Notes = p.Polishes_AdditionalInfo.Notes,
 
-            TempData["Messages"] = "File Uploaded!";
-            return RedirectToAction("Import");
+                }).OrderBy(p => p.BrandName).ToArray();
+                return View(polishes);
+            }
         }
     }
 }

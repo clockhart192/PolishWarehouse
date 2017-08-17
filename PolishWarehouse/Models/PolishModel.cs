@@ -19,17 +19,49 @@ namespace PolishWarehouse.Models
         public bool WasGift { get; set; }
         public string GiftFromName { get; set; }
         public string Notes { get; set; }
+        public Color[] SecondaryColors { get; set; }
+        public Color[] GlitterColors { get; set; }
+        public PolishType[] Types { get; set; }
+
+        public PolishModel() { }
+        public PolishModel(int? id)
+        {
+            if (!id.HasValue)
+                return;
+
+            using (var db = new PolishWarehouseEntities())
+            {
+                var p = db.Polishes.Where(po => po.ID == id).SingleOrDefault();
+
+                BrandName = p.Brand.Name;
+                PolishName = p.Name;
+                ColorName = p.Color.Name;
+                Description = p.Polishes_AdditionalInfo.Description;
+                Label = p.Label;
+                Coats = p.Coats;
+                Quantity = p.Quantity;
+                HasBeenTried = p.HasBeenTried;
+                WasGift = p.WasGift;
+                GiftFromName = p.Polishes_AdditionalInfo.GiftFromName;
+                Notes = p.Polishes_AdditionalInfo.Notes;
+                SecondaryColors = p.Polishes_Secondary_Colors.Select(pec => pec.Color).ToArray();
+                GlitterColors = p.Polishes_Glitter_Colors.Select(pec => pec.Color).ToArray();
+                Types = p.Polishes_PolishTypes.Select(ppt => ppt.PolishType).ToArray();
+            }
+        }
 
         public static bool processCSV(HttpPostedFileBase file, bool overwriteIfExists = false)
         {
-            using (var db = new PolishWarehouseEntities())
+
+            //db.Configuration.AutoDetectChangesEnabled = false;
+            using (var reader = new TextFieldParser(file.InputStream))
             {
-                using (var reader = new TextFieldParser(file.InputStream))
+                reader.TextFieldType = FieldType.Delimited;
+                reader.SetDelimiters(",");
+                reader.ReadFields(); //Skip the header
+                while (!reader.EndOfData)
                 {
-                    reader.TextFieldType = FieldType.Delimited;
-                    reader.SetDelimiters(",");
-                    reader.ReadFields(); //Skip the header
-                    while (!reader.EndOfData)
+                    using (var db = new PolishWarehouseEntities())
                     {
                         string[] fields = reader.ReadFields();
                         var swatchWheel = fields[(int)Column.swatchWheel];
@@ -55,7 +87,7 @@ namespace PolishWarehouse.Models
                             {
                                 colornum = Convert.ToInt32(fields[(int)Column.swatchNum].Trim());
                             }
-                            catch(Exception ex)
+                            catch (Exception ex)
                             {
                                 Console.WriteLine(ex.Message);
                                 throw new Exception(string.Format("Swatch #{0} did not register as a number.", fields[(int)Column.swatchNum]));
@@ -103,7 +135,7 @@ namespace PolishWarehouse.Models
                             if (ptype != null)
                             {
                                 var polishType = db.Polishes_PolishTypes.Where(p => p.PolishID == polish.ID && p.PolishTypeID == ptype.ID).SingleOrDefault();
-                                if(polishType == null)//Add this type/polish combo if it did not already exist.
+                                if (polishType == null)//Add this type/polish combo if it did not already exist.
                                 {
                                     polishType = new Polishes_PolishTypes()
                                     {

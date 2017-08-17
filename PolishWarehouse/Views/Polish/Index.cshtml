@@ -11,20 +11,22 @@
             <div class="panel-heading">
                 <a data-toggle="collapse" href=""><h3>Polish List</h3></a>
             </div>
-            <div class="panel-collapse" id="salescollapse">
+            <div class="panel-collapse" id="Polishcollapse">
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12 table-responsive">
                             @*<input type="text" onkeyup="SortTable('salestable',this)" />*@
                             <table class="table table-hover table-condensed datatable" id="polishtable">
                                 <thead>
-                                <th>Brand</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Label</th>
-                                <th>Coats</th>
-                                <th>Tried</th>
-                                <th>Gift</th>
+                                    <tr>
+                                        <th>Brand</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Label</th>
+                                        <th>Coats</th>
+                                        <th>Tried</th>
+                                        <th>Gift</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var polish in Model)

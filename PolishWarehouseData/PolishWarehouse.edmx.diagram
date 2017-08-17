@@ -8,17 +8,20 @@
         <EntityTypeShape EntityType="PolishWarehouseModel.Brand" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PolishWarehouseModel.Color" Width="1.5" PointX="0.75" PointY="4.625" IsExpanded="true" />
         <EntityTypeShape EntityType="PolishWarehouseModel.Polish" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Extra_Colors" Width="1.5" PointX="5.25" PointY="4.625" IsExpanded="true" />
         <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_PolishTypes" Width="1.5" PointX="5.25" PointY="1.625" IsExpanded="true" />
         <EntityTypeShape EntityType="PolishWarehouseModel.PolishType" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_AdditionalInfo" Width="1.5" PointX="5.25" PointY="9.75" IsExpanded="true" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Brand_ID" ManuallyRouted="false" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Color_ID" ManuallyRouted="false" />
-        <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Extra_Colors_Color_ID" ManuallyRouted="false" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_AdditionalInfo_Polish_ID" ManuallyRouted="false" />
-        <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Extra_Colors_Polish_ID" ManuallyRouted="false" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_PolishTypes_Polish_ID" ManuallyRouted="false" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_PolishTypes_Polish_Type_ID" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Glitter_Colors" Width="1.5" PointX="8.25" PointY="2.25" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Secondary_Colors" Width="1.5" PointX="8.25" PointY="5.25" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Glitter_Colors_Color_ID" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Color_ID" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Glitter_Colors_Polish_ID" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Polish_ID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

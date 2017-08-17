@@ -20,6 +20,9 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="IsPrimary" Type="bit" Nullable="false" />
+          <Property Name="IsSecondary" Type="bit" Nullable="false" />
+          <Property Name="IsGlitter" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Polishes">
           <Key>
@@ -52,7 +55,7 @@
           <Property Name="SelfImageURL" Type="nvarchar(max)" />
           <Property Name="GiftFromName" Type="nvarchar" MaxLength="100" />
         </EntityType>
-        <EntityType Name="Polishes_Extra_Colors">
+        <EntityType Name="Polishes_Glitter_Colors">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -67,6 +70,14 @@
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PolishID" Type="bigint" Nullable="false" />
           <Property Name="PolishTypeID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Polishes_Secondary_Colors">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PolishID" Type="bigint" Nullable="false" />
+          <Property Name="ColorID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PolishTypes">
           <Key>
@@ -112,26 +123,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Polishes_Extra_Colors_Color_ID">
+        <Association Name="FK_Polishes_Glitter_Colors_Color_ID">
           <End Role="Colors" Type="Self.Colors" Multiplicity="1" />
-          <End Role="Polishes_Extra_Colors" Type="Self.Polishes_Extra_Colors" Multiplicity="*" />
+          <End Role="Polishes_Glitter_Colors" Type="Self.Polishes_Glitter_Colors" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Colors">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Polishes_Extra_Colors">
+            <Dependent Role="Polishes_Glitter_Colors">
               <PropertyRef Name="ColorID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Polishes_Extra_Colors_Polish_ID">
+        <Association Name="FK_Polishes_Glitter_Colors_Polish_ID">
           <End Role="Polishes" Type="Self.Polishes" Multiplicity="1" />
-          <End Role="Polishes_Extra_Colors" Type="Self.Polishes_Extra_Colors" Multiplicity="*" />
+          <End Role="Polishes_Glitter_Colors" Type="Self.Polishes_Glitter_Colors" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Polishes">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Polishes_Extra_Colors">
+            <Dependent Role="Polishes_Glitter_Colors">
               <PropertyRef Name="PolishID" />
             </Dependent>
           </ReferentialConstraint>
@@ -160,13 +171,38 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Polishes_Secondary_Colors_Color_ID">
+          <End Role="Colors" Type="Self.Colors" Multiplicity="1" />
+          <End Role="Polishes_Secondary_Colors" Type="Self.Polishes_Secondary_Colors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Colors">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Polishes_Secondary_Colors">
+              <PropertyRef Name="ColorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Polishes_Secondary_Colors_Polish_ID">
+          <End Role="Polishes" Type="Self.Polishes" Multiplicity="1" />
+          <End Role="Polishes_Secondary_Colors" Type="Self.Polishes_Secondary_Colors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Polishes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Polishes_Secondary_Colors">
+              <PropertyRef Name="PolishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="PolishWarehouseModelStoreContainer">
           <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Colors" EntityType="Self.Colors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes" EntityType="Self.Polishes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes_AdditionalInfo" EntityType="Self.Polishes_AdditionalInfo" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Polishes_Extra_Colors" EntityType="Self.Polishes_Extra_Colors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Polishes_Glitter_Colors" EntityType="Self.Polishes_Glitter_Colors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes_PolishTypes" EntityType="Self.Polishes_PolishTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Polishes_Secondary_Colors" EntityType="Self.Polishes_Secondary_Colors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PolishTypes" EntityType="Self.PolishTypes" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Polishes_AdditionalInfo_Polish_ID" Association="Self.FK_Polishes_AdditionalInfo_Polish_ID">
             <End Role="Polishes" EntitySet="Polishes" />
@@ -180,13 +216,13 @@
             <End Role="Colors" EntitySet="Colors" />
             <End Role="Polishes" EntitySet="Polishes" />
           </AssociationSet>
-          <AssociationSet Name="FK_Polishes_Extra_Colors_Color_ID" Association="Self.FK_Polishes_Extra_Colors_Color_ID">
+          <AssociationSet Name="FK_Polishes_Glitter_Colors_Color_ID" Association="Self.FK_Polishes_Glitter_Colors_Color_ID">
             <End Role="Colors" EntitySet="Colors" />
-            <End Role="Polishes_Extra_Colors" EntitySet="Polishes_Extra_Colors" />
+            <End Role="Polishes_Glitter_Colors" EntitySet="Polishes_Glitter_Colors" />
           </AssociationSet>
-          <AssociationSet Name="FK_Polishes_Extra_Colors_Polish_ID" Association="Self.FK_Polishes_Extra_Colors_Polish_ID">
+          <AssociationSet Name="FK_Polishes_Glitter_Colors_Polish_ID" Association="Self.FK_Polishes_Glitter_Colors_Polish_ID">
             <End Role="Polishes" EntitySet="Polishes" />
-            <End Role="Polishes_Extra_Colors" EntitySet="Polishes_Extra_Colors" />
+            <End Role="Polishes_Glitter_Colors" EntitySet="Polishes_Glitter_Colors" />
           </AssociationSet>
           <AssociationSet Name="FK_Polishes_PolishTypes_Polish_ID" Association="Self.FK_Polishes_PolishTypes_Polish_ID">
             <End Role="Polishes" EntitySet="Polishes" />
@@ -195,6 +231,14 @@
           <AssociationSet Name="FK_Polishes_PolishTypes_Polish_Type_ID" Association="Self.FK_Polishes_PolishTypes_Polish_Type_ID">
             <End Role="PolishTypes" EntitySet="PolishTypes" />
             <End Role="Polishes_PolishTypes" EntitySet="Polishes_PolishTypes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Polishes_Secondary_Colors_Color_ID" Association="Self.FK_Polishes_Secondary_Colors_Color_ID">
+            <End Role="Colors" EntitySet="Colors" />
+            <End Role="Polishes_Secondary_Colors" EntitySet="Polishes_Secondary_Colors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Polishes_Secondary_Colors_Polish_ID" Association="Self.FK_Polishes_Secondary_Colors_Polish_ID">
+            <End Role="Polishes" EntitySet="Polishes" />
+            <End Role="Polishes_Secondary_Colors" EntitySet="Polishes_Secondary_Colors" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -218,7 +262,11 @@
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Polishes" Relationship="Self.FK_Polishes_Color_ID" FromRole="Colors" ToRole="Polishes" />
-          <NavigationProperty Name="Polishes_Extra_Colors" Relationship="Self.FK_Polishes_Extra_Colors_Color_ID" FromRole="Colors" ToRole="Polishes_Extra_Colors" />
+          <Property Name="IsPrimary" Type="Boolean" Nullable="false" />
+          <Property Name="IsSecondary" Type="Boolean" Nullable="false" />
+          <Property Name="IsGlitter" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Polishes_Glitter_Colors" Relationship="PolishWarehouseModel.FK_Polishes_Glitter_Colors_Color_ID" FromRole="Color" ToRole="Polishes_Glitter_Colors" />
+          <NavigationProperty Name="Polishes_Secondary_Colors" Relationship="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Color_ID" FromRole="Color" ToRole="Polishes_Secondary_Colors" />
         </EntityType>
         <EntityType Name="Polish">
           <Key>
@@ -237,21 +285,12 @@
           <NavigationProperty Name="Brand" Relationship="Self.FK_Polishes_Brand_ID" FromRole="Polishes" ToRole="Brands" />
           <NavigationProperty Name="Color" Relationship="Self.FK_Polishes_Color_ID" FromRole="Polishes" ToRole="Colors" />
           <NavigationProperty Name="Polishes_AdditionalInfo" Relationship="Self.FK_Polishes_AdditionalInfo_Polish_ID" FromRole="Polishes" ToRole="Polishes_AdditionalInfo" />
-          <NavigationProperty Name="Polishes_Extra_Colors" Relationship="Self.FK_Polishes_Extra_Colors_Polish_ID" FromRole="Polishes" ToRole="Polishes_Extra_Colors" />
           <NavigationProperty Name="Polishes_PolishTypes" Relationship="Self.FK_Polishes_PolishTypes_Polish_ID" FromRole="Polishes" ToRole="Polishes_PolishTypes" />
           <Property Name="ColorNumber" Type="Int32" Nullable="false" />
           <Property Name="Coats" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Polishes_Extra_Colors">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PolishID" Type="Int64" Nullable="false" />
-          <Property Name="ColorID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Color" Relationship="Self.FK_Polishes_Extra_Colors_Color_ID" FromRole="Polishes_Extra_Colors" ToRole="Colors" />
-          <NavigationProperty Name="Polish" Relationship="Self.FK_Polishes_Extra_Colors_Polish_ID" FromRole="Polishes_Extra_Colors" ToRole="Polishes" />
+          <NavigationProperty Name="Polishes_Glitter_Colors" Relationship="PolishWarehouseModel.FK_Polishes_Glitter_Colors_Polish_ID" FromRole="Polish" ToRole="Polishes_Glitter_Colors" />
+          <NavigationProperty Name="Polishes_Secondary_Colors" Relationship="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Polish_ID" FromRole="Polish" ToRole="Polishes_Secondary_Colors" />
         </EntityType>
         <EntityType Name="Polishes_PolishTypes">
           <Key>
@@ -310,18 +349,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Polishes_Extra_Colors_Color_ID">
-          <End Role="Colors" Type="Self.Color" Multiplicity="1" />
-          <End Role="Polishes_Extra_Colors" Type="Self.Polishes_Extra_Colors" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Colors">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Polishes_Extra_Colors">
-              <PropertyRef Name="ColorID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Polishes_AdditionalInfo_Polish_ID">
           <End Role="Polishes" Type="Self.Polish" Multiplicity="1" />
           <End Role="Polishes_AdditionalInfo" Type="Self.Polishes_AdditionalInfo" Multiplicity="0..1" />
@@ -330,18 +357,6 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Polishes_AdditionalInfo">
-              <PropertyRef Name="PolishID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Polishes_Extra_Colors_Polish_ID">
-          <End Role="Polishes" Type="Self.Polish" Multiplicity="1" />
-          <End Role="Polishes_Extra_Colors" Type="Self.Polishes_Extra_Colors" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Polishes">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Polishes_Extra_Colors">
               <PropertyRef Name="PolishID" />
             </Dependent>
           </ReferentialConstraint>
@@ -374,7 +389,6 @@
           <EntitySet Name="Brands" EntityType="Self.Brand" />
           <EntitySet Name="Colors" EntityType="Self.Color" />
           <EntitySet Name="Polishes" EntityType="Self.Polish" />
-          <EntitySet Name="Polishes_Extra_Colors" EntityType="Self.Polishes_Extra_Colors" />
           <EntitySet Name="Polishes_PolishTypes" EntityType="Self.Polishes_PolishTypes" />
           <EntitySet Name="PolishTypes" EntityType="Self.PolishType" />
           <EntitySet Name="Polishes_AdditionalInfo" EntityType="Self.Polishes_AdditionalInfo" />
@@ -386,17 +400,9 @@
             <End Role="Colors" EntitySet="Colors" />
             <End Role="Polishes" EntitySet="Polishes" />
           </AssociationSet>
-          <AssociationSet Name="FK_Polishes_Extra_Colors_Color_ID" Association="Self.FK_Polishes_Extra_Colors_Color_ID">
-            <End Role="Colors" EntitySet="Colors" />
-            <End Role="Polishes_Extra_Colors" EntitySet="Polishes_Extra_Colors" />
-          </AssociationSet>
           <AssociationSet Name="FK_Polishes_AdditionalInfo_Polish_ID" Association="Self.FK_Polishes_AdditionalInfo_Polish_ID">
             <End Role="Polishes" EntitySet="Polishes" />
             <End Role="Polishes_AdditionalInfo" EntitySet="Polishes_AdditionalInfo" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Polishes_Extra_Colors_Polish_ID" Association="Self.FK_Polishes_Extra_Colors_Polish_ID">
-            <End Role="Polishes" EntitySet="Polishes" />
-            <End Role="Polishes_Extra_Colors" EntitySet="Polishes_Extra_Colors" />
           </AssociationSet>
           <AssociationSet Name="FK_Polishes_PolishTypes_Polish_ID" Association="Self.FK_Polishes_PolishTypes_Polish_ID">
             <End Role="Polishes" EntitySet="Polishes" />
@@ -406,7 +412,93 @@
             <End Role="PolishTypes" EntitySet="PolishTypes" />
             <End Role="Polishes_PolishTypes" EntitySet="Polishes_PolishTypes" />
           </AssociationSet>
+          <EntitySet Name="Polishes_Glitter_Colors" EntityType="PolishWarehouseModel.Polishes_Glitter_Colors" />
+          <EntitySet Name="Polishes_Secondary_Colors" EntityType="PolishWarehouseModel.Polishes_Secondary_Colors" />
+          <AssociationSet Name="FK_Polishes_Glitter_Colors_Color_ID" Association="PolishWarehouseModel.FK_Polishes_Glitter_Colors_Color_ID">
+            <End Role="Color" EntitySet="Colors" />
+            <End Role="Polishes_Glitter_Colors" EntitySet="Polishes_Glitter_Colors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Polishes_Secondary_Colors_Color_ID" Association="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Color_ID">
+            <End Role="Color" EntitySet="Colors" />
+            <End Role="Polishes_Secondary_Colors" EntitySet="Polishes_Secondary_Colors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Polishes_Glitter_Colors_Polish_ID" Association="PolishWarehouseModel.FK_Polishes_Glitter_Colors_Polish_ID">
+            <End Role="Polish" EntitySet="Polishes" />
+            <End Role="Polishes_Glitter_Colors" EntitySet="Polishes_Glitter_Colors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Polishes_Secondary_Colors_Polish_ID" Association="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Polish_ID">
+            <End Role="Polish" EntitySet="Polishes" />
+            <End Role="Polishes_Secondary_Colors" EntitySet="Polishes_Secondary_Colors" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Polishes_Glitter_Colors">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PolishID" Type="Int64" Nullable="false" />
+          <Property Name="ColorID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Color" Relationship="PolishWarehouseModel.FK_Polishes_Glitter_Colors_Color_ID" FromRole="Polishes_Glitter_Colors" ToRole="Color" />
+          <NavigationProperty Name="Polish" Relationship="PolishWarehouseModel.FK_Polishes_Glitter_Colors_Polish_ID" FromRole="Polishes_Glitter_Colors" ToRole="Polish" />
+        </EntityType>
+        <EntityType Name="Polishes_Secondary_Colors">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PolishID" Type="Int64" Nullable="false" />
+          <Property Name="ColorID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Color" Relationship="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Color_ID" FromRole="Polishes_Secondary_Colors" ToRole="Color" />
+          <NavigationProperty Name="Polish" Relationship="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Polish_ID" FromRole="Polishes_Secondary_Colors" ToRole="Polish" />
+        </EntityType>
+        <Association Name="FK_Polishes_Glitter_Colors_Color_ID">
+          <End Type="PolishWarehouseModel.Color" Role="Color" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.Polishes_Glitter_Colors" Role="Polishes_Glitter_Colors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Color">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Polishes_Glitter_Colors">
+              <PropertyRef Name="ColorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Polishes_Secondary_Colors_Color_ID">
+          <End Type="PolishWarehouseModel.Color" Role="Color" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.Polishes_Secondary_Colors" Role="Polishes_Secondary_Colors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Color">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Polishes_Secondary_Colors">
+              <PropertyRef Name="ColorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Polishes_Glitter_Colors_Polish_ID">
+          <End Type="PolishWarehouseModel.Polish" Role="Polish" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.Polishes_Glitter_Colors" Role="Polishes_Glitter_Colors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Polish">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Polishes_Glitter_Colors">
+              <PropertyRef Name="PolishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Polishes_Secondary_Colors_Polish_ID">
+          <End Type="PolishWarehouseModel.Polish" Role="Polish" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.Polishes_Secondary_Colors" Role="Polishes_Secondary_Colors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Polish">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Polishes_Secondary_Colors">
+              <PropertyRef Name="PolishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -425,6 +517,9 @@
           <EntitySetMapping Name="Colors">
             <EntityTypeMapping TypeName="PolishWarehouseModel.Color">
               <MappingFragment StoreEntitySet="Colors">
+                <ScalarProperty Name="IsGlitter" ColumnName="IsGlitter" />
+                <ScalarProperty Name="IsSecondary" ColumnName="IsSecondary" />
+                <ScalarProperty Name="IsPrimary" ColumnName="IsPrimary" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -447,15 +542,6 @@
                 <ScalarProperty Name="Label" ColumnName="Label" />
                 <ScalarProperty Name="HasBeenTried" ColumnName="HasBeenTried" />
                 <ScalarProperty Name="WasGift" ColumnName="WasGift" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Polishes_Extra_Colors">
-            <EntityTypeMapping TypeName="PolishWarehouseModel.Polishes_Extra_Colors">
-              <MappingFragment StoreEntitySet="Polishes_Extra_Colors">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="PolishID" ColumnName="PolishID" />
-                <ScalarProperty Name="ColorID" ColumnName="ColorID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -488,6 +574,24 @@
                 <ScalarProperty Name="SelfImage" ColumnName="SelfImage" />
                 <ScalarProperty Name="SelfImageURL" ColumnName="SelfImageURL" />
                 <ScalarProperty Name="GiftFromName" ColumnName="GiftFromName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Polishes_Glitter_Colors">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.Polishes_Glitter_Colors">
+              <MappingFragment StoreEntitySet="Polishes_Glitter_Colors">
+                <ScalarProperty Name="ColorID" ColumnName="ColorID" />
+                <ScalarProperty Name="PolishID" ColumnName="PolishID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Polishes_Secondary_Colors">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.Polishes_Secondary_Colors">
+              <MappingFragment StoreEntitySet="Polishes_Secondary_Colors">
+                <ScalarProperty Name="ColorID" ColumnName="ColorID" />
+                <ScalarProperty Name="PolishID" ColumnName="PolishID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

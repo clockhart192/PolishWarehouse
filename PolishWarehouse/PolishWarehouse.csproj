@@ -184,6 +184,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PolishController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -204,6 +205,10 @@
     <Content Include="Views\Shared\MessageControl.cshtml" />
     <Content Include="Views\Polish\Import.cshtml" />
     <Content Include="Views\Polish\Index.cshtml" />
+    <Content Include="Views\Polish\Details.cshtml" />
+    <Content Include="Views\Settings\Brands.cshtml" />
+    <Content Include="Views\Settings\Colors.cshtml" />
+    <Content Include="Views\Settings\PolishTypes.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

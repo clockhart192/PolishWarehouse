@@ -12,7 +12,7 @@ namespace PolishWarehouseData
     using System;
     using System.Collections.Generic;
     
-    public partial class Polishes_Extra_Colors
+    public partial class Polishes_Glitter_Colors
     {
         public long ID { get; set; }
         public long PolishID { get; set; }

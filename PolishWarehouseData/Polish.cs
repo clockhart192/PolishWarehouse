@@ -17,8 +17,9 @@ namespace PolishWarehouseData
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Polish()
         {
-            this.Polishes_Extra_Colors = new HashSet<Polishes_Extra_Colors>();
             this.Polishes_PolishTypes = new HashSet<Polishes_PolishTypes>();
+            this.Polishes_Glitter_Colors = new HashSet<Polishes_Glitter_Colors>();
+            this.Polishes_Secondary_Colors = new HashSet<Polishes_Secondary_Colors>();
         }
     
         public long ID { get; set; }
@@ -39,8 +40,10 @@ namespace PolishWarehouseData
         public virtual Color Color { get; set; }
         public virtual Polishes_AdditionalInfo Polishes_AdditionalInfo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Polishes_Extra_Colors> Polishes_Extra_Colors { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Polishes_PolishTypes> Polishes_PolishTypes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Polishes_Glitter_Colors> Polishes_Glitter_Colors { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Polishes_Secondary_Colors> Polishes_Secondary_Colors { get; set; }
     }
 }
