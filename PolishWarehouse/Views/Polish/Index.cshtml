@@ -3,6 +3,8 @@
     ViewBag.Title = "Polish List";
 }
 
+<br />
+
 @Html.Partial("MessageControl")
 
 <div class="row">
@@ -33,7 +35,7 @@
                                     {
                                         <tr>
                                             <td>@polish.BrandName</td>
-                                            <td>@polish.PolishName</td>
+                                            <td>@Html.ActionLink(polish.PolishName,"Details",new { id= polish.PolishID})</td>
                                             <td>@polish.Description</td>
                                             <td>@polish.Label</td>
                                             <td>@polish.Coats</td>

@@ -54,6 +54,9 @@
     <Compile Include="Brand.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
+    <Compile Include="BrandCategory.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
     <Compile Include="Color.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>

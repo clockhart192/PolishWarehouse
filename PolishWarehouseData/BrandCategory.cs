@@ -12,21 +12,19 @@ namespace PolishWarehouseData
     using System;
     using System.Collections.Generic;
     
-    public partial class Brand
+    public partial class BrandCategory
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Brand()
+        public BrandCategory()
         {
-            this.Polishes = new HashSet<Polish>();
+            this.Brands = new HashSet<Brand>();
         }
     
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int CategoryID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Polish> Polishes { get; set; }
-        public virtual BrandCategory BrandCategory { get; set; }
+        public virtual ICollection<Brand> Brands { get; set; }
     }
 }

@@ -14,10 +14,15 @@ namespace PolishWarehouse.Controllers
         {
             using (var db = new PolishWarehouseEntities())
             {
-                var polishes = db.Polishes.Select(p=> new PolishModel {
+                var polishes = db.Polishes.Select(p => new PolishModel
+                {
+                    PolishID = p.ID,
+                    BrandID = p.BrandID,
+                    ColorID = p.ColorID,
                     BrandName = p.Brand.Name,
                     PolishName = p.Name,
                     ColorName = p.Color.Name,
+                    ColorNumber = p.ColorNumber,
                     Description = p.Polishes_AdditionalInfo.Description,
                     Label = p.Label,
                     Coats = p.Coats,
@@ -34,10 +39,16 @@ namespace PolishWarehouse.Controllers
 
         public ActionResult Details(int? id)
         {
-            if (!id.HasValue)
-                return View(new PolishModel());
+            ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
+            ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
+            ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
+            ViewBag.Brands = PolishModel.getBrands().OrderBy(c => c.Name);
+            ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
 
-            return View(new PolishModel(id.Value));
+            if (id.HasValue)
+                return View(new PolishModel(id.Value));
+            else
+                return View(new PolishModel());
         }
 
         [HttpPost]
@@ -46,23 +57,60 @@ namespace PolishWarehouse.Controllers
         {
             using (var db = new PolishWarehouseEntities())
             {
-                var polishes = db.Polishes.Select(p => new PolishModel
+                try
                 {
-                    BrandName = p.Brand.Name,
-                    PolishName = p.Name,
-                    ColorName = p.Color.Name,
-                    Description = p.Polishes_AdditionalInfo.Description,
-                    Label = p.Label,
-                    Coats = p.Coats,
-                    Quantity = p.Quantity,
-                    HasBeenTried = p.HasBeenTried,
-                    WasGift = p.WasGift,
-                    GiftFromName = p.Polishes_AdditionalInfo.GiftFromName,
-                    Notes = p.Polishes_AdditionalInfo.Notes,
-
-                }).OrderBy(p => p.BrandName).ToArray();
-                return View(polishes);
+                    bool isnew = false;
+                    if(polish.PolishID > 0)
+                    {
+                        isnew = true;
+                    }
+                    polish.Add();
+                    TempData["Messages"] = isnew? "Polish Added!" : "Polish Updated!";
+                }
+                catch(Exception ex)
+                {
+                    TempData["Errors"] = "Error: " + ex.Message;
+                }
+                return RedirectToAction("Details");
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetNextColorNumber(int colorID)
+        {
+            try
+            {
+                return Json(PolishModel.getNextColorNumber(colorID));
+            }
+            catch(Exception ex)
+            {
+                return Json(ex.Message);
+            }
+            
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetPolishQuickInfo(string colorName)
+        {
+            try
+            {
+                using (var db = new PolishWarehouseEntities())
+                {
+                    var c = db.Colors.Where(b => b.Name == colorName).SingleOrDefault();
+                    if (c == null)
+                        throw new Exception("Color Doesn't exist!");
+
+                    return Json(new { id = c.ID, number = PolishModel.getNextColorNumber(c.ID) });
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+
         }
 
         public ActionResult Import()
