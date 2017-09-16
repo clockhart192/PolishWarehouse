@@ -8,7 +8,7 @@ namespace PolishWarehouse.Models
 {
     public class PolishModel
     {
-        public long PolishID { get; set; }
+        public long? ID { get; set; }
         public string PolishName { get; set; }
         public int BrandID { get; set; }
         public string BrandName { get; set; }
@@ -44,7 +44,7 @@ namespace PolishWarehouse.Models
             {
                 var p = db.Polishes.Where(po => po.ID == id).SingleOrDefault();
 
-                PolishID = p.ID;
+                ID = p.ID;
                 BrandID = p.BrandID;
                 ColorID = p.ColorID;
                 BrandName = p.Brand.Name;
@@ -239,12 +239,12 @@ namespace PolishWarehouse.Models
             }
         }
 
-        public bool Add()
+        public bool Save()
         {
             using (var db = new PolishWarehouseEntities())
             {
                 //Add the polish
-                var polish = db.Polishes.Where(p => p.ID == PolishID).SingleOrDefault();
+                var polish = db.Polishes.Where(p => p.ID == ID).SingleOrDefault();
                 if (polish == null)
                 {
                     polish = new Polish();
@@ -281,7 +281,7 @@ namespace PolishWarehouse.Models
                 polish.WasGift = WasGift;
 
                 db.SaveChanges();
-                PolishID = polish.ID;
+                ID = polish.ID;
 
                 //Add the additional info
                 var polishAdditional = db.Polishes_AdditionalInfo.Where(p => p.PolishID == polish.ID).SingleOrDefault();
@@ -384,6 +384,37 @@ namespace PolishWarehouse.Models
 
             }
             return true;
+        }
+
+        public Response Delete()
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                //Remove the dependants
+                var additional = db.Polishes_AdditionalInfo.Where(a => a.PolishID == ID).SingleOrDefault();
+                if (additional != null)
+                    db.Polishes_AdditionalInfo.Remove(additional);
+
+                var secondary = db.Polishes_Secondary_Colors.Where(a => a.PolishID == ID).ToArray();
+                if (secondary != null)
+                    db.Polishes_Secondary_Colors.RemoveRange(secondary);
+
+                var glitter = db.Polishes_Glitter_Colors.Where(a => a.PolishID == ID).ToArray();
+                if (glitter != null)
+                    db.Polishes_Glitter_Colors.RemoveRange(glitter);
+
+                var types = db.Polishes_PolishTypes.Where(a => a.PolishID == ID).ToArray();
+                if (types != null)
+                    db.Polishes_PolishTypes.RemoveRange(types);
+
+                //Remove the polish
+                var polish = db.Polishes.Where(p => p.ID == ID.Value).SingleOrDefault();
+
+                db.Polishes.Remove(polish);
+                db.SaveChanges();
+
+                return new Response(true);
+            }
         }
 
         public enum Column

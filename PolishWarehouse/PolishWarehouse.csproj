@@ -195,7 +195,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BrandCategoryModel.cs" />
+    <Compile Include="Models\ColorModel.cs" />
+    <Compile Include="Models\PolishTypeModel.cs" />
+    <Compile Include="Models\BrandModel.cs" />
     <Compile Include="Models\PolishModel.cs" />
+    <Compile Include="Models\SiteModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -216,6 +221,7 @@
     <Content Include="Views\Settings\Brands.cshtml" />
     <Content Include="Views\Settings\Colors.cshtml" />
     <Content Include="Views\Settings\PolishTypes.cshtml" />
+    <Content Include="Views\Settings\BrandCategories.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

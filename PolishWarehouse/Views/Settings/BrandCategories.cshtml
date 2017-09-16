@@ -1,6 +1,6 @@
-﻿@model PolishWarehouse.Models.PolishTypeModel[]
+﻿@model PolishWarehouse.Models.BrandCategoryModel[]
 @{
-    ViewBag.Title = "Polish Types";
+    ViewBag.Title = "Brand Categories";
 }
 
 <br />
@@ -11,7 +11,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a data-toggle="collapse" href=""><h3>Polish Types</h3></a>
+                <a data-toggle="collapse" href=""><h3>Brand Categories</h3></a>
             </div>
             <div class="panel">
                 <div class="panel-body">
@@ -26,19 +26,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var type in Model)
+                                    @foreach (var category in Model)
                                     {
                                         <tr>
-                                            <td>@type.Name</td>
-                                            <td class="hidden-xs">@type.Description</td>
+                                            <td>@category.Name</td>
+                                            <td class="hidden-xs">@category.Description</td>
                                             <td>
                                                 <div class="dropdown">
-                                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton-@type.ID" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton-@category.ID" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Actions <b class="caret"></b>
                                                     </button>
-                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@type.ID">
-                                                        <li><a class="dropdown-item" href="#" onclick="getDetailsModal('@type.ID'); return false;">Edit</a></li>
-                                                        <li><a class="dropdown-item" href="#" onclick="getDeleteModal('@type.ID'); return false;">Delete</a></li>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@category.ID">
+                                                        <li><a class="dropdown-item" href="#" onclick="getDetailsModal('@category.ID'); return false;">Edit</a></li>
+                                                        <li><a class="dropdown-item" href="#" onclick="getDeleteModal('@category.ID'); return false;">Delete</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        @using (Html.BeginForm("SavePolishType", "Settings", FormMethod.Post))
+        @using (Html.BeginForm("SaveCategory", "Settings", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
             <div class="modal fade" id="Details" role="dialog">
@@ -74,7 +74,6 @@
                                 </div>
                             </div>
                             <div class="row">
-                                
                                 <div class="col-md-12">
                                     <label for="Notes">Description</label>
                                     <br />
@@ -94,7 +93,7 @@
             </div>
         }
 
-        @using (Html.BeginForm("DeletePolishType", "Settings", FormMethod.Post))
+        @using (Html.BeginForm("DeleteCategory", "Settings", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
             <div class="modal fade" id="Delete" role="dialog">
@@ -107,7 +106,7 @@
                         </div>
                         <div class="modal-body">
                             <input type="hidden" name="ID" id="delete-ID">
-                            Are you sure you want to delete this polish type?
+                            Are you sure you want to delete this polish?
                         </div>
                         <div class="modal-footer">
                             <div class="row">
@@ -134,7 +133,7 @@
                     id: id
                 };
                 $.ajax({
-                    url: "@Url.Action("GetPolishTypeDetails", "Settings")",
+                    url: "@Url.Action("GetBrandCategoryDetails", "Settings")",
                     type: 'POST',
                 data: data,
                 success: function (response) {

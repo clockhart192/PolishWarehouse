@@ -25,9 +25,9 @@
                                         <th>Name</th>
                                         <th>Description</th>
                                         <th>Label</th>
-                                        <th>Coats</th>
-                                        <th>Tried</th>
-                                        <th>Gift</th>
+                                        <th class="hidden-xs">Coats</th>
+                                        <th class="hidden-xs">Tried</th>
+                                        <th class="hidden-xs">Gift</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -35,12 +35,12 @@
                                     {
                                         <tr>
                                             <td>@polish.BrandName</td>
-                                            <td>@Html.ActionLink(polish.PolishName,"Details",new { id= polish.PolishID})</td>
+                                            <td>@Html.ActionLink(polish.PolishName,"Details",new { id= polish.ID})</td>
                                             <td>@polish.Description</td>
                                             <td>@polish.Label</td>
-                                            <td>@polish.Coats</td>
-                                            <td>@Html.CheckBox("HasBeenTried", @polish.HasBeenTried, new { @class = "checkbox disabled" })</td>
-                                            <td>@Html.CheckBox("WasGift", @polish.WasGift, new { @class = "checkbox disabled" })</td>
+                                            <td class="hidden-xs">@polish.Coats</td>
+                                            <td class="hidden-xs">@Html.CheckBox("HasBeenTried", @polish.HasBeenTried, new { @class = "checkbox disabled" })</td>
+                                            <td class="hidden-xs">@Html.CheckBox("WasGift", @polish.WasGift, new { @class = "checkbox disabled" })</td>
                                         </tr>
                                     }
                                 </tbody>

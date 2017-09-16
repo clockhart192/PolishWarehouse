@@ -16,7 +16,7 @@ namespace PolishWarehouse.Controllers
             {
                 var polishes = db.Polishes.Select(p => new PolishModel
                 {
-                    PolishID = p.ID,
+                    ID = p.ID,
                     BrandID = p.BrandID,
                     ColorID = p.ColorID,
                     BrandName = p.Brand.Name,
@@ -60,11 +60,11 @@ namespace PolishWarehouse.Controllers
                 try
                 {
                     bool isnew = false;
-                    if(polish.PolishID > 0)
+                    if(polish.ID > 0)
                     {
                         isnew = true;
                     }
-                    polish.Add();
+                    polish.Save();
                     TempData["Messages"] = isnew? "Polish Added!" : "Polish Updated!";
                 }
                 catch(Exception ex)

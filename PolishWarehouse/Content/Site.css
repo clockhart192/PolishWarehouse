@@ -42,12 +42,12 @@ textarea {
     margin-top: 5px;
 }
 
-#polishtable {
+#polishtable, #table {
     background-color: #000000;
     color: #EEEEEE;
 }
 
-    #polishtable tr:hover td {
+    #polishtable tr:hover td, #table tr:hover td {
         background-color: #1A1A1A;
         color: #EEEEEE;
     }
@@ -63,15 +63,21 @@ textarea {
 /*Menu*/
 .dropdown-menu {
     background-color: #000000;
+    border: 1px solid #1A1A1A;
 }
 
     .dropdown-menu li a {
         color: #AAAAAA;
     }
 
+    .dropdown-menu li a:hover{
+         background-color: #4A148C;
+    }
+
 /*Panel*/
 .panel {
-    border-color: #333333;
+    border-color: #000000;
+    background-color: #000000;
 }
 
 .panel-default .panel-heading {
@@ -123,6 +129,12 @@ textarea {
 }
 
     .btn-default:hover {
+        background-color: #6A1B9A;
+        color: #EEEEEE;
+        border-color: #000000;
+    }
+
+    .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
         background-color: #6A1B9A;
         color: #EEEEEE;
         border-color: #000000;
