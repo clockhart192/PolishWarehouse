@@ -59,13 +59,8 @@ namespace PolishWarehouse.Controllers
             {
                 try
                 {
-                    bool isnew = false;
-                    if(polish.ID > 0)
-                    {
-                        isnew = true;
-                    }
                     polish.Save();
-                    TempData["Messages"] = isnew? "Polish Added!" : "Polish Updated!";
+                    TempData["Messages"] = "Polish Saved!";
                 }
                 catch(Exception ex)
                 {

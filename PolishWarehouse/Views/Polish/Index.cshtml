@@ -54,7 +54,18 @@
         <script>
             $(document).ready(function () {
                 $('#polishtable').dataTable({
-                    "iDisplayLength": 50
+                    "pageLength": 100,
+                    "deferLoading": true,
+                    "lengthMenu": [10, 25, 50, 100, 150, 200, "All"],
+                    "columns": [
+                        { "searchable": true },
+                        { "searchable": true },
+                        { "searchable": true },
+                        { "searchable": true },
+                        { "searchable": true },
+                        { "searchable": true },
+                        { "searchable": true },
+                    ]
                 });
             });
         </script>

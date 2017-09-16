@@ -1,9 +1,11 @@
 --Drop Everything.
-DROP TABLE Polishes_Extra_Colors
+DROP TABLE Polishes_Secondary_Colors
+DROP TABLE Polishes_Glitter_Colors
 DROP TABLE Polishes_PolishTypes
 DROP TABLE Polishes_AdditionalInfo
 DROP TABLE Polishes
 DROP TABLE Brands
+DROP TABLE BrandCategory
 DROP TABLE Colors
 DROP TABLE PolishTypes
 
@@ -20,9 +22,16 @@ CREATE TABLE Colors
 	ID				int			  IDENTITY (1,1) NOT NULL PRIMARY KEY,
 	Name			nvarchar(100) NOT NULL,
 	Description		nvarchar(MAX) NULL,
-	IsPrimary		bit			  NOT NULL DEFAULT 0,
-	IsSecondary		bit			  NOT NULL DEFAULT 0,
+	IsPrimary		bit			  NOT NULL DEFAULT 1,
+	IsSecondary		bit			  NOT NULL DEFAULT 1,
 	IsGlitter		bit			  NOT NULL DEFAULT 0,
+)
+
+CREATE TABLE BrandCategory
+(
+	ID				int			  IDENTITY (1,1) NOT NULL PRIMARY KEY,
+	Name			nvarchar(100) NOT NULL,
+	Description		nvarchar(MAX) NULL
 )
 
 CREATE TABLE Brands
@@ -30,6 +39,8 @@ CREATE TABLE Brands
 	ID				int			  IDENTITY (1,1) NOT NULL PRIMARY KEY,
 	Name			nvarchar(100) NOT NULL,
 	Description		nvarchar(MAX) NULL,
+	CategoryID		int			  NOT NULL DEFAULT 1,
+	CONSTRAINT FK_Brand_Category_ID FOREIGN KEY (CategoryID)  REFERENCES BrandCategory(ID),
 )
 
 CREATE TABLE Polishes
@@ -47,6 +58,7 @@ CREATE TABLE Polishes
 	Quantity	    int			  NOT NULL DEFAULT 1,
 	HasBeenTried	bit			  NOT NULL DEFAULT 0,
 	WasGift			bit		      NOT NULL DEFAULT 0,
+	--Destash			bit		      NOT NULL DEFAULT 0,
 
   CONSTRAINT FK_Polishes_Color_ID FOREIGN KEY (ColorID)  REFERENCES Colors(ID),
   CONSTRAINT FK_Polishes_Brand_ID FOREIGN KEY (BrandID)  REFERENCES Brands(ID),
@@ -66,6 +78,20 @@ CREATE TABLE Polishes_AdditionalInfo
 	CONSTRAINT FK_Polishes_AdditionalInfo_Polish_ID FOREIGN KEY (PolishID)  REFERENCES Polishes(ID),
 )
 
+--TODO: Flesh this out with Elan as a P2 feature.
+--CREATE TABLE Polishes_DestashInfo
+--(
+--	PolishID		bigint	      NOT NULL PRIMARY KEY,
+--	BuyerName		nvarchar(50)  NULL,
+--	Price			money		  NULL,
+--	DateOfferLocked	datetime	  NULL,
+--	DateShipped		datetime	  NULL,
+--	DateReceived	datetime	  NULL,
+--	Notes			nvarchar(MAX) NULL,
+--
+--	CONSTRAINT FK_Polishes_DestashInfo_Polish_ID FOREIGN KEY (PolishID)  REFERENCES Polishes(ID),
+--)
+
 
 
 CREATE TABLE Polishes_PolishTypes
@@ -78,18 +104,31 @@ CREATE TABLE Polishes_PolishTypes
 	CONSTRAINT FK_Polishes_PolishTypes_Polish_Type_ID FOREIGN KEY (PolishTypeID)  REFERENCES PolishTypes(ID),
 )
 
-CREATE TABLE Polishes_Extra_Colors
+CREATE TABLE Polishes_Secondary_Colors
 (
 	ID				bigint	      IDENTITY (1,1) NOT NULL PRIMARY KEY,
 	PolishID		bigint		  NOT NULL,
 	ColorID			int			  NOT NULL,
 	
-	CONSTRAINT FK_Polishes_Extra_Colors_Polish_ID FOREIGN KEY (PolishID)  REFERENCES Polishes(ID),
-	CONSTRAINT FK_Polishes_Extra_Colors_Color_ID FOREIGN KEY (ColorID)  REFERENCES Colors(ID),
+	CONSTRAINT FK_Polishes_Secondary_Colors_Polish_ID FOREIGN KEY (PolishID)  REFERENCES Polishes(ID),
+	CONSTRAINT FK_Polishes_Secondary_Colors_Color_ID FOREIGN KEY (ColorID)  REFERENCES Colors(ID),
 )
 
+CREATE TABLE Polishes_Glitter_Colors
+(
+	ID				bigint	      IDENTITY (1,1) NOT NULL PRIMARY KEY,
+	PolishID		bigint		  NOT NULL,
+	ColorID			int			  NOT NULL,
+	
+	CONSTRAINT FK_Polishes_Glitter_Colors_Polish_ID FOREIGN KEY (PolishID)  REFERENCES Polishes(ID),
+	CONSTRAINT FK_Polishes_Glitter_Colors_Color_ID FOREIGN KEY (ColorID)  REFERENCES Colors(ID),
+)
 
 --Insert Base data.
+INSERT INTO BrandCategory (Name) Values('Indie');
+INSERT INTO BrandCategory (Name) Values('Mainstream');
+INSERT INTO BrandCategory (Name) Values('Boutique');
+
 INSERT INTO Brands (Name) Values('A England');
 INSERT INTO Brands (Name) Values('Anchor & Heart');
 INSERT INTO Brands (Name) Values('Anonymous Lacquer');
@@ -224,7 +263,7 @@ INSERT INTO PolishTypes (Name) Values('Texture');
 INSERT INTO PolishTypes (Name) Values('Topper');
 INSERT INTO PolishTypes (Name) Values('Thermal');
 INSERT INTO PolishTypes (Name) Values('Neon');
-INSERT INTO PolishTypes (Name) Values('Glow in the dark');
+INSERT INTO PolishTypes (Name) Values('GOTD');
 
 
 Select * From Brands
