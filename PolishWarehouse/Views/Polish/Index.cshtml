@@ -35,7 +35,7 @@
                                     {
                                         <tr>
                                             <td>@polish.BrandName</td>
-                                            <td>@Html.ActionLink(polish.PolishName,"Details",new { id= polish.ID})</td>
+                                            <td>@Html.ActionLink(polish.PolishName, "Details", new { id = polish.ID })</td>
                                             <td>@polish.Description</td>
                                             <td>@polish.Label</td>
                                             <td class="hidden-xs">@polish.Coats</td>
@@ -56,7 +56,7 @@
                 $('#polishtable').dataTable({
                     "pageLength": 100,
                     "deferLoading": true,
-                    "lengthMenu": [10, 25, 50, 100, 150, 200, "All"],
+                    "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
                     "columns": [
                         { "searchable": true },
                         { "searchable": true },

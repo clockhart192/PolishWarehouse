@@ -57,7 +57,7 @@ namespace PolishWarehouse.Models
             using (var db = new PolishWarehouseEntities())
             {
                 var brands = db.Brands.Where(p => p.CategoryID == ID.Value).ToArray();
-                if (brands != null)
+                if (brands.Count() > 0)
                 {
                     return new Response(false, "Delete Failed: There are brands that belong to this category.");
                 }

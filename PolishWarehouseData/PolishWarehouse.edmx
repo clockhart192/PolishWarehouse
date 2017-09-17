@@ -64,6 +64,20 @@
           <Property Name="SelfImageURL" Type="nvarchar(max)" />
           <Property Name="GiftFromName" Type="nvarchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="Polishes_DestashInfo">
+          <Key>
+            <PropertyRef Name="PolishID" />
+          </Key>
+          <Property Name="PolishID" Type="bigint" Nullable="false" />
+          <Property Name="Qty" Type="int" Nullable="false" />
+          <Property Name="BuyerName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AskingPrice" Type="money" />
+          <Property Name="SoldPrice" Type="money" />
+          <Property Name="TrackingNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="InternalNotes" Type="nvarchar(max)" />
+          <Property Name="SaleStatus" Type="nvarchar" MaxLength="5" />
+        </EntityType>
         <EntityType Name="Polishes_Glitter_Colors">
           <Key>
             <PropertyRef Name="ID" />
@@ -141,6 +155,18 @@
             </Principal>
             <Dependent Role="Polishes">
               <PropertyRef Name="ColorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Polishes_DestashInfo_Polish_ID">
+          <End Role="Polishes" Type="Self.Polishes" Multiplicity="1" />
+          <End Role="Polishes_DestashInfo" Type="Self.Polishes_DestashInfo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Polishes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Polishes_DestashInfo">
+              <PropertyRef Name="PolishID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -222,6 +248,7 @@
           <EntitySet Name="Colors" EntityType="Self.Colors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes" EntityType="Self.Polishes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes_AdditionalInfo" EntityType="Self.Polishes_AdditionalInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Polishes_DestashInfo" EntityType="Self.Polishes_DestashInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes_Glitter_Colors" EntityType="Self.Polishes_Glitter_Colors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes_PolishTypes" EntityType="Self.Polishes_PolishTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes_Secondary_Colors" EntityType="Self.Polishes_Secondary_Colors" Schema="dbo" store:Type="Tables" />
@@ -241,6 +268,10 @@
           <AssociationSet Name="FK_Polishes_Color_ID" Association="Self.FK_Polishes_Color_ID">
             <End Role="Colors" EntitySet="Colors" />
             <End Role="Polishes" EntitySet="Polishes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Polishes_DestashInfo_Polish_ID" Association="Self.FK_Polishes_DestashInfo_Polish_ID">
+            <End Role="Polishes" EntitySet="Polishes" />
+            <End Role="Polishes_DestashInfo" EntitySet="Polishes_DestashInfo" />
           </AssociationSet>
           <AssociationSet Name="FK_Polishes_Glitter_Colors_Color_ID" Association="Self.FK_Polishes_Glitter_Colors_Color_ID">
             <End Role="Colors" EntitySet="Colors" />
@@ -319,6 +350,7 @@
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Polishes_Glitter_Colors" Relationship="PolishWarehouseModel.FK_Polishes_Glitter_Colors_Polish_ID" FromRole="Polish" ToRole="Polishes_Glitter_Colors" />
           <NavigationProperty Name="Polishes_Secondary_Colors" Relationship="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Polish_ID" FromRole="Polish" ToRole="Polishes_Secondary_Colors" />
+          <NavigationProperty Name="Polishes_DestashInfo" Relationship="PolishWarehouseModel.FK_Polishes_DestashInfo_Polish_ID" FromRole="Polish" ToRole="Polishes_DestashInfo" />
         </EntityType>
         <EntityType Name="Polishes_PolishTypes">
           <Key>
@@ -463,6 +495,11 @@
             <End Role="BrandCategory" EntitySet="BrandCategories" />
             <End Role="Brand" EntitySet="Brands" />
           </AssociationSet>
+          <EntitySet Name="Polishes_DestashInfo" EntityType="PolishWarehouseModel.Polishes_DestashInfo" />
+          <AssociationSet Name="FK_Polishes_DestashInfo_Polish_ID" Association="PolishWarehouseModel.FK_Polishes_DestashInfo_Polish_ID">
+            <End Role="Polish" EntitySet="Polishes" />
+            <End Role="Polishes_DestashInfo" EntitySet="Polishes_DestashInfo" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Polishes_Glitter_Colors">
           <Key>
@@ -550,6 +587,33 @@
             </Principal>
             <Dependent Role="Brand">
               <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Polishes_DestashInfo">
+          <Key>
+            <PropertyRef Name="PolishID" />
+          </Key>
+          <Property Name="PolishID" Type="Int64" Nullable="false" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <Property Name="BuyerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AskingPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="SoldPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TrackingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InternalNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SaleStatus" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Polish" Relationship="PolishWarehouseModel.FK_Polishes_DestashInfo_Polish_ID" FromRole="Polishes_DestashInfo" ToRole="Polish" />
+        </EntityType>
+        <Association Name="FK_Polishes_DestashInfo_Polish_ID">
+          <End Type="PolishWarehouseModel.Polish" Role="Polish" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.Polishes_DestashInfo" Role="Polishes_DestashInfo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Polish">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Polishes_DestashInfo">
+              <PropertyRef Name="PolishID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -656,6 +720,21 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Polishes_DestashInfo">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.Polishes_DestashInfo">
+              <MappingFragment StoreEntitySet="Polishes_DestashInfo">
+                <ScalarProperty Name="SaleStatus" ColumnName="SaleStatus" />
+                <ScalarProperty Name="InternalNotes" ColumnName="InternalNotes" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="TrackingNumber" ColumnName="TrackingNumber" />
+                <ScalarProperty Name="SoldPrice" ColumnName="SoldPrice" />
+                <ScalarProperty Name="AskingPrice" ColumnName="AskingPrice" />
+                <ScalarProperty Name="BuyerName" ColumnName="BuyerName" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="PolishID" ColumnName="PolishID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

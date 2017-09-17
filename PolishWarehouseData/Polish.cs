@@ -45,5 +45,6 @@ namespace PolishWarehouseData
         public virtual ICollection<Polishes_Glitter_Colors> Polishes_Glitter_Colors { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Polishes_Secondary_Colors> Polishes_Secondary_Colors { get; set; }
+        public virtual Polishes_DestashInfo Polishes_DestashInfo { get; set; }
     }
 }

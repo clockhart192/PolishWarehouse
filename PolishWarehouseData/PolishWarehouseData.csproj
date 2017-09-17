@@ -66,6 +66,9 @@
     <Compile Include="Polishes_AdditionalInfo.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
+    <Compile Include="Polishes_DestashInfo.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
     <Compile Include="Polishes_Glitter_Colors.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>

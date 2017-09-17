@@ -24,6 +24,8 @@
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Polish_ID" />
         <EntityTypeShape EntityType="PolishWarehouseModel.BrandCategory" Width="1.5" PointX="0.75" PointY="9" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Brand_Category_ID" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_DestashInfo" Width="1.5" PointX="5.25" PointY="4.75" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_DestashInfo_Polish_ID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -411,9 +411,9 @@ namespace PolishWarehouse.Models
                 var polish = db.Polishes.Where(p => p.ID == ID.Value).SingleOrDefault();
 
                 db.Polishes.Remove(polish);
-                db.SaveChanges();
+                //db.SaveChanges();
 
-                return new Response(true);
+                return new Response(false,"Polishes can't be removed yet like this because your husband didn't do it right.");
             }
         }
 

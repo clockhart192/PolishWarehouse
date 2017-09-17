@@ -34,5 +34,6 @@ namespace PolishWarehouseData
         public virtual DbSet<Polishes_Glitter_Colors> Polishes_Glitter_Colors { get; set; }
         public virtual DbSet<Polishes_Secondary_Colors> Polishes_Secondary_Colors { get; set; }
         public virtual DbSet<BrandCategory> BrandCategories { get; set; }
+        public virtual DbSet<Polishes_DestashInfo> Polishes_DestashInfo { get; set; }
     }
 }

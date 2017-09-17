@@ -12,11 +12,16 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a data-toggle="collapse" href=""><h3>Brands</h3></a>
+                <h3>Brands</h3>
             </div>
             <div class="panel">
                 <div class="panel-body">
                     <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-default" onclick="Add(); return false;">Add</button>
+                        </div>
+                    </div>
+                    <div class="row margin-top-5">
                         <div class="col-md-12 table-responsive">
                             <table class="table table-hover table-condensed datatable" id="table">
                                 <thead>
@@ -169,6 +174,14 @@
             function getDeleteModal(id) {
                 $("#delete-ID").val(id);
                 $("#Delete").modal("show");
+            }
+
+            function Add() {
+                $("#detail-Name").val(null);
+                $("#detail-ID").val(null);
+                $("#detail-Description").val(null);
+                 $("#detail-CategoryID").val(null);
+                $("#Details").modal("show");
             }
         </script>
     </div>

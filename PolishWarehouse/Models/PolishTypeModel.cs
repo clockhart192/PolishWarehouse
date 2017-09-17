@@ -60,7 +60,7 @@ namespace PolishWarehouse.Models
             using (var db = new PolishWarehouseEntities())
             {
                 var polishes = db.Polishes_PolishTypes.Where(p => p.PolishTypeID == ID.Value).ToArray();
-                if(polishes != null)
+                if(polishes.Count() > 0)
                 {
                     return new Response(false, "Delete Failed: There are nail polishes that belong to this polish type.");
                 }

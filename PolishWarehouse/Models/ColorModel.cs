@@ -72,19 +72,19 @@ namespace PolishWarehouse.Models
             using (var db = new PolishWarehouseEntities())
             {
                 var polishes = db.Polishes.Where(p => p.ColorID == ID.Value).ToArray();
-                if (polishes != null)
+                if (polishes.Count() > 0)
                 {
                     return new Response(false, "Delete Failed: There are nail polishes that have this color assigned to it as a primary.");
                 }
 
                 var secondaryPolishes = db.Polishes_Secondary_Colors.Where(p => p.ColorID == ID.Value).ToArray();
-                if (secondaryPolishes != null)
+                if (secondaryPolishes.Count() > 0)
                 {
                     return new Response(false, "Delete Failed: There are nail polishes that have this color assigned to it as a secondary color.");
                 }
 
                 var glitterPolishes = db.Polishes_Glitter_Colors.Where(p => p.ColorID == ID.Value).ToArray();
-                if (glitterPolishes != null)
+                if (glitterPolishes.Count() > 0)
                 {
                     return new Response(false, "Delete Failed: There are nail polishes that have this color assigned to it as a glitter color.");
                 }
