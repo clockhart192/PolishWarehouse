@@ -105,6 +105,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\default.png" />
     <Content Include="Content\Images\favicon.ico" />
+    <Content Include="Content\Images\galaxy-wallpaper.jpg" />
     <Content Include="Content\select2-bootstrap.css" />
     <Content Include="Content\select2-bootstrap.min.css" />
     <Content Include="Content\select2-spinner.gif" />
@@ -119,6 +120,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\Local Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Local IIS.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\DataTables\DataTables-1.10.16\css\dataTables.bootstrap.css" />
     <Content Include="Scripts\DataTables\DataTables-1.10.16\css\dataTables.bootstrap.min.css" />
@@ -227,6 +229,10 @@
     <Content Include="Views\Settings\Colors.cshtml" />
     <Content Include="Views\Settings\PolishTypes.cshtml" />
     <Content Include="Views\Settings\BrandCategories.cshtml" />
+    <Content Include="Views\Polish\PublicList.cshtml" />
+    <Content Include="Views\Polish\PublicDestash.cshtml" />
+    <Content Include="Views\Polish\Destash.cshtml" />
+    <Content Include="Views\Polish\DestashDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

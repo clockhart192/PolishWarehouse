@@ -1,0 +1,65 @@
+﻿@model PolishWarehouse.Models.PolishDestashModel[]
+@{
+    ViewBag.Title = "Polish List";
+}
+
+<br />
+
+@Html.Partial("MessageControl")
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a data-toggle="collapse" href=""><h3>Polish Destash</h3></a>
+            </div>
+            <div class="panel-collapse" id="Polishcollapse">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.ActionLink("Public Destash", "PublicDestash", "Polish", new { @class = "btn btn-default" })
+                        </div>
+                    </div>
+                    <div class="row margin-top-5">
+                        <div class="col-md-12 table-responsive">
+                            @*<input type="text" onkeyup="SortTable('salestable',this)" />*@
+                            <table class="table table-hover table-condensed datatable" id="polishtable">
+                                <thead>
+                                    <tr>
+                                        <th>Brand</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Asking Price</th>
+                                        <th class="hidden-xs">Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var polish in Model)
+                                    {
+                                        <tr>
+                                            <td>@polish.BrandName</td>
+                                            <td>@Html.ActionLink(polish.PolishName, "DestashDetails", new { id = polish.ID })</td>
+                                            <td>@polish.Description</td>
+                                            <td>@polish.AskingPrice.Value.ToString("C2")</td>
+                                            <td class="hidden-xs">@polish.DestashNotes</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $('#polishtable').dataTable({
+                    "pageLength": 100,
+                    "deferLoading": true,
+                    "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
+                });
+            });
+        </script>
+    </div>
+</div>

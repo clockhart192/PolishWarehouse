@@ -216,7 +216,7 @@ namespace PolishWarehouse.Models
         {
             using (var db = new PolishWarehouseEntities())
             {
-                var polishes = db.Polishes.Where(p => p.ColorID == colorID).ToArray();
+                var polishes = db.Polishes.Where(p => p.ColorID == colorID).OrderBy(p=> p.ColorNumber).ToArray();
 
                 //This is our first one for this color clearly.
                 if (polishes.Length <= 0)
@@ -413,7 +413,7 @@ namespace PolishWarehouse.Models
                 db.Polishes.Remove(polish);
                 //db.SaveChanges();
 
-                return new Response(false,"Polishes can't be removed yet like this because your husband didn't do it right.");
+                return new Response(false, "Polishes can't be removed yet like this because your husband didn't do it right.");
             }
         }
 
@@ -434,12 +434,93 @@ namespace PolishWarehouse.Models
         }
     }
 
-    public class PolishDetailModel
+    public class PolishDestashModel : PolishModel
     {
-        public PolishModel Model { get; set; }
-        public Color[] PrimaryColors { get; set; }
-        public Color[] SecondaryColors { get; set; }
-        public Color[] GlitterColors { get; set; }
-        public Brand[] Brands { get; set; }
+        public int SellQty { get; set; } = 1;
+        public string BuyerName { get; set; }
+        public decimal? AskingPrice { get; set; }
+        public decimal? SoldPrice { get; set; }
+        public string TrackingNumber { get; set; }
+        public string DestashNotes { get; set; }
+        public string InternalDestashNotes { get; set; }
+        public string SaleStatus { get; set; }
+
+        public PolishDestashModel() { }
+        public PolishDestashModel(int? id)
+        {
+            if (!id.HasValue)
+                return;
+
+            using (var db = new PolishWarehouseEntities())
+            {
+                var polish = db.Polishes.Join(db.Polishes_DestashInfo,
+                                            p => p.ID,
+                                            pdi => pdi.PolishID,
+                                            (p, pdi) => new { Polish = p, Polishes_DestashInfo = pdi }).Where(po => po.Polish.ID == id).SingleOrDefault();
+
+                ID = polish.Polish.ID;
+                BrandID = polish.Polish.BrandID;
+                ColorID = polish.Polish.ColorID;
+                BrandName = polish.Polish.Brand.Name;
+                PolishName = polish.Polish.Name;
+                ColorName = polish.Polish.Color.Name;
+                ColorNumber = polish.Polish.ColorNumber;
+                Description = polish.Polish.Polishes_AdditionalInfo.Description;
+                Label = polish.Polish.Label;
+                Coats = polish.Polish.Coats;
+                Quantity = polish.Polish.Quantity;
+                HasBeenTried = polish.Polish.HasBeenTried;
+                WasGift = polish.Polish.WasGift;
+                GiftFromName = polish.Polish.Polishes_AdditionalInfo.GiftFromName;
+                Notes = polish.Polish.Polishes_AdditionalInfo.Notes;
+                SecondaryColors = polish.Polish.Polishes_Secondary_Colors.Select(pec => pec.Color).ToArray();
+                GlitterColors = polish.Polish.Polishes_Glitter_Colors.Select(pec => pec.Color).ToArray();
+                Types = polish.Polish.Polishes_PolishTypes.Select(ppt => ppt.PolishType).ToArray();
+                MakerImage = polish.Polish.Polishes_AdditionalInfo.MakerImage;
+                MakerImageURL = polish.Polish.Polishes_AdditionalInfo.MakerImageURL;
+                SelfImage = polish.Polish.Polishes_AdditionalInfo.SelfImage;
+                SelfImageURL = polish.Polish.Polishes_AdditionalInfo.SelfImageURL;
+
+                SellQty = polish.Polishes_DestashInfo.Qty;
+                BuyerName = polish.Polishes_DestashInfo.BuyerName;
+                AskingPrice = polish.Polishes_DestashInfo.AskingPrice;
+                SoldPrice = polish.Polishes_DestashInfo.SoldPrice;
+                TrackingNumber = polish.Polishes_DestashInfo.TrackingNumber;
+                DestashNotes = polish.Polishes_DestashInfo.Notes;
+                InternalDestashNotes = polish.Polishes_DestashInfo.InternalNotes;
+                SaleStatus = polish.Polishes_DestashInfo.SaleStatus;
+            }
+        }
+        public Response DestashPolish()
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                var polish = db.Polishes.Where(p => p.ID == ID).SingleOrDefault();
+                if (polish == null)
+                    return new Response(false,"Polish not found.");
+
+                var destash = db.Polishes_DestashInfo.Where(p => p.PolishID == ID).SingleOrDefault();
+                if (destash == null)
+                {
+                    destash = new Polishes_DestashInfo();
+                    destash.PolishID = ID.Value;
+                    db.Polishes_DestashInfo.Add(destash);
+                }
+
+                destash.Qty = SellQty;
+                destash.BuyerName = BuyerName;
+                destash.AskingPrice = AskingPrice;
+                destash.SoldPrice = SoldPrice;
+                destash.TrackingNumber = TrackingNumber;
+                destash.Notes = DestashNotes;
+                destash.InternalNotes = InternalDestashNotes;
+                destash.SaleStatus = SaleStatus;
+
+                db.SaveChanges();
+
+                return new Response(true);
+            }
+        }
     }
+
 }

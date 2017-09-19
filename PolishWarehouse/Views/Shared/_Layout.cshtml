@@ -31,8 +31,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Add", "Details", "Polish")</li>
-                    <li>@Html.ActionLink("List", "Index", "Polish")</li>
+                    <li>@Html.ActionLink("Add", "Details", "Polish", new { id = string.Empty },null)</li>
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Destash <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("List", "Destash", "Polish")</li>
+                            <li>@Html.ActionLink("Add", "DestashDetails", "Polish",new { id = string.Empty },null)</li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">Settings <b class="caret"></b></a>
                         <ul class="dropdown-menu">

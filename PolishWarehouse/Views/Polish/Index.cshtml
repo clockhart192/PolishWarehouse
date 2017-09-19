@@ -11,11 +11,16 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a data-toggle="collapse" href=""><h3>Polish List</h3></a>
+                <h3>Polish List</h3>
             </div>
             <div class="panel-collapse" id="Polishcollapse">
                 <div class="panel-body">
                     <div class="row">
+                        <div class="col-md-12">
+                            @Html.ActionLink("Public List", "PublicList", "Polish", new { @class= "btn btn-default"})
+                        </div>
+                    </div>
+                    <div class="row margin-top-5">
                         <div class="col-md-12 table-responsive">
                             @*<input type="text" onkeyup="SortTable('salestable',this)" />*@
                             <table class="table table-hover table-condensed datatable" id="polishtable">
@@ -23,11 +28,12 @@
                                     <tr>
                                         <th>Brand</th>
                                         <th>Name</th>
-                                        <th>Description</th>
+                                        <th class="hidden-xs">Description</th>
                                         <th>Label</th>
                                         <th class="hidden-xs">Coats</th>
                                         <th class="hidden-xs">Tried</th>
                                         <th class="hidden-xs">Gift</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -36,11 +42,22 @@
                                         <tr>
                                             <td>@polish.BrandName</td>
                                             <td>@Html.ActionLink(polish.PolishName, "Details", new { id = polish.ID })</td>
-                                            <td>@polish.Description</td>
+                                            <td class="hidden-xs">@polish.Description</td>
                                             <td>@polish.Label</td>
                                             <td class="hidden-xs">@polish.Coats</td>
                                             <td class="hidden-xs">@Html.CheckBox("HasBeenTried", @polish.HasBeenTried, new { @class = "checkbox disabled" })</td>
                                             <td class="hidden-xs">@Html.CheckBox("WasGift", @polish.WasGift, new { @class = "checkbox disabled" })</td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Actions <b class="caret"></b>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#" onclick="Destash('@polish.ID'); return false;">Destash</a></li>
+                                                        <li class="disabled"><a class="dropdown-item" href="#" onclick="getDeleteModal(''); return false;">Delete</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
                                         </tr>
                                     }
                                 </tbody>
@@ -51,23 +68,107 @@
                 </div>
             </div>
         </div>
+
+        @using (Html.BeginForm("DestashPolish", "Polish", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal fade" id="Destash" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Destash</h4>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="ID" id="destash-ID">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="destash-sellQty">Asking Price*</label>
+                                    <br />
+                                    <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" value="0" class="form-control" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="PolishName">Sell Qty*</label>
+                                    <br />
+                                    <input type="number" id="destash-sellQty" name="SellQty" value="1" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="destash-buyerName">Buyer Name</label>
+                                    <br />
+                                    <input type="text" id="destash-buyerName" name="BuyerName" placeholder="Name" class="form-control" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="destash-soldPrice">Sold Price</label>
+                                    <br />
+                                    <input type="number" id="destash-soldPrice" step="0.01" name="AskingPrice" value="0" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="destash-trackingNumber">Tracking</label>
+                                    <br />
+                                    <input type="text" id="destash-trackingNumber" name="TrackingNumber" placeholder="Tracking" class="form-control" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="destash-Status">Status</label>
+                                    <br />
+                                    <select id="destash-status" name="SaleStatus">
+                                        <option></option>
+                                        <option value="P">Pending</option>
+                                        <option value="S">Sold</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="Notes">Notes</label>
+                                    <br />
+                                    <textarea class="form-control" rows="5" id="destash-Notes" name="DestashNotes" placeholder="Notes"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="Notes">Internal Notes</label>
+                                    <br />
+                                    <textarea class="form-control" rows="5" id="destash-internalNotes" name="InternalNotes" placeholder="Internal Notes"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-md-2"><button type="submit" id="Update-Btn" class="btn btn-default margin-top-5">Save</button></div>
+                                <div class="col-md-8"></div>
+                                <div class="col-md-2"><button class="btn btn-danger margin-top-5" onclick="$('#Details').modal('hide'); return false;">Close</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
         <script>
             $(document).ready(function () {
                 $('#polishtable').dataTable({
                     "pageLength": 100,
                     "deferLoading": true,
                     "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
-                    "columns": [
-                        { "searchable": true },
-                        { "searchable": true },
-                        { "searchable": true },
-                        { "searchable": true },
-                        { "searchable": true },
-                        { "searchable": true },
-                        { "searchable": true },
-                    ]
+                   
                 });
             });
+
+            function getDeleteModal(id) {
+                $("#delete-ID").val(id);
+                $("#Delete").modal("show");
+            }
+            function Destash(id) {
+                $("#destash-ID").val(id);
+                $("#destash-sellQty").val(null);
+                $("#destash-askingPrice").val(null);
+                $("#destash-soldPrice").val(null);
+                $("#destash-trackingNumber").val(null);
+                $("#destash-status").val(null);
+                $("#Destash").modal("show");
+            }
         </script>
     </div>
 </div>

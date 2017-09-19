@@ -15,7 +15,7 @@ namespace PolishWarehouse.Controllers
         {
             using (var db = new PolishWarehouseEntities())
             {
-                var colors = db.Colors.Select(b => new ColorModel()
+                var colors = db.Colors.Where(c=> c.ID != 0).Select(b => new ColorModel()
                 {
                     ID = b.ID,
                     Name = b.Name,
