@@ -1,9 +1,7 @@
 ﻿@model PolishWarehouse.Models.PolishModel[]
-@{
+@if (Request.IsAuthenticated)
+{
     ViewBag.Title = "Polish List";
-}
-
-<br />
 
 @Html.Partial("MessageControl")
 
@@ -172,3 +170,9 @@
         </script>
     </div>
 </div>
+}
+else
+{
+    TempData["Errors"] = "Please Log in.";
+    Response.Redirect("~/Account/Login");
+}

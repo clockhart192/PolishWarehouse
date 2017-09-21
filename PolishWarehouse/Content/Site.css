@@ -13,6 +13,10 @@
     padding-right: 15px;
 }
 
+.container-max{
+    max-width:100%;
+}
+
 input,
 select,
 textarea {
@@ -248,9 +252,8 @@ input:checked + .slider:before {
     }
 }
 
-@media (min-width: 1200px) {
+/*@media (min-width: 1200px) {
     .container {
-        /*max-width: 1170px;*/
         max-width: 100%;
     }
 }
@@ -258,7 +261,6 @@ input:checked + .slider:before {
 
 @media (min-width: 992px) {
     .container {
-        /*max-width: 970px;*/
         max-width: 100%;
     }
 }
@@ -266,10 +268,9 @@ input:checked + .slider:before {
 
 @media (min-width: 768px) {
     .container {
-        /*max-width: 750px;*/
         max-width: 100%;
     }
-}
+}*/
 
 
 /*Data tables overrides*/

@@ -1,5 +1,6 @@
 ﻿@model PolishWarehouse.Models.PolishDestashModel
-@{
+@if (Request.IsAuthenticated)
+{
     ViewBag.Title = "Destash";
     var polish = Model;
     var primaryColors = ViewBag.PrimaryColors;
@@ -10,80 +11,75 @@
 
     var header = string.IsNullOrWhiteSpace(polish.PolishName) ? "New Destash Polish" : polish.PolishName + " Destash";
     bool isNew = string.IsNullOrWhiteSpace(polish.PolishName);
-}
 
-<h2>
-    @header
-</h2>
+    @Html.Partial("MessageControl")
 
-@Html.Partial("MessageControl")
-
-@using (Html.BeginForm("DestashDetails", "Polish", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <input type="hidden" name="PolishID" id="PolishID" value="@polish.ID">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Polish Info</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="BrandID">Brand Name*</label>
-                                    <br />
-                                    <input list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" value="@polish.BrandName">
-                                    <datalist id="BrandList">
-                                        @foreach (var brand in brands)
+    using (Html.BeginForm("DestashDetails", "Polish", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="PolishID" id="PolishID" value="@polish.ID">
+        <div class="row container-max">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">@header</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="BrandID">Brand Name*</label>
+                                        <br />
+                                        <input list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" value="@polish.BrandName">
+                                        <datalist id="BrandList">
+                                            @foreach (var brand in brands)
                                         {
-                                            <option value="@brand.Name"></option>
+                                        <option value="@brand.Name"></option>
                                         }
-                                    </datalist>
-                                    <input type="hidden" name="BrandID" id="BrandID" value="@polish.BrandID">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="PolishName">Polish Name*</label>
-                                    <br />
-                                    <input type="text" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" value="@polish.PolishName" />
-                                </div>
+                                        </datalist>
+                                        <input type="hidden" name="BrandID" id="BrandID" value="@polish.BrandID">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="PolishName">Polish Name*</label>
+                                        <br />
+                                        <input type="text" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" value="@polish.PolishName" />
+                                    </div>
 
-                            </div>
-                            <div class="row hidden">
-                                <div class="col-md-6">
-                                    <label for="ColorID">Color*</label>
-                                    <br />
-                                    <input list="ColorList" id="ColorName" name="ColorName" class="form-control" placeholder="Primary Color" value="@polish.ColorName">
-                                    <datalist id="ColorList">
-                                        @foreach (var color in primaryColors)
+                                </div>
+                                <div class="row hidden">
+                                    <div class="col-md-6">
+                                        <label for="ColorID">Color*</label>
+                                        <br />
+                                        <input list="ColorList" id="ColorName" name="ColorName" class="form-control" placeholder="Primary Color" value="@polish.ColorName">
+                                        <datalist id="ColorList">
+                                            @foreach (var color in primaryColors)
                                         {
-                                            <option value="@color.Name"></option>
+                                        <option value="@color.Name"></option>
                                         }
-                                    </datalist>
-                                    <input type="hidden" name="ColorID" id="ColorID" value="0">
+                                        </datalist>
+                                        <input type="hidden" name="ColorID" id="ColorID" value="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="PolishName">Color Number*</label>
+                                        <br />
+                                        <input type="text" id="ColorNumber" name="ColorNumber" placeholder="Color Number" class="form-control" value="@(polish.ColorNumber == 0 ?  "" : polish.ColorNumber.ToString())" />
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="PolishName">Color Number*</label>
-                                    <br />
-                                    <input type="text" id="ColorNumber" name="ColorNumber" placeholder="Color Number" class="form-control" value="@(polish.ColorNumber == 0 ?  "" : polish.ColorNumber.ToString())" />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="PolishName">Description</label>
+                                        <br />
+                                        <textarea class="form-control" rows="5" id="Description" name="Description" placeholder="Description">@polish.Description</textarea>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label for="PolishName">Description</label>
-                                    <br />
-                                    <textarea class="form-control" rows="5" id="Description" name="Description" placeholder="Description">@polish.Description</textarea>
-                                </div>
-                            </div>
-                            <div class="row hidden">
-                                <div class="col-md-6">
-                                    <label for="SecondaryColorsIDs">Secondary Colors</label>
-                                    <br />
-                                    <select multiple id="SecondaryColorsIDs" name="SecondaryColorsIDs" class="form-control">
-                                        <option></option>
-                                        @foreach (var color in secondaryColors)
+                                <div class="row hidden">
+                                    <div class="col-md-6">
+                                        <label for="SecondaryColorsIDs">Secondary Colors</label>
+                                        <br />
+                                        <select multiple id="SecondaryColorsIDs" name="SecondaryColorsIDs" class="form-control">
+                                            <option></option>
+                                            @foreach (var color in secondaryColors)
                                         {
                                             string sel = "";
                                             if (polish.SecondaryColors != null)
@@ -96,14 +92,14 @@
 
                                         <option @sel value="@color.ID">@color.Name</option>
                                         }
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="GlitterColorsIDs">Glitter Colors</label>
-                                    <br />
-                                    <select multiple id="GlitterColorsIDs" name="GlitterColorsIDs" class="form-control">
-                                        <option></option>
-                                        @foreach (var color in glitterColors)
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="GlitterColorsIDs">Glitter Colors</label>
+                                        <br />
+                                        <select multiple id="GlitterColorsIDs" name="GlitterColorsIDs" class="form-control">
+                                            <option></option>
+                                            @foreach (var color in glitterColors)
                                         {
                                             string sel = "";
                                             if (polish.GlitterColors != null)
@@ -116,197 +112,197 @@
 
                                         <option @sel value="@color.ID">@color.Name</option>
                                         }
-                                    </select>
-                                </div>
+                                        </select>
+                                    </div>
 
+                                </div>
+                                <div class="row hidden">
+                                    <div class="col-md-3">
+                                        <label for="Coats">Coats</label>
+                                        <br />
+                                        <input type="number" id="Coats" name="Coats" placeholder="Coats" class="form-control" value="@polish.Coats" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Coats">Quantity</label>
+                                        <br />
+                                        <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" value="@polish.Quantity" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="submit"></label>
+                                        <br />
+                                        <input type="submit" class="btn btn-default" value="Save" />
+                                    </div>
+                                </div>
                             </div>
-                            <div class="row hidden">
-                                <div class="col-md-3">
-                                    <label for="Coats">Coats</label>
-                                    <br />
-                                    <input type="number" id="Coats" name="Coats" placeholder="Coats" class="form-control" value="@polish.Coats" />
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="Coats">Quantity</label>
-                                    <br />
-                                    <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" value="@polish.Quantity" />
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="submit"></label>
-                                    <br />
-                                    <input type="submit" class="btn btn-default" value="Save" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            @if (!string.IsNullOrWhiteSpace(polish.SelfImage))
-                            {
-                                <img src="@polish.SelfImage" alt="self image via upload" class="img-polish-display" />
-                            }
-                            else if (!string.IsNullOrWhiteSpace(polish.SelfImageURL))
-                            {
-                                <img src="@polish.SelfImageURL" alt="self image via url" class="img-polish-display" />
-                            }
-                            else if (!string.IsNullOrWhiteSpace(polish.MakerImage))
-                            {
-                                <img src="@polish.MakerImage" alt="self image via upload" class="img-polish-display" />
-                            }
-                            else if (!string.IsNullOrWhiteSpace(polish.MakerImageURL))
-                            {
-                                <img src="@polish.MakerImageURL" alt="maker image via url" class="img-polish-display" />
-                            }
-                            else
-                            {
-                                <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
-                            }
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3>Destash Info</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="destash-sellQty">Asking Price*</label>
-                            <br />
-                            @if (polish.AskingPrice.HasValue)
-                            {
-                                <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" value="@polish.AskingPrice.Value.ToString("N2")" class="form-control" />
-                            }
-                            else
-                            {
-                                <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" class="form-control" />
-                            }
-                        </div>
-                        <div class="col-md-6">
-                            <label for="PolishName">Sell Qty*</label>
-                            <br />
-                            <input type="number" id="destash-sellQty" name="SellQty" value="@polish.SellQty" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="destash-buyerName">Buyer Name</label>
-                            <br />
-                            <input type="text" id="destash-buyerName" name="BuyerName" placeholder="Name" value="@polish.BuyerName" class="form-control" />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="destash-soldPrice">Sold Price</label>
-                            <br />
-                            <input type="number" id="destash-soldPrice" step="0.01" name="SoldPrice" value="@polish.SoldPrice" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="destash-trackingNumber">Tracking</label>
-                            <br />
-                            <input type="text" id="destash-trackingNumber" name="TrackingNumber" placeholder="Tracking" value="@polish.TrackingNumber" class="form-control" />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="destash-Status">Status</label>
-                            <br />
-                            <select id="destash-status" name="SaleStatus">
-                                <option></option>
-                                @switch (polish.SaleStatus)
+                            <div class="col-md-4">
+                                @if (!string.IsNullOrWhiteSpace(polish.SelfImage))
                                 {
-                                    case "P":
-                                        <option value="P" selected>Pending</option>
-                                        <option value="S">Sold</option>
-                                        break;
-                                    case "S":
-                                        <option value="P">Pending</option>
-                                        <option value="S" selected>Sold</option>
-                                        break;
-                                    default:
-                                        <option value="P">Pending</option>
-                                        <option value="S">Sold</option>
-                                        break;
+                                    <img src="@polish.SelfImage" alt="self image via upload" class="img-polish-display" />
                                 }
-                                
-                            </select>
+                                else if (!string.IsNullOrWhiteSpace(polish.SelfImageURL))
+                                {
+                                    <img src="@polish.SelfImageURL" alt="self image via url" class="img-polish-display" />
+                                }
+                                else if (!string.IsNullOrWhiteSpace(polish.MakerImage))
+                                {
+                                    <img src="@polish.MakerImage" alt="self image via upload" class="img-polish-display" />
+                                }
+                                else if (!string.IsNullOrWhiteSpace(polish.MakerImageURL))
+                                {
+                                    <img src="@polish.MakerImageURL" alt="maker image via url" class="img-polish-display" />
+                                }
+                                else
+                                {
+                                    <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Destash Info</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="destash-sellQty">Asking Price*</label>
+                                <br />
+                                @if (polish.AskingPrice.HasValue)
+                                {
+                                    <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" value="@polish.AskingPrice.Value.ToString("N2")" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" class="form-control" />
+                                }
+                            </div>
+                            <div class="col-md-6">
+                                <label for="PolishName">Sell Qty*</label>
+                                <br />
+                                <input type="number" id="destash-sellQty" name="SellQty" value="@polish.SellQty" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="destash-buyerName">Buyer Name</label>
+                                <br />
+                                <input type="text" id="destash-buyerName" name="BuyerName" placeholder="Name" value="@polish.BuyerName" class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="destash-soldPrice">Sold Price</label>
+                                <br />
+                                <input type="number" id="destash-soldPrice" step="0.01" name="SoldPrice" value="@polish.SoldPrice" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="destash-trackingNumber">Tracking</label>
+                                <br />
+                                <input type="text" id="destash-trackingNumber" name="TrackingNumber" placeholder="Tracking" value="@polish.TrackingNumber" class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="destash-Status">Status</label>
+                                <br />
+                                <select id="destash-status" name="SaleStatus">
+                                    <option></option>
+                                    @switch (polish.SaleStatus)
+                                    {
+                                        case "P":
+                                            <option value="P" selected>Pending</option>
+                                            <option value="S">Sold</option>
+                                            break;
+                                        case "S":
+                                            <option value="P">Pending</option>
+                                            <option value="S" selected>Sold</option>
+                                            break;
+                                        default:
+                                            <option value="P">Pending</option>
+                                            <option value="S">Sold</option>
+                                            break;
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="Notes">Notes</label>
+                                <br />
+                                <textarea class="form-control" rows="5" id="destash-Notes" name="DestashNotes" placeholder="Notes">@polish.DestashNotes</textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Notes">Internal Notes</label>
+                                <br />
+                                <textarea class="form-control" rows="5" id="destash-internalNotes" name="InternalNotes" placeholder="Internal Notes">@polish.InternalDestashNotes</textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="submit"></label>
+                                <br />
+                                <input type="submit" class="btn btn-default" value="Save" />
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="Notes">Notes</label>
-                            <br />
-                            <textarea class="form-control" rows="5" id="destash-Notes" name="DestashNotes" placeholder="Notes">@polish.DestashNotes</textarea>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="Notes">Internal Notes</label>
-                            <br />
-                            <textarea class="form-control" rows="5" id="destash-internalNotes" name="InternalNotes" placeholder="Internal Notes">@polish.InternalDestashNotes</textarea>
-                        </div>
+                </div>
+                <div class="panel panel-default hidden">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Additional Info</h3>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="submit"></label>
-                            <br />
-                            <input type="submit" class="btn btn-default" value="Save" />
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label for="WasGift">Gift</label>
+                                <br />
+                                <label class="switch">
+                                    <input id="WasGift" name="WasGift" type="checkbox" @(polish.WasGift ? "checked" : "")>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="GiftFromName">Gifter's Name</label>
+                                <br />
+                                <input type="text" 2" id="GiftFromName" name="GiftFromName" placeholder="Gifter's Name" class="form-control" value="@polish.GiftFromName" />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="HasBeenTried">Has been tried?</label>
+                                <br />
+                                <label class="switch">
+                                    <input id="HasBeenTried" name="HasBeenTried" type="checkbox" @(polish.HasBeenTried ? "checked" : "")>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-2">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="PolishName">Notes</label>
+                                <br />
+                                <textarea class="form-control" rows="5" id="Notes" name="Notes" placeholder="Notes">@polish.Notes</textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default hidden">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Additional Info</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label for="WasGift">Gift</label>
-                            <br />
-                            <label class="switch">
-                                <input id="WasGift" name="WasGift" type="checkbox" @(polish.WasGift ? "checked" : "")>
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="GiftFromName">Gifter's Name</label>
-                            <br />
-                            <input type="text" 2" id="GiftFromName" name="GiftFromName" placeholder="Gifter's Name" class="form-control" value="@polish.GiftFromName" />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="HasBeenTried">Has been tried?</label>
-                            <br />
-                            <label class="switch">
-                                <input id="HasBeenTried" name="HasBeenTried" type="checkbox" @(polish.HasBeenTried ? "checked" : "")>
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
-                        <div class="col-md-2">
-                        </div>
+            <div class="col-md-4 hidden">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Polish Types</h3>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label for="PolishName">Notes</label>
-                            <br />
-                            <textarea class="form-control" rows="5" id="Notes" name="Notes" placeholder="Notes">@polish.Notes</textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 hidden">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Polish Types</h3>
-                </div>
-                <div class="panel-body">
-                    <br />
-                    <div class="row">
-                        @foreach (var type in polishTypes)
+                    <div class="panel-body">
+                        <br />
+                        <div class="row">
+                            @foreach (var type in polishTypes)
                         {
                             string check = "";
                             if (polish.Types != null)
                             {
                                 check = polish.Types.Any(pt => pt.ID == type.ID) ? "checked" : "";
                             }
-                        <div class="col-sm-2">
+                        <div class="col-sm-3">
                             <span>@type.Name</span>
                             <br />
                             <label class="switch">
@@ -315,139 +311,106 @@
                             </label>
                         </div>
                         }
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Media</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Media</h3>
+                    </div>
+                    <div class="panel-body">
+
                         @if (!isNew)
                         {
-                            <div class="col-md-6">
-                                <label for="MakerImage">Self Image</label>
-                                <br />
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <span class="btn btn-primary btn-file">Browse&nbsp;&nbsp;<span class="glyphicon glyphicon-search"></span><input type="file" name="SelfImage" /></span>
-                                    </span>
-                                    <input class="form-control" type="text" readonly="" id="file_display">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="MakerImage">Self Image</label>
+                                    <br />
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <span class="btn btn-primary btn-file">Browse&nbsp;&nbsp;<span class="glyphicon glyphicon-search"></span><input type="file" name="SelfImage" /></span>
+                                        </span>
+                                        <input class="form-control" type="text" readonly="" id="file_display">
+                                    </div>
                                 </div>
                             </div>
                         }
-                        
-                        <div class="col-md-6">
-                            <label for="SelfImageURL">Self Image URL</label>
-                            <br />
-                            <input type="text" 2" id="SelfImageURL" name="SelfImageURL" placeholder="Self Image URL" class="form-control" value="@polish.SelfImageURL" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        @if (!isNew)
-                        {
-                        <div class="col-md-6">
-                            <label for="MakerImage">Maker Image</label>
-                            <br />
-                            <div class="input-group">
-                                <span class="input-group-btn">
-                                    <span class="btn btn-primary btn-file">Browse&nbsp;&nbsp;<span class="glyphicon glyphicon-search"></span><input type="file" name="MakerImage" /></span>
-                                </span>
-                                <input class="form-control" type="text" readonly="" id="file_display">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="SelfImageURL">Self Image URL</label>
+                                <br />
+                                <input type="text" 2" id="SelfImageURL" name="SelfImageURL" placeholder="Self Image URL" class="form-control" value="@polish.SelfImageURL" />
                             </div>
                         </div>
+
+                        @if (!isNew)
+                        {
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="MakerImage">Maker Image</label>
+                                    <br />
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <span class="btn btn-primary btn-file">Browse&nbsp;&nbsp;<span class="glyphicon glyphicon-search"></span><input type="file" name="MakerImage" /></span>
+                                        </span>
+                                        <input class="form-control" type="text" readonly="" id="file_display">
+                                    </div>
+                                </div>
+                            </div>
                         }
-                        <div class="col-md-6">
-                            <label for="SelfImageURL">Maker Image URL</label>
-                            <br />
-                            <input type="text" 2" id="MakerImageURL" name="MakerImageURL" placeholder="Maker Image URL" class="form-control" value="@polish.MakerImageURL" />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="SelfImageURL">Maker Image URL</label>
+                                <br />
+                                <input type="text" 2" id="MakerImageURL" name="MakerImageURL" placeholder="Maker Image URL" class="form-control" value="@polish.MakerImageURL" />
+                            </div>
                         </div>
+
                     </div>
-                    
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="modal fade" id="Add-New-Brand-Confirm" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add New Brand?</h4>
+                </div>
+                <div class="modal-body">
+                    <span id="Add-New-Brand-Text"></span>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-2"><button id="Add-New-Brand-Confirm-Btn" class="btn btn-default">Yes</button></div>
+                        <div class="col-md-8"></div>
+                        <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Add-New-Brand-Confirm').modal('hide'); return false;">No</button></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-}
+    <script>
+        $(document).ready(function () {
 
-<div class="modal fade" id="Add-New-Brand-Confirm" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add New Brand?</h4>
-            </div>
-            <div class="modal-body">
-                <span id="Add-New-Brand-Text"></span>
-            </div>
-            <div class="modal-footer">
-                <div class="row">
-                    <div class="col-md-2"><button id="Add-New-Brand-Confirm-Btn" class="btn btn-default">Yes</button></div>
-                    <div class="col-md-8"></div>
-                    <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Add-New-Brand-Confirm').modal('hide'); return false;">No</button></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    $(document).ready(function () {
-
-        $('#ColorName').on("blur", function (e) {
-            var token = $('[name=__RequestVerificationToken]').val();
-            var data = {
-                __RequestVerificationToken: token,
-                colorName: $('#ColorName').val()
-            };
-
-            $.ajax({
-                url: "@Url.Action("GetPolishQuickInfo", "Polish")",
-                type: 'POST',
-                data: data,
-                success: function (response) {
-                    $("#ColorNumber").val(response.number);
-                    $("#ColorID").val(response.id);
-                },
-                failure: function (response) {
-                    alert(response);
-                },
-                error: function (response) {
-                    alert(response);
-                }
-            });
-        });
-
-        $('#SecondaryColorsIDs').select2({
-            placeholder: "Select Secondary Colors"
-        });
-
-        $('#GlitterColorsIDs').select2({
-            placeholder: "Select Glitter Colors"
-        });
-
-        $("#BrandName").on("blur", function () {
-            if ($('#BrandName').val() != "") {
+            $('#ColorName').on("blur", function (e) {
                 var token = $('[name=__RequestVerificationToken]').val();
                 var data = {
                     __RequestVerificationToken: token,
-                    BrandName: $('#BrandName').val()
+                    colorName: $('#ColorName').val()
                 };
 
                 $.ajax({
-                    url: "@Url.Action("GetBrandID", "Settings")",
+                    url: "@Url.Action("GetPolishQuickInfo", "Polish")",
                     type: 'POST',
                     data: data,
                     success: function (response) {
-                        if (response > 0) {
-                            $("#BrandID").val(response);
-                        }
-                        else {
-                            var n = $('#BrandName').val();
-                            $("#Add-New-Brand-Text").text('Are you sure you want to add " ' + n + '" as a brand?');
-                            $("#Add-New-Brand-Confirm").modal("show");
-                        }
+                        $("#ColorNumber").val(response.number);
+                        $("#ColorID").val(response.id);
                     },
                     failure: function (response) {
                         alert(response);
@@ -456,40 +419,85 @@
                         alert(response);
                     }
                 });
-            };
-        });
-
-        $("#Add-New-Brand-Confirm-Btn").on("click", function () {
-            var token = $('[name=__RequestVerificationToken]').val();
-            var data = {
-                __RequestVerificationToken: token,
-                BrandName: $('#BrandName').val()
-            };
-
-            loading();
-            $.ajax({
-                url: "@Url.Action("AddBrand", "Settings")",
-                type: 'POST',
-                data: data,
-                success: function (response) {
-                    if (response > 0) {
-                        $("#BrandID").val(response);
-                        $("#Add-New-Brand-Confirm").modal("hide");
-                    }
-                    else {
-                        alert("Unknown error adding brand.");
-                    }
-                    doneLoading();
-                },
-                failure: function (response) {
-                    alert(response);
-                },
-                error: function (response) {
-                    alert(response);
-                }
             });
-        });
 
-        $("#BrandName").focus();
-    });
-</script>
+            $('#SecondaryColorsIDs').select2({
+                placeholder: "Select Secondary Colors"
+            });
+
+            $('#GlitterColorsIDs').select2({
+                placeholder: "Select Glitter Colors"
+            });
+
+            $("#BrandName").on("blur", function () {
+                if ($('#BrandName').val() != "") {
+                    var token = $('[name=__RequestVerificationToken]').val();
+                    var data = {
+                        __RequestVerificationToken: token,
+                        BrandName: $('#BrandName').val()
+                    };
+
+                    $.ajax({
+                        url: "@Url.Action("GetBrandID", "Settings")",
+                        type: 'POST',
+                        data: data,
+                        success: function (response) {
+                            if (response > 0) {
+                                $("#BrandID").val(response);
+                            }
+                            else {
+                                var n = $('#BrandName').val();
+                                $("#Add-New-Brand-Text").text('Are you sure you want to add " ' + n + '" as a brand?');
+                                $("#Add-New-Brand-Confirm").modal("show");
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response);
+                        },
+                        error: function (response) {
+                            alert(response);
+                        }
+                    });
+                };
+            });
+
+            $("#Add-New-Brand-Confirm-Btn").on("click", function () {
+                var token = $('[name=__RequestVerificationToken]').val();
+                var data = {
+                    __RequestVerificationToken: token,
+                    BrandName: $('#BrandName').val()
+                };
+
+                loading();
+                $.ajax({
+                    url: "@Url.Action("AddBrand", "Settings")",
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        if (response > 0) {
+                            $("#BrandID").val(response);
+                            $("#Add-New-Brand-Confirm").modal("hide");
+                        }
+                        else {
+                            alert("Unknown error adding brand.");
+                        }
+                        doneLoading();
+                    },
+                    failure: function (response) {
+                        alert(response);
+                    },
+                    error: function (response) {
+                        alert(response);
+                    }
+                });
+            });
+
+            $("#BrandName").focus();
+        });
+    </script>
+}
+else
+{
+    TempData["Errors"] = "Please Log in.";
+    Response.Redirect("~/Account/Login");
+}
