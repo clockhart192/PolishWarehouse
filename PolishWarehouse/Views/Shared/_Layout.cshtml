@@ -20,74 +20,13 @@
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-@if (Request.IsAuthenticated)
-{
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Polish Warehouse", "Index", "Polish", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Add", "Details", "Polish", new { id = string.Empty }, null)</li>
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Destash <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("List", "Destash", "Polish")</li>
-                            <li>@Html.ActionLink("Add", "DestashDetails", "Polish", new { id = string.Empty }, null)</li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Settings <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Colors", "Colors", "Settings")</li>
-                            <li>@Html.ActionLink("Brands", "Brands", "Settings")</li>
-                            <li>@Html.ActionLink("Brand Categories", "BrandCategories", "Settings")</li>
-                            <li>@Html.ActionLink("Polish Types", "PolishTypes", "Settings")</li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Utilities <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Import", "Import", "Polish")</li>
-                            <li>@Html.ActionLink("New User", "Register", "Account")</li>
-                        </ul>
-                    </li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
-}
-else
-{
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        @Html.ActionLink("Polish Warehouse", "PublicList", "Polish", new { area = "" }, new { @class = "navbar-brand" })
-    </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("List", "PublicDestash", "Polish", null, null)</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
-}
-        </div>
-    </div>
+    @Html.Partial("_HeaderPartial")
 
     <div class="container body-content">
         <br />
         @RenderBody()
         <hr />
-        <footer>
-        </footer>
+        <footer></footer>
         <div class="modal fade" id="loadingModal" data-backdrop="static" data-keyboard="false" role="dialog">
             <div class="modal-dialog modal-sm">
                 <!-- Modal content-->
@@ -97,24 +36,24 @@ else
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            
+
                             <div class="col-md-12">
                                 <span class="glyphicon glyphicon-refresh glyphicon-spin large-glyphicon text-center"></span>
                             </div>
-                           
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-                <script>
-                    function loading() { $("#loadingModal").modal(); }
-                    function doneLoading() { $("#loadingModal").modal("hide"); }
-                    //$(document).ready(function () { loading(); });
-                </script>
-            </div>
+        <script>
+            function loading() { $("#loadingModal").modal(); }
+            function doneLoading() { $("#loadingModal").modal("hide"); }
+            //$(document).ready(function () { loading(); });
+        </script>
+    </div>
 
-            @RenderSection("scripts", required: false)
+    @RenderSection("scripts", required: false)
 
 </body>
 </html>

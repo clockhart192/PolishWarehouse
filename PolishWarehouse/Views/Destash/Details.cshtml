@@ -18,7 +18,7 @@
     {
         @Html.AntiForgeryToken()
         <input type="hidden" name="PolishID" id="PolishID" value="@polish.ID">
-        <div class="row container-max">
+        <div class="row">
             <div class="col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -498,6 +498,6 @@
 }
 else
 {
-    TempData["Errors"] = "Please Log in.";
+    //TempData["Errors"] = "Please Log in.";
     Response.Redirect("~/Account/Login");
 }

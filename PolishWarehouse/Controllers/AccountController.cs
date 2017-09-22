@@ -415,7 +415,7 @@ namespace PolishWarehouse.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("PublicList", "Polish");
+            return RedirectToAction("Public", "Polish");
         }
 
         //

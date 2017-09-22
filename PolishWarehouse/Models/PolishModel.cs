@@ -35,7 +35,7 @@ namespace PolishWarehouse.Models
         public int[] TypesIDs { get; set; }
 
         public PolishModel() { }
-        public PolishModel(int? id)
+        public PolishModel(int? id, bool colors = true)
         {
             if (!id.HasValue)
                 return;
@@ -59,16 +59,15 @@ namespace PolishWarehouse.Models
                 WasGift = p.WasGift;
                 GiftFromName = p.Polishes_AdditionalInfo.GiftFromName;
                 Notes = p.Polishes_AdditionalInfo.Notes;
-                SecondaryColors = p.Polishes_Secondary_Colors.Select(pec => pec.Color).ToArray();
-                GlitterColors = p.Polishes_Glitter_Colors.Select(pec => pec.Color).ToArray();
-                Types = p.Polishes_PolishTypes.Select(ppt => ppt.PolishType).ToArray();
+                SecondaryColors = colors ? p.Polishes_Secondary_Colors.Select(pec => pec.Color).ToArray() : null;
+                GlitterColors = colors ? p.Polishes_Glitter_Colors.Select(pec => pec.Color).ToArray() : null;
+                Types = colors ? p.Polishes_PolishTypes.Select(ppt => ppt.PolishType).ToArray() : null;
                 MakerImage = p.Polishes_AdditionalInfo.MakerImage;
                 MakerImageURL = p.Polishes_AdditionalInfo.MakerImageURL;
                 SelfImage = p.Polishes_AdditionalInfo.SelfImage;
                 SelfImageURL = p.Polishes_AdditionalInfo.SelfImageURL;
             }
         }
-
         public static bool processCSV(HttpPostedFileBase file, bool overwriteIfExists = false)
         {
 

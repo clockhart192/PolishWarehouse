@@ -15,7 +15,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                @Html.ActionLink("Public Destash", "PublicDestash", "Polish", new { @class = "btn btn-default" })
+                                @Html.ActionLink("Public Destash", "Public", "Destash", null, new { @class = "btn btn-default" })
                             </div>
                         </div>
                         <div class="row margin-top-5">
@@ -64,6 +64,6 @@
 }
 else
 {
-    TempData["Errors"] = "Please Log in.";
+    //TempData["Errors"] = "Please Log in.";
     Response.Redirect("~/Account/Login");
 }
