@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        @using (Html.BeginForm("DestashPolish", "Polish", FormMethod.Post))
+        @using (Html.BeginForm("DestashPolish", "Destash", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
             <div class="modal fade" id="Destash" role="dialog">
@@ -160,7 +160,7 @@
             }
             function Destash(id) {
                 $("#destash-ID").val(id);
-                $("#destash-sellQty").val(null);
+                $("#destash-sellQty").val(1);
                 $("#destash-askingPrice").val(null);
                 $("#destash-soldPrice").val(null);
                 $("#destash-trackingNumber").val(null);

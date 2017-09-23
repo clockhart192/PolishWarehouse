@@ -77,10 +77,14 @@ namespace PolishWarehouse.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Details(PolishDestashModel polish)
         {
+            var action = "Details";
             using (var db = new PolishWarehouseEntities())
             {
                 try
                 {
+                    if (polish.ID.HasValue)
+                        action = "Index";
+
                     polish.Save();
                     polish.DestashPolish();
                     TempData["Messages"] = "Polish Saved!";
@@ -89,7 +93,7 @@ namespace PolishWarehouse.Controllers
                 {
                     TempData["Errors"] = "Error: " + ex.Message;
                 }
-                return RedirectToAction("DestashDetails");
+                return RedirectToAction(action);
             }
         }
 

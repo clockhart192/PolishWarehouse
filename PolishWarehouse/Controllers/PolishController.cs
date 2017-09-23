@@ -68,8 +68,12 @@ namespace PolishWarehouse.Controllers
         {
             using (var db = new PolishWarehouseEntities())
             {
+                var action = "Details";
                 try
                 {
+                    if (polish.ID.HasValue)
+                        action = "Index";
+
                     polish.Save();
                     TempData["Messages"] = "Polish Saved!";
                 }
@@ -77,7 +81,7 @@ namespace PolishWarehouse.Controllers
                 {
                     TempData["Errors"] = "Error: " + ex.Message;
                 }
-                return RedirectToAction("Details");
+                return RedirectToAction(action);
             }
         }
 

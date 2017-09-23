@@ -14,7 +14,7 @@
 
     @Html.Partial("MessageControl")
 
-    using (Html.BeginForm("DestashDetails", "Polish", FormMethod.Post))
+    using (Html.BeginForm("Details", "Destash", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         <input type="hidden" name="PolishID" id="PolishID" value="@polish.ID">
