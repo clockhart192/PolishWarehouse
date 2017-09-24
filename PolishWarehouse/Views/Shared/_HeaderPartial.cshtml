@@ -13,11 +13,20 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Add", "Details", "Polish", new { id = string.Empty }, null)</li>
+                    @*<li>@Html.ActionLink("Add", "Details", "Polish", new { id = string.Empty }, null)</li>*@
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Polish <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("List", "", "Polish")</li>
+                            <li>@Html.ActionLink(" Public List", "Public", "Polish")</li>
+                            <li>@Html.ActionLink("Add", "Details", "Polish", new { id = string.Empty }, null)</li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">Destash <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("List", "", "Destash")</li>
+                            <li>@Html.ActionLink(" Public List", "Public", "Destash")</li>
                             <li>@Html.ActionLink("Add", "Details", "Destash", new { id = string.Empty }, null)</li>
                         </ul>
                     </li>

@@ -14,7 +14,7 @@
 
     @Html.Partial("MessageControl")
 
-    using (Html.BeginForm("Details", "Destash", FormMethod.Post))
+    using (Html.BeginForm("Details", "Destash", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         <input type="hidden" name="PolishID" id="PolishID" value="@polish.ID">
@@ -134,22 +134,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                @if (!string.IsNullOrWhiteSpace(polish.SelfImage))
+                            <div class="col-md-4 text-center">
+                                @if (polish.Images != null)
                                 {
-                                    <img src="@polish.SelfImage" alt="self image via upload" class="img-polish-display" />
-                                }
-                                else if (!string.IsNullOrWhiteSpace(polish.SelfImageURL))
-                                {
-                                    <img src="@polish.SelfImageURL" alt="self image via url" class="img-polish-display" />
-                                }
-                                else if (!string.IsNullOrWhiteSpace(polish.MakerImage))
-                                {
-                                    <img src="@polish.MakerImage" alt="self image via upload" class="img-polish-display" />
-                                }
-                                else if (!string.IsNullOrWhiteSpace(polish.MakerImageURL))
-                                {
-                                    <img src="@polish.MakerImageURL" alt="maker image via url" class="img-polish-display" />
+                                    if (polish.Images.Count() > 0)
+                                    {
+                                        var DisplayImage = @polish.Images.Where(i => i.DisplayImage).SingleOrDefault();
+                                        if (DisplayImage == null)
+                                            DisplayImage = polish.Images[0];
+
+                                        <img src="@DisplayImage.ImageForHTML" class="img-polish-display" alt="image" />
+                                        <br />
+                                        @Html.ActionLink("Manage Images", "ManageImages", "Polish", new { id = polish.ID }, new { @class = "btn btn-default" })
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
+                                    }
                                 }
                                 else
                                 {
@@ -287,8 +288,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 hidden">
-                <div class="panel panel-default">
+            <div class="col-md-4">
+                <div class="panel panel-default hidden">
                     <div class="panel-heading">
                         <h3 class="panel-title">Polish Types</h3>
                     </div>
@@ -319,54 +320,18 @@
                         <h3 class="panel-title">Media</h3>
                     </div>
                     <div class="panel-body">
-
-                        @if (!isNew)
-                        {
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label for="MakerImage">Self Image</label>
-                                    <br />
-                                    <div class="input-group">
-                                        <span class="input-group-btn">
-                                            <span class="btn btn-primary btn-file">Browse&nbsp;&nbsp;<span class="glyphicon glyphicon-search"></span><input type="file" name="SelfImage" /></span>
-                                        </span>
-                                        <input class="form-control" type="text" readonly="" id="file_display">
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
                         <div class="row">
                             <div class="col-md-12">
-                                <label for="SelfImageURL">Self Image URL</label>
+                                <label for="MakerImage">Images</label>
                                 <br />
-                                <input type="text" 2" id="SelfImageURL" name="SelfImageURL" placeholder="Self Image URL" class="form-control" value="@polish.SelfImageURL" />
-                            </div>
-                        </div>
-
-                        @if (!isNew)
-                        {
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label for="MakerImage">Maker Image</label>
-                                    <br />
-                                    <div class="input-group">
-                                        <span class="input-group-btn">
-                                            <span class="btn btn-primary btn-file">Browse&nbsp;&nbsp;<span class="glyphicon glyphicon-search"></span><input type="file" name="MakerImage" /></span>
-                                        </span>
-                                        <input class="form-control" type="text" readonly="" id="file_display">
-                                    </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-primary btn-file">Browse&nbsp;&nbsp;<span class="glyphicon glyphicon-search"></span><input type="file" name="files" id="files" multiple /></span>
+                                    </span>
+                                    <input class="form-control" type="text" readonly="" id="file_display">
                                 </div>
                             </div>
-                        }
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="SelfImageURL">Maker Image URL</label>
-                                <br />
-                                <input type="text" 2" id="MakerImageURL" name="MakerImageURL" placeholder="Maker Image URL" class="form-control" value="@polish.MakerImageURL" />
-                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -493,6 +458,12 @@
             });
 
             $("#BrandName").focus();
+        });
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            $('#file_display').val(label);
         });
     </script>
 }

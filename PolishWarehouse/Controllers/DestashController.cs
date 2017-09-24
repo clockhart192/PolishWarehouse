@@ -68,14 +68,14 @@ namespace PolishWarehouse.Controllers
             ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
 
             if (id.HasValue)
-                return View(new PolishDestashModel(id.Value));
+                return View(new PolishDestashModel(id.Value,returnimages: true));
             else
                 return View(new PolishDestashModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Details(PolishDestashModel polish)
+        public ActionResult Details(PolishDestashModel polish, IEnumerable<HttpPostedFileBase> files)
         {
             var action = "Details";
             using (var db = new PolishWarehouseEntities())
@@ -86,6 +86,10 @@ namespace PolishWarehouse.Controllers
                         action = "Index";
 
                     polish.Save();
+
+                    if (files != null)
+                        polish.SaveImages(files);
+
                     polish.DestashPolish();
                     TempData["Messages"] = "Polish Saved!";
                 }

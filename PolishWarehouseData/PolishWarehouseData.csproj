@@ -72,6 +72,9 @@
     <Compile Include="Polishes_Glitter_Colors.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
+    <Compile Include="Polishes_Images.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
     <Compile Include="Polishes_PolishTypes.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>

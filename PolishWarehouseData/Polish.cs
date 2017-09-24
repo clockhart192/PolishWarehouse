@@ -20,6 +20,7 @@ namespace PolishWarehouseData
             this.Polishes_PolishTypes = new HashSet<Polishes_PolishTypes>();
             this.Polishes_Glitter_Colors = new HashSet<Polishes_Glitter_Colors>();
             this.Polishes_Secondary_Colors = new HashSet<Polishes_Secondary_Colors>();
+            this.Polishes_Images = new HashSet<Polishes_Images>();
         }
     
         public long ID { get; set; }
@@ -38,7 +39,6 @@ namespace PolishWarehouseData
     
         public virtual Brand Brand { get; set; }
         public virtual Color Color { get; set; }
-        public virtual Polishes_AdditionalInfo Polishes_AdditionalInfo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Polishes_PolishTypes> Polishes_PolishTypes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -46,5 +46,8 @@ namespace PolishWarehouseData
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Polishes_Secondary_Colors> Polishes_Secondary_Colors { get; set; }
         public virtual Polishes_DestashInfo Polishes_DestashInfo { get; set; }
+        public virtual Polishes_AdditionalInfo Polishes_AdditionalInfo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Polishes_Images> Polishes_Images { get; set; }
     }
 }

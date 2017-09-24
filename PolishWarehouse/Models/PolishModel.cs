@@ -3,6 +3,8 @@ using System;
 using System.Linq;
 using System.Web;
 using Microsoft.VisualBasic.FileIO;
+using System.Collections.Generic;
+using System.IO;
 
 namespace PolishWarehouse.Models
 {
@@ -23,19 +25,16 @@ namespace PolishWarehouse.Models
         public bool WasGift { get; set; } = false;
         public string GiftFromName { get; set; }
         public string Notes { get; set; }
-        public string MakerImage { get; set; }
-        public string MakerImageURL { get; set; }
-        public string SelfImage { get; set; }
-        public string SelfImageURL { get; set; }
         public Color[] SecondaryColors { get; set; }
         public Color[] GlitterColors { get; set; }
         public PolishType[] Types { get; set; }
         public int[] SecondaryColorsIDs { get; set; }
         public int[] GlitterColorsIDs { get; set; }
         public int[] TypesIDs { get; set; }
+        public PolishImageModel[] Images { get; set; }
 
         public PolishModel() { }
-        public PolishModel(int? id, bool colors = true)
+        public PolishModel(int? id, bool colors = true, bool returnimages = false)
         {
             if (!id.HasValue)
                 return;
@@ -62,10 +61,22 @@ namespace PolishWarehouse.Models
                 SecondaryColors = colors ? p.Polishes_Secondary_Colors.Select(pec => pec.Color).ToArray() : null;
                 GlitterColors = colors ? p.Polishes_Glitter_Colors.Select(pec => pec.Color).ToArray() : null;
                 Types = colors ? p.Polishes_PolishTypes.Select(ppt => ppt.PolishType).ToArray() : null;
-                MakerImage = p.Polishes_AdditionalInfo.MakerImage;
-                MakerImageURL = p.Polishes_AdditionalInfo.MakerImageURL;
-                SelfImage = p.Polishes_AdditionalInfo.SelfImage;
-                SelfImageURL = p.Polishes_AdditionalInfo.SelfImageURL;
+
+                if (returnimages)
+                {
+                    Images = db.Polishes_Images.Where(i => i.PolishID == id).Select(i => new PolishImageModel() {
+                        ID = i.ID,
+                        PolishID = i.PolishID,
+                        Image = i.Image,
+                        MimeType = i.MIMEType,
+                        ImageForHTML = "data:" + i.MIMEType + ";base64," + i.Image,
+                        Description = i.Description,
+                        Notes = i.Notes,
+                        MakerImage = i.MakerImage.HasValue ? i.MakerImage.Value : false,
+                        PublicImage = i.PublicImage,
+                        DisplayImage = i.DisplayImage.HasValue ? i.DisplayImage.Value : false
+                    }).ToArray();
+                }
             }
         }
         public static bool processCSV(HttpPostedFileBase file, bool overwriteIfExists = false)
@@ -293,10 +304,7 @@ namespace PolishWarehouse.Models
                 polishAdditional.Description = Description;
                 polishAdditional.Notes = Notes;
                 polishAdditional.GiftFromName = GiftFromName;
-                //polishAdditional.MakerImage = MakerImage;
-                polishAdditional.MakerImageURL = MakerImageURL;
-                //polishAdditional.SelfImage = SelfImage;
-                polishAdditional.SelfImageURL = SelfImageURL;
+
 
                 db.SaveChanges();
 
@@ -385,6 +393,42 @@ namespace PolishWarehouse.Models
             return true;
         }
 
+        public Response SaveImages(IEnumerable<HttpPostedFileBase> files)
+        {
+            if (!ID.HasValue)
+                return new Response(false, "Polish is not saved, save polish before uploading images");
+
+            using (var db = new PolishWarehouseEntities())
+            {
+                var changes = false;
+                foreach (var file in files)
+                {
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        changes = true;
+                        MemoryStream target = new MemoryStream();
+                        file.InputStream.CopyTo(target);
+                        byte[] data = target.ToArray();
+                        var fileBase64 = Convert.ToBase64String(data);
+
+                        var image = new Polishes_Images()
+                        {
+                            PolishID = ID.Value,
+                            Image = fileBase64,
+                            MIMEType = file.ContentType,
+                            MakerImage = false
+                        };
+
+                        db.Polishes_Images.Add(image);
+                    }
+                }
+                if(changes)
+                    db.SaveChanges();
+
+                return new Response(true);
+            }
+        }
+
         public Response Delete()
         {
             using (var db = new PolishWarehouseEntities())
@@ -416,6 +460,8 @@ namespace PolishWarehouse.Models
             }
         }
 
+       
+
         public enum Column
         {
             brand = 0,
@@ -445,7 +491,7 @@ namespace PolishWarehouse.Models
         public string SaleStatus { get; set; }
 
         public PolishDestashModel() { }
-        public PolishDestashModel(int? id)
+        public PolishDestashModel(int? id, bool colors = true, bool returnimages = false)
         {
             if (!id.HasValue)
                 return;
@@ -475,10 +521,23 @@ namespace PolishWarehouse.Models
                 SecondaryColors = polish.Polish.Polishes_Secondary_Colors.Select(pec => pec.Color).ToArray();
                 GlitterColors = polish.Polish.Polishes_Glitter_Colors.Select(pec => pec.Color).ToArray();
                 Types = polish.Polish.Polishes_PolishTypes.Select(ppt => ppt.PolishType).ToArray();
-                MakerImage = polish.Polish.Polishes_AdditionalInfo.MakerImage;
-                MakerImageURL = polish.Polish.Polishes_AdditionalInfo.MakerImageURL;
-                SelfImage = polish.Polish.Polishes_AdditionalInfo.SelfImage;
-                SelfImageURL = polish.Polish.Polishes_AdditionalInfo.SelfImageURL;
+
+                if (returnimages)
+                {
+                    Images = db.Polishes_Images.Where(i => i.PolishID == id).Select(i => new PolishImageModel()
+                    {
+                        ID = i.ID,
+                        PolishID = i.PolishID,
+                        Image = i.Image,
+                        MimeType = i.MIMEType,
+                        ImageForHTML = "data:" + i.MIMEType + ";base64," + i.Image,
+                        Description = i.Description,
+                        Notes = i.Notes,
+                        MakerImage = i.MakerImage.HasValue ? i.MakerImage.Value : false,
+                        PublicImage = i.PublicImage,
+                        DisplayImage = i.DisplayImage.HasValue ? i.DisplayImage.Value : false
+                    }).ToArray();
+                }
 
                 SellQty = polish.Polishes_DestashInfo.Qty;
                 BuyerName = polish.Polishes_DestashInfo.BuyerName;
@@ -522,4 +581,60 @@ namespace PolishWarehouse.Models
         }
     }
 
+    public class PolishImageModel
+    {
+        public long? ID { get; set; }
+        public long PolishID { get; set; }
+        public string Image { get; set; }
+        public string MimeType { get; set; }
+        public string ImageForHTML { get; set; }
+        public string Description { get; set; }
+        public string Notes { get; set; }
+        public bool MakerImage { get; set; }
+        public bool PublicImage { get; set; }
+        public bool DisplayImage { get; set; }
+
+        public Response Save(HttpPostedFileBase file)
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                var image = db.Polishes_Images.Where(i => i.ID == ID).SingleOrDefault();
+
+                if(image == null)
+                {
+                    return new Response(false, "Image not found");
+                }
+
+                image.Description = Description;
+                image.Notes = Notes;
+                image.MakerImage = MakerImage;
+                image.PublicImage = PublicImage;
+                image.DisplayImage = DisplayImage;
+
+                if (DisplayImage)//Kill the rest of the Display Images for this polish if this is the primary.
+                {
+                    var otherImages = db.Polishes_Images.Where(i => i.PolishID == PolishID && i.ID != ID).ToArray();
+                    foreach (var otherImage in otherImages)
+                    {
+                        otherImage.DisplayImage = false;
+                    }
+                }
+                
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    MemoryStream target = new MemoryStream();
+                    file.InputStream.CopyTo(target);
+                    byte[] data = target.ToArray();
+                    var fileBase64 = Convert.ToBase64String(data);
+
+                    image.Image = fileBase64;
+                    image.MIMEType = file.ContentType;
+                }
+
+                db.SaveChanges();
+                return new Response(true);
+            }
+        }
+    }
 }

@@ -3,6 +3,7 @@ DROP TABLE Polishes_Secondary_Colors
 DROP TABLE Polishes_Glitter_Colors
 DROP TABLE Polishes_PolishTypes
 DROP TABLE Polishes_AdditionalInfo
+DROP TABLE Polishes_Images
 DROP TABLE Polishes
 DROP TABLE Brands
 DROP TABLE BrandCategory
@@ -69,28 +70,52 @@ CREATE TABLE Polishes_AdditionalInfo
 	PolishID		bigint	      NOT NULL PRIMARY KEY,
 	Description		nvarchar(MAX) NULL,
 	Notes			nvarchar(MAX) NULL,
-	MakerImage		nvarchar(MAX) NULL,
-	MakerImageURL	nvarchar(MAX) NULL,
-	SelfImage		nvarchar(MAX) NULL,
-	SelfImageURL	nvarchar(MAX) NULL,
 	GiftFromName	nvarchar(100) NULL,
 
 	CONSTRAINT FK_Polishes_AdditionalInfo_Polish_ID FOREIGN KEY (PolishID)  REFERENCES Polishes(ID),
 )
 
---TODO: Flesh this out with Elan as a P2 feature.
---CREATE TABLE Polishes_DestashInfo
---(
---	PolishID		bigint	      NOT NULL PRIMARY KEY,
---	BuyerName		nvarchar(50)  NULL,
---	Price			money		  NULL,
---	DateOfferLocked	datetime	  NULL,
---	DateShipped		datetime	  NULL,
---	DateReceived	datetime	  NULL,
---	Notes			nvarchar(MAX) NULL,
---
---	CONSTRAINT FK_Polishes_DestashInfo_Polish_ID FOREIGN KEY (PolishID)  REFERENCES Polishes(ID),
---)
+CREATE TABLE Polishes_Images
+(
+	ID				bigint		  NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	PolishID		bigint	      NOT NULL,
+	Image			VARCHAR(MAX)  NOT NULL,
+	MIMEType		VARCHAR(50)	  NOT NULL,
+	Description		nvarchar(MAX) NULL,
+	Notes			nvarchar(MAX) NULL,
+	MakerImage		bit			  NULL,
+	PublicImage		bit			  NOT NULL DEFAULT 1,
+	DisplayImage	bit			  NULL
+
+	CONSTRAINT FK_Polishes_Images_Polish_ID FOREIGN KEY (PolishID)  REFERENCES Polishes(ID),
+)
+
+CREATE TABLE [dbo].[Polishes_DestashInfo](
+	[PolishID] [bigint] NOT NULL,
+	[Qty] [int] NOT NULL,
+	[BuyerName] [nvarchar](50) NULL,
+	[AskingPrice] [money] NULL,
+	[SoldPrice] [money] NULL,
+	[TrackingNumber] [nvarchar](50) NULL,
+	[Notes] [nvarchar](max) NULL,
+	[InternalNotes] [nvarchar](max) NULL,
+	[SaleStatus] [nvarchar](5) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PolishID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Polishes_DestashInfo] ADD  DEFAULT ((1)) FOR [Qty]
+GO
+
+ALTER TABLE [dbo].[Polishes_DestashInfo]  WITH CHECK ADD  CONSTRAINT [FK_Polishes_DestashInfo_Polish_ID] FOREIGN KEY([PolishID])
+REFERENCES [dbo].[Polishes] ([ID])
+GO
+
+ALTER TABLE [dbo].[Polishes_DestashInfo] CHECK CONSTRAINT [FK_Polishes_DestashInfo_Polish_ID]
+GO
 
 
 

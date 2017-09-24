@@ -29,6 +29,14 @@ textarea {
 .btn-file {
     position: relative;
     overflow: hidden;
+     background-color: #4A148C;
+    color: #EEEEEE;
+    border-color: #4A148C;
+}
+.btn-file:hover {
+     background-color: #6A1B9A;
+        color: #EEEEEE;
+        border-color: #6A1B9A;
 }
 
     .btn-file input[type=file] {
@@ -63,8 +71,8 @@ textarea {
 
 
 .img-polish-display {
-    height: 250px;
-    width: 250px;
+    max-height: 200px;
+    max-width: 200px;
     display: block;
     margin: auto;
 }

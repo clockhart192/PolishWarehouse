@@ -14,7 +14,7 @@ namespace PolishWarehouse.Controllers
         {
             using (var db = new PolishWarehouseEntities())
             {
-                var polishes = db.Polishes.Where(p=> p.Polishes_DestashInfo == null).Select(p => new PolishModel
+                var polishes = db.Polishes.Where(p => p.Polishes_DestashInfo == null).Select(p => new PolishModel
                 {
                     ID = p.ID,
                     BrandID = p.BrandID,
@@ -45,7 +45,7 @@ namespace PolishWarehouse.Controllers
 
         public JsonResult DetailsAsync(int id)
         {
-            var model = new PolishModel(id,false);
+            var model = new PolishModel(id, false, true);
             return Json(model);
         }
         public ActionResult Details(int? id)
@@ -57,14 +57,14 @@ namespace PolishWarehouse.Controllers
             ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
 
             if (id.HasValue)
-                return View(new PolishModel(id.Value));
+                return View(new PolishModel(id.Value, returnimages: true));
             else
                 return View(new PolishModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Details(PolishModel polish)
+        public ActionResult Details(PolishModel polish, IEnumerable<HttpPostedFileBase> files)
         {
             using (var db = new PolishWarehouseEntities())
             {
@@ -75,6 +75,9 @@ namespace PolishWarehouse.Controllers
                         action = "Index";
 
                     polish.Save();
+                    if (files != null)
+                        polish.SaveImages(files);
+
                     TempData["Messages"] = "Polish Saved!";
                 }
                 catch (Exception ex)
@@ -82,6 +85,60 @@ namespace PolishWarehouse.Controllers
                     TempData["Errors"] = "Error: " + ex.Message;
                 }
                 return RedirectToAction(action);
+            }
+        }
+
+        public ActionResult ManageImages(int id)
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                var images = db.Polishes_Images.Where(p => p.PolishID == id).Select(p => new PolishImageModel
+                {
+                    ID = p.ID,
+                    PolishID = p.PolishID,
+                    Image = p.Image,
+                    MimeType = p.MIMEType,
+                    ImageForHTML = "data:" + p.MIMEType + ";base64," + p.Image,
+                    Description = p.Description,
+                    Notes = p.Notes,
+                    MakerImage = p.MakerImage.HasValue ? p.MakerImage.Value : false,
+                    PublicImage = p.PublicImage,
+                    DisplayImage = p.DisplayImage.HasValue ? p.DisplayImage.Value : false
+                }).ToArray();
+
+                var polish = db.Polishes.Where(p => p.ID == id).SingleOrDefault();
+                if (polish != null)
+                    ViewBag.PolishName = polish.Name;
+                var destash = db.Polishes_DestashInfo.Where(p => p.PolishID == id).SingleOrDefault();
+                if (polish != null)
+                    ViewBag.RedirectController = "Destash";
+                else
+                    ViewBag.RedirectController = "Polish";
+
+                return View(images);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ImageDetails(PolishImageModel model, HttpPostedFileBase file)
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                try
+                {
+                    var resp = model.Save(file);
+                    if (resp.WasSuccessful)
+                        TempData["Messages"] = "Image Saved!";
+                    else
+                        TempData["Errors"] = resp.Message;
+                }
+                catch (Exception ex)
+                {
+                    TempData["Errors"] = "Error: " + ex.Message;
+                }
+                return RedirectToAction("ManageImages", new { id = model.PolishID });
+
             }
         }
 
@@ -93,11 +150,11 @@ namespace PolishWarehouse.Controllers
             {
                 return Json(PolishModel.getNextColorNumber(colorID));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Json(ex.Message);
             }
-            
+
         }
 
         [HttpPost]
@@ -114,7 +171,7 @@ namespace PolishWarehouse.Controllers
 
                     return Json(new { id = c.ID, number = PolishModel.getNextColorNumber(c.ID) });
                 }
-                
+
             }
             catch (Exception ex)
             {

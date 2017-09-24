@@ -58,10 +58,6 @@
           <Property Name="PolishID" Type="bigint" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Notes" Type="nvarchar(max)" />
-          <Property Name="MakerImage" Type="nvarchar(max)" />
-          <Property Name="MakerImageURL" Type="nvarchar(max)" />
-          <Property Name="SelfImage" Type="nvarchar(max)" />
-          <Property Name="SelfImageURL" Type="nvarchar(max)" />
           <Property Name="GiftFromName" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Polishes_DestashInfo">
@@ -85,6 +81,20 @@
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PolishID" Type="bigint" Nullable="false" />
           <Property Name="ColorID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Polishes_Images">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PolishID" Type="bigint" Nullable="false" />
+          <Property Name="Image" Type="varchar(max)" Nullable="false" />
+          <Property Name="MIMEType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="MakerImage" Type="bit" />
+          <Property Name="PublicImage" Type="bit" Nullable="false" />
+          <Property Name="DisplayImage" Type="bit" />
         </EntityType>
         <EntityType Name="Polishes_PolishTypes">
           <Key>
@@ -194,6 +204,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Polishes_Images_Polish_ID">
+          <End Role="Polishes" Type="Self.Polishes" Multiplicity="1" />
+          <End Role="Polishes_Images" Type="Self.Polishes_Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Polishes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Polishes_Images">
+              <PropertyRef Name="PolishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Polishes_PolishTypes_Polish_ID">
           <End Role="Polishes" Type="Self.Polishes" Multiplicity="1" />
           <End Role="Polishes_PolishTypes" Type="Self.Polishes_PolishTypes" Multiplicity="*" />
@@ -250,6 +272,7 @@
           <EntitySet Name="Polishes_AdditionalInfo" EntityType="Self.Polishes_AdditionalInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes_DestashInfo" EntityType="Self.Polishes_DestashInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes_Glitter_Colors" EntityType="Self.Polishes_Glitter_Colors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Polishes_Images" EntityType="Self.Polishes_Images" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes_PolishTypes" EntityType="Self.Polishes_PolishTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes_Secondary_Colors" EntityType="Self.Polishes_Secondary_Colors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PolishTypes" EntityType="Self.PolishTypes" Schema="dbo" store:Type="Tables" />
@@ -280,6 +303,10 @@
           <AssociationSet Name="FK_Polishes_Glitter_Colors_Polish_ID" Association="Self.FK_Polishes_Glitter_Colors_Polish_ID">
             <End Role="Polishes" EntitySet="Polishes" />
             <End Role="Polishes_Glitter_Colors" EntitySet="Polishes_Glitter_Colors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Polishes_Images_Polish_ID" Association="Self.FK_Polishes_Images_Polish_ID">
+            <End Role="Polishes" EntitySet="Polishes" />
+            <End Role="Polishes_Images" EntitySet="Polishes_Images" />
           </AssociationSet>
           <AssociationSet Name="FK_Polishes_PolishTypes_Polish_ID" Association="Self.FK_Polishes_PolishTypes_Polish_ID">
             <End Role="Polishes" EntitySet="Polishes" />
@@ -343,7 +370,6 @@
           <Property Name="WasGift" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Brand" Relationship="Self.FK_Polishes_Brand_ID" FromRole="Polishes" ToRole="Brands" />
           <NavigationProperty Name="Color" Relationship="Self.FK_Polishes_Color_ID" FromRole="Polishes" ToRole="Colors" />
-          <NavigationProperty Name="Polishes_AdditionalInfo" Relationship="Self.FK_Polishes_AdditionalInfo_Polish_ID" FromRole="Polishes" ToRole="Polishes_AdditionalInfo" />
           <NavigationProperty Name="Polishes_PolishTypes" Relationship="Self.FK_Polishes_PolishTypes_Polish_ID" FromRole="Polishes" ToRole="Polishes_PolishTypes" />
           <Property Name="ColorNumber" Type="Int32" Nullable="false" />
           <Property Name="Coats" Type="Int32" Nullable="false" />
@@ -351,6 +377,8 @@
           <NavigationProperty Name="Polishes_Glitter_Colors" Relationship="PolishWarehouseModel.FK_Polishes_Glitter_Colors_Polish_ID" FromRole="Polish" ToRole="Polishes_Glitter_Colors" />
           <NavigationProperty Name="Polishes_Secondary_Colors" Relationship="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Polish_ID" FromRole="Polish" ToRole="Polishes_Secondary_Colors" />
           <NavigationProperty Name="Polishes_DestashInfo" Relationship="PolishWarehouseModel.FK_Polishes_DestashInfo_Polish_ID" FromRole="Polish" ToRole="Polishes_DestashInfo" />
+          <NavigationProperty Name="Polishes_AdditionalInfo" Relationship="PolishWarehouseModel.FK_Polishes_AdditionalInfo_Polish_ID" FromRole="Polish" ToRole="Polishes_AdditionalInfo" />
+          <NavigationProperty Name="Polishes_Images" Relationship="PolishWarehouseModel.FK_Polishes_Images_Polish_ID" FromRole="Polish" ToRole="Polishes_Images" />
         </EntityType>
         <EntityType Name="Polishes_PolishTypes">
           <Key>
@@ -370,20 +398,6 @@
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Polishes_PolishTypes" Relationship="Self.FK_Polishes_PolishTypes_Polish_Type_ID" FromRole="PolishTypes" ToRole="Polishes_PolishTypes" />
-        </EntityType>
-        <EntityType Name="Polishes_AdditionalInfo">
-          <Key>
-            <PropertyRef Name="PolishID" />
-          </Key>
-          <Property Name="PolishID" Type="Int64" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MakerImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MakerImageURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SelfImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SelfImageURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GiftFromName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Polish" Relationship="Self.FK_Polishes_AdditionalInfo_Polish_ID" FromRole="Polishes_AdditionalInfo" ToRole="Polishes" />
         </EntityType>
         <Association Name="FK_Polishes_Brand_ID">
           <End Role="Brands" Type="Self.Brand" Multiplicity="1" />
@@ -406,18 +420,6 @@
             </Principal>
             <Dependent Role="Polishes">
               <PropertyRef Name="ColorID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Polishes_AdditionalInfo_Polish_ID">
-          <End Role="Polishes" Type="Self.Polish" Multiplicity="1" />
-          <End Role="Polishes_AdditionalInfo" Type="Self.Polishes_AdditionalInfo" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Polishes">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Polishes_AdditionalInfo">
-              <PropertyRef Name="PolishID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -451,7 +453,6 @@
           <EntitySet Name="Polishes" EntityType="Self.Polish" />
           <EntitySet Name="Polishes_PolishTypes" EntityType="Self.Polishes_PolishTypes" />
           <EntitySet Name="PolishTypes" EntityType="Self.PolishType" />
-          <EntitySet Name="Polishes_AdditionalInfo" EntityType="Self.Polishes_AdditionalInfo" />
           <AssociationSet Name="FK_Polishes_Brand_ID" Association="Self.FK_Polishes_Brand_ID">
             <End Role="Brands" EntitySet="Brands" />
             <End Role="Polishes" EntitySet="Polishes" />
@@ -459,10 +460,6 @@
           <AssociationSet Name="FK_Polishes_Color_ID" Association="Self.FK_Polishes_Color_ID">
             <End Role="Colors" EntitySet="Colors" />
             <End Role="Polishes" EntitySet="Polishes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Polishes_AdditionalInfo_Polish_ID" Association="Self.FK_Polishes_AdditionalInfo_Polish_ID">
-            <End Role="Polishes" EntitySet="Polishes" />
-            <End Role="Polishes_AdditionalInfo" EntitySet="Polishes_AdditionalInfo" />
           </AssociationSet>
           <AssociationSet Name="FK_Polishes_PolishTypes_Polish_ID" Association="Self.FK_Polishes_PolishTypes_Polish_ID">
             <End Role="Polishes" EntitySet="Polishes" />
@@ -499,6 +496,16 @@
           <AssociationSet Name="FK_Polishes_DestashInfo_Polish_ID" Association="PolishWarehouseModel.FK_Polishes_DestashInfo_Polish_ID">
             <End Role="Polish" EntitySet="Polishes" />
             <End Role="Polishes_DestashInfo" EntitySet="Polishes_DestashInfo" />
+          </AssociationSet>
+          <EntitySet Name="Polishes_AdditionalInfo" EntityType="PolishWarehouseModel.Polishes_AdditionalInfo" />
+          <AssociationSet Name="FK_Polishes_AdditionalInfo_Polish_ID" Association="PolishWarehouseModel.FK_Polishes_AdditionalInfo_Polish_ID">
+            <End Role="Polish" EntitySet="Polishes" />
+            <End Role="Polishes_AdditionalInfo" EntitySet="Polishes_AdditionalInfo" />
+          </AssociationSet>
+          <EntitySet Name="Polishes_Images" EntityType="PolishWarehouseModel.Polishes_Images" />
+          <AssociationSet Name="FK_Polishes_Images_Polish_ID" Association="PolishWarehouseModel.FK_Polishes_Images_Polish_ID">
+            <End Role="Polish" EntitySet="Polishes" />
+            <End Role="Polishes_Images" EntitySet="Polishes_Images" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Polishes_Glitter_Colors">
@@ -617,6 +624,55 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Polishes_AdditionalInfo">
+          <Key>
+            <PropertyRef Name="PolishID" />
+          </Key>
+          <Property Name="PolishID" Type="Int64" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GiftFromName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Polish" Relationship="PolishWarehouseModel.FK_Polishes_AdditionalInfo_Polish_ID" FromRole="Polishes_AdditionalInfo" ToRole="Polish" />
+        </EntityType>
+        <Association Name="FK_Polishes_AdditionalInfo_Polish_ID">
+          <End Type="PolishWarehouseModel.Polish" Role="Polish" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.Polishes_AdditionalInfo" Role="Polishes_AdditionalInfo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Polish">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Polishes_AdditionalInfo">
+              <PropertyRef Name="PolishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Polishes_Images">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PolishID" Type="Int64" Nullable="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MIMEType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MakerImage" Type="Boolean" />
+          <NavigationProperty Name="Polish" Relationship="PolishWarehouseModel.FK_Polishes_Images_Polish_ID" FromRole="Polishes_Images" ToRole="Polish" />
+          <Property Name="PublicImage" Type="Boolean" Nullable="false" />
+          <Property Name="DisplayImage" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_Polishes_Images_Polish_ID">
+          <End Type="PolishWarehouseModel.Polish" Role="Polish" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.Polishes_Images" Role="Polishes_Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Polish">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Polishes_Images">
+              <PropertyRef Name="PolishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -682,20 +738,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Polishes_AdditionalInfo">
-            <EntityTypeMapping TypeName="PolishWarehouseModel.Polishes_AdditionalInfo">
-              <MappingFragment StoreEntitySet="Polishes_AdditionalInfo">
-                <ScalarProperty Name="PolishID" ColumnName="PolishID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Notes" ColumnName="Notes" />
-                <ScalarProperty Name="MakerImage" ColumnName="MakerImage" />
-                <ScalarProperty Name="MakerImageURL" ColumnName="MakerImageURL" />
-                <ScalarProperty Name="SelfImage" ColumnName="SelfImage" />
-                <ScalarProperty Name="SelfImageURL" ColumnName="SelfImageURL" />
-                <ScalarProperty Name="GiftFromName" ColumnName="GiftFromName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Polishes_Glitter_Colors">
             <EntityTypeMapping TypeName="PolishWarehouseModel.Polishes_Glitter_Colors">
               <MappingFragment StoreEntitySet="Polishes_Glitter_Colors">
@@ -735,6 +777,31 @@
                 <ScalarProperty Name="BuyerName" ColumnName="BuyerName" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
                 <ScalarProperty Name="PolishID" ColumnName="PolishID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Polishes_AdditionalInfo">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.Polishes_AdditionalInfo">
+              <MappingFragment StoreEntitySet="Polishes_AdditionalInfo">
+                <ScalarProperty Name="GiftFromName" ColumnName="GiftFromName" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PolishID" ColumnName="PolishID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Polishes_Images">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.Polishes_Images">
+              <MappingFragment StoreEntitySet="Polishes_Images">
+                <ScalarProperty Name="DisplayImage" ColumnName="DisplayImage" />
+                <ScalarProperty Name="PublicImage" ColumnName="PublicImage" />
+                <ScalarProperty Name="MakerImage" ColumnName="MakerImage" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="MIMEType" ColumnName="MIMEType" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="PolishID" ColumnName="PolishID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
