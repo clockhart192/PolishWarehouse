@@ -182,6 +182,7 @@
     <Content Include="Scripts\bootstrap-table.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\A2.pubxml" />
     <None Include="Properties\PublishProfiles\Godaddy.pubxml" />
     <None Include="Properties\PublishProfiles\Local Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Local IIS.pubxml" />
