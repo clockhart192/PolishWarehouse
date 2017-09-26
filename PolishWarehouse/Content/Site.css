@@ -1,13 +1,8 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
-    background-color: #000000;
     color: #DDD;
-     background-size:     cover;                      /* <------ */
-    background-repeat:   no-repeat;
-    background-position: center center;              /* optional, center the image */
-    background-attachment: fixed;
-    background-image: url("../Content/Images/galaxy-wallpaper.jpg")
+    background-color: #4A148C;
 }
 
 .body-content {
@@ -119,11 +114,37 @@ textarea {
     background-color: #1A1A1A;
 }
 
-/*Modal*/
-.modal-sm {
-    width: 300px;
-    text-align: center;
+.pagination>li>a, .pagination>li>span,.pagination>.disabled>a{
+    background-color: #1A1A1A;
+    border: #1A1A1A;
 }
+
+/*Modal*/
+@media screen and (min-width: 768px){
+    body{
+            background-color:      #000000;
+            background-size:       cover;                      /* <------ */
+            background-repeat:     no-repeat;
+            background-position:   center center;              /* optional, center the image */
+            background-attachment: fixed;
+            background-image:      url("../Content/Images/galaxy-wallpaper.jpg");
+    }
+    .modal-sm {
+        width: 300px;
+        text-align: center;
+    }
+
+    .modal-md {
+        width: 50%;
+        text-align: center;
+    }
+
+    .modal-lg {
+        width: 70%;
+        text-align: center;
+    }
+}
+
 
 .modal-header {
     background-color: #333333;
@@ -325,4 +346,9 @@ table.dataTable thead .sorting_desc:after {
 table.dataTable thead .sorting_asc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:after {
   color: #eee;
+}
+
+/*Gallery Overrides*/
+.blueimp-gallery-controls > .prev, .blueimp-gallery-controls > .next{
+    display:block;
 }

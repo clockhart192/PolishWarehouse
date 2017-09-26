@@ -6,9 +6,9 @@ CREATE TABLE Polishes_Images
 	MIMEType		VARCHAR(50)	  NOT NULL,
 	Description		nvarchar(MAX) NULL,
 	Notes			nvarchar(MAX) NULL,
-	MakerImage		bit			  NULL,
+	MakerImage		bit			  NOT NULL DEFAULT 0,
 	PublicImage		bit			  NOT NULL DEFAULT 1,
-	DisplayImage	bit			  NULL
+	DisplayImage	bit			  NOT NULL DEFAULT 1
 
 	CONSTRAINT FK_Polishes_Images_Polish_ID FOREIGN KEY (PolishID)  REFERENCES Polishes(ID),
 )

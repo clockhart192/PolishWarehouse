@@ -44,7 +44,7 @@ namespace PolishWarehouse.Controllers
                         InternalDestashNotes = p.Polishes_DestashInfo.InternalNotes,
                         SaleStatus = p.Polishes_DestashInfo.SaleStatus
 
-                    }).OrderBy(p => p.BrandName).ToArray();
+                    }).Where(p => p.SaleStatus != "S").OrderBy(p => p.BrandName).ToArray();
                 return View(polishes);
             }
         }
@@ -57,7 +57,7 @@ namespace PolishWarehouse.Controllers
 
         public JsonResult DetailsAsync(int id)
         {
-            return Json(new PolishDestashModel(id));
+            return Json(new PolishDestashModel(id, false, true, true));
         }
         public ActionResult Details(int? id)
         {

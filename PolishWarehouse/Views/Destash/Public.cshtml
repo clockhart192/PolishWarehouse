@@ -49,16 +49,16 @@
     </div>
 </div>
 <div class="modal fade" id="Details" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-md">
         <!-- Modal content-->
-        <div class="modal-content">
+        <div class="modal-content" id="Modal-Details-Content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Details</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3>Polish Info</h3>
@@ -130,28 +130,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        @*@if (!string.IsNullOrWhiteSpace(polish.SelfImage))
-                                            {
-                                                <img src="@polish.SelfImage" alt="self image via upload" class="img-polish-display" />
-                                            }
-                                            else if (!string.IsNullOrWhiteSpace(polish.SelfImageURL))
-                                            {
-                                                <img src="@polish.SelfImageURL" alt="self image via url" class="img-polish-display" />
-                                            }
-                                            else if (!string.IsNullOrWhiteSpace(polish.MakerImage))
-                                            {
-                                                <img src="@polish.MakerImage" alt="self image via upload" class="img-polish-display" />
-                                            }
-                                            else if (!string.IsNullOrWhiteSpace(polish.MakerImageURL))
-                                            {
-                                                <img src="@polish.MakerImageURL" alt="maker image via url" class="img-polish-display" />
-                                            }
-                                            else
-                                            {
-                                                <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
-                                            }*@
-                                    </div>
+                                   
                                 </div>
 
                             </div>
@@ -207,55 +186,126 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6" id="Images-div">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
+                                <div id="blueimp-gallery-carousel" class="blueimp-gallery blueimp-gallery-carousel">
+                                    <div class="slides"></div>
+                                    <h3 class="title"></h3>
+                                    <a class="prev">‹</a>
+                                    <a class="next">›</a>
+                                    <a class="play-pause"></a>
+                                    <ol class="indicator"></ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a class="btn btn-default" href="#" onclick="$('#Modal-Details-Content').hide(); $('#Image-Viewer').modal('show'); return false;">Larger</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                   
+
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="Image-Viewer" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
+                <div id="blueimp-gallery-carousel-full" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls">
+                    <div class="slides"></div>
+                    <h3 class="title"></h3>
+                    <a class="prev">‹</a>
+                    <a class="next">›</a>
+                    <a class="play-pause"></a>
+                    <ol class="indicator"></ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
-            $(document).ready(function () {
-                $('#polishtable').dataTable({
-                    "pageLength": 100,
-                    "deferLoading": true,
-                    "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
-                });
-            });
+    var carouselLinks = [];
+    $(document).ready(function () {
+        $('#polishtable').dataTable({
+            "pageLength": 100,
+            "deferLoading": true,
+            "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
+        });
+    });
 
-            function getDetailsModal(id) {
-                var token = $('[name=__RequestVerificationToken]').val();
-                var data = {
-                    __RequestVerificationToken: token,
-                    id: id
-                };
-                $.ajax({
-                    url: "@Url.Action("DetailsAsync", "Destash")",
-                    type: 'POST',
-                data: data,
-                success: function (response) {
-                    $("#BrandName").val(response.BrandName);
-                    $("#PolishName").val(response.PolishName);
-                    $("#ColorName").val(response.ColorName);
-                    $("#Description").val(response.Description);
-                    $("#AskingPrice").val(response.AskingPrice);
-                    $("#SellQty").val(response.SellQty);
-                    $("#DestashNotes").val(response.DestashNotes);
+    function getDetailsModal(id) {
+        loading();
+        var token = $('[name=__RequestVerificationToken]').val();
+        var data = {
+            __RequestVerificationToken: token,
+            id: id
+        };
+        $.ajax({
+            url: "@Url.Action("DetailsAsync", "Destash")",
+            type: 'POST',
+            data: data,
+            success: function (response) {
+                $("#BrandName").val(response.BrandName);
+                $("#PolishName").val(response.PolishName);
+                $("#ColorName").val(response.ColorName);
+                $("#Description").val(response.Description);
+                $("#AskingPrice").val(response.AskingPrice);
+                $("#SellQty").val(response.SellQty);
+                $("#DestashNotes").val(response.DestashNotes);
 
-                    //for(var i=0;i<response.Types.Length;i++){
-                    //    $('#polish-type-' + response.Types[i].Name).prop('checked', true);
-                    //}
+                //for(var i=0;i<response.Types.Length;i++){
+                //    $('#polish-type-' + response.Types[i].Name).prop('checked', true);
+                //}
 
-                    $("#Details").modal("show");
-                },
-                failure: function (response) {
-                    alert(response);
-                },
-                error: function (response) {
-                    alert(response);
+                carouselLinks = [];
+                if (response.Images.length > 0) {
+                    $("#Images-div").show();
+                    $.each(response.Images, function (index, image) {
+                        carouselLinks.push({
+                            href: image.ImageForHTML,
+                            title: image.Description
+                        });
+                    });
                 }
-            });
+                else {
+                    $("#Images-div").hide();
+                }
+
+                doneLoading();
+                $("#Details").modal("show");
+            },
+            failure: function (response) {
+                alert(response);
+            },
+            error: function (response) {
+                alert(response);
             }
+        });
+    }
+    $('#Details').on('shown.bs.modal', function (e) {
+        blueimp.Gallery(carouselLinks, {
+            container: '#blueimp-gallery-carousel',
+            carousel: true,
+            clearSlides: true
+        });
+    });
+    $('#Image-Viewer').on('shown.bs.modal', function (e) {
+        blueimp.Gallery(carouselLinks, {
+            container: '#blueimp-gallery-carousel-full',
+            carousel: true,
+            clearSlides: true
+        });
+    });
+    $('#Image-Viewer').on('hidden.bs.modal', function () {
+        $('#Modal-Details-Content').show();
+    })
 </script>

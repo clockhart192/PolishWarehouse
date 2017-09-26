@@ -45,7 +45,7 @@ namespace PolishWarehouse.Controllers
 
         public JsonResult DetailsAsync(int id)
         {
-            var model = new PolishModel(id, false, true);
+            var model = new PolishModel(id, false, true, true);
             return Json(model);
         }
         public ActionResult Details(int? id)
@@ -110,7 +110,7 @@ namespace PolishWarehouse.Controllers
                 if (polish != null)
                     ViewBag.PolishName = polish.Name;
                 var destash = db.Polishes_DestashInfo.Where(p => p.PolishID == id).SingleOrDefault();
-                if (polish != null)
+                if (destash != null)
                     ViewBag.RedirectController = "Destash";
                 else
                     ViewBag.RedirectController = "Polish";

@@ -34,7 +34,7 @@ namespace PolishWarehouse.Models
         public PolishImageModel[] Images { get; set; }
 
         public PolishModel() { }
-        public PolishModel(int? id, bool colors = true, bool returnimages = false)
+        public PolishModel(int? id, bool colors = true, bool returnimages = false, bool forPublicView = true)
         {
             if (!id.HasValue)
                 return;
@@ -64,7 +64,7 @@ namespace PolishWarehouse.Models
 
                 if (returnimages)
                 {
-                    Images = db.Polishes_Images.Where(i => i.PolishID == id).Select(i => new PolishImageModel() {
+                    Images = db.Polishes_Images.Where(i => i.PolishID == id && (forPublicView ? i.PublicImage : true)).Select(i => new PolishImageModel() {
                         ID = i.ID,
                         PolishID = i.PolishID,
                         Image = i.Image,
@@ -76,6 +76,8 @@ namespace PolishWarehouse.Models
                         PublicImage = i.PublicImage,
                         DisplayImage = i.DisplayImage.HasValue ? i.DisplayImage.Value : false
                     }).ToArray();
+
+
                 }
             }
         }
@@ -401,6 +403,9 @@ namespace PolishWarehouse.Models
             using (var db = new PolishWarehouseEntities())
             {
                 var changes = false;
+                var images = db.Polishes_Images.Where(i => i.PolishID == ID.Value).ToArray();
+
+                bool first = images == null ? true : !(images.Any(i=> i.DisplayImage.Value));
                 foreach (var file in files)
                 {
                     if (file != null && file.ContentLength > 0)
@@ -416,10 +421,12 @@ namespace PolishWarehouse.Models
                             PolishID = ID.Value,
                             Image = fileBase64,
                             MIMEType = file.ContentType,
-                            MakerImage = false
+                            MakerImage = false,
+                            DisplayImage = first,
+                            PublicImage = true,
                         };
-
                         db.Polishes_Images.Add(image);
+                        first = false;
                     }
                 }
                 if(changes)
@@ -491,7 +498,7 @@ namespace PolishWarehouse.Models
         public string SaleStatus { get; set; }
 
         public PolishDestashModel() { }
-        public PolishDestashModel(int? id, bool colors = true, bool returnimages = false)
+        public PolishDestashModel(int? id, bool colors = true, bool returnimages = false, bool forPublicView = true)
         {
             if (!id.HasValue)
                 return;
@@ -524,7 +531,7 @@ namespace PolishWarehouse.Models
 
                 if (returnimages)
                 {
-                    Images = db.Polishes_Images.Where(i => i.PolishID == id).Select(i => new PolishImageModel()
+                    Images = db.Polishes_Images.Where(i => i.PolishID == id && (forPublicView ? i.PublicImage : true)).Select(i => new PolishImageModel()
                     {
                         ID = i.ID,
                         PolishID = i.PolishID,

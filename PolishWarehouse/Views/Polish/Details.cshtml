@@ -143,7 +143,7 @@
                                         if (DisplayImage == null)
                                             DisplayImage = polish.Images[0];
 
-                                        <img src="@DisplayImage.ImageForHTML" class="img-polish-display" alt="image" />
+                                        <a href="#" onclick="$('#Image-Gallery-Modal').modal('show'); return false;"><img src="@DisplayImage.ImageForHTML" class="img-polish-display" alt="image" /></a>
                                         <br />
                                         @Html.ActionLink("Manage Images", "ManageImages", "Polish", new { id = polish.ID }, new { @class = "btn btn-default" })
                                     }
@@ -178,7 +178,7 @@
                             <div class="col-md-4">
                                 <label for="GiftFromName">Gifter's Name</label>
                                 <br />
-                                <input type="text" 2" id="GiftFromName" name="GiftFromName" placeholder="Gifter's Name" class="form-control" value="@polish.GiftFromName" />
+                                <input type="text" 2" id="GiftFromName" name="GiftFromName" placeholder="Name" class="form-control" value="@polish.GiftFromName" />
                             </div>
                             <div class="col-md-4">
                                 <label for="HasBeenTried">Has been tried?</label>
@@ -268,6 +268,52 @@
                         <div class="col-md-8"></div>
                         <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Add-New-Brand-Confirm').modal('hide'); return false;">No</button></div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="Image-Gallery-Modal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
+                    <div id="blueimp-gallery-carousel" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls">
+                        <div class="slides"></div>
+                        <h3 class="title"></h3>
+                        <a class="prev">‹</a>
+                        <a class="next">›</a>
+                        <a class="play-pause"></a>
+                        <ol class="indicator"></ol>
+                    </div>
+                    <div class="links" id="links">
+                        @if (polish.Images != null)
+                        {
+                            if (polish.Images.Count() > 0)
+                            {
+                                foreach (var image in polish.Images)
+                                {
+                                    <a href="@image.ImageForHTML"></a>
+                                }
+                            }
+                        }
+                    </div>
+                    <script>
+                        $('#Image-Gallery-Modal').on('shown.bs.modal', function (e) {
+                            blueimp.Gallery(
+                                    document.getElementById('links').getElementsByTagName('a'),
+                                    {
+                                        container: '#blueimp-gallery-carousel',
+                                        carousel: true
+                                    }
+                                );
+                        });
+                    </script>
+                </div>
+                <div class="modal-footer">
                 </div>
             </div>
         </div>
