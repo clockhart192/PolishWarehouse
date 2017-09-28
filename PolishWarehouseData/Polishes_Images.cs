@@ -10,8 +10,7 @@
 namespace PolishWarehouseData
 {
     using System;
-    using System.Collections.Generic;
-    
+
     public partial class Polishes_Images
     {
         public long ID { get; set; }

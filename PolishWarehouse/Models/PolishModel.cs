@@ -64,7 +64,8 @@ namespace PolishWarehouse.Models
 
                 if (returnimages)
                 {
-                    Images = db.Polishes_Images.Where(i => i.PolishID == id && (forPublicView ? i.PublicImage : true)).Select(i => new PolishImageModel() {
+                    Images = db.Polishes_Images.Where(i => i.PolishID == id && (forPublicView ? i.PublicImage : true)).Select(i => new PolishImageModel()
+                    {
                         ID = i.ID,
                         PolishID = i.PolishID,
                         Image = i.Image,
@@ -120,8 +121,8 @@ namespace PolishWarehouse.Models
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine(ex.Message);
-                                throw new Exception(string.Format("Swatch #{0} did not register as a number.", fields[(int)Column.swatchNum]));
+
+                                throw new Exception(Logging.LogEvent(LogTypes.Error, $"Swatch #{fields[(int)Column.swatchNum]} did not register as a number", $"Swatch #{fields[(int)Column.swatchNum]} did not register as a number", ex));
                             }
 
                             var coats = 0;
@@ -131,8 +132,7 @@ namespace PolishWarehouse.Models
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine(ex.Message);
-                                throw new Exception(string.Format("Coat Value for swatch label {0} did not register as a number.", fields[(int)Column.swatchWheel]));
+                                throw new Exception(Logging.LogEvent(LogTypes.Error, $"Coat Value for swatch label { fields[(int)Column.swatchWheel]} did not register as a number.", $"Coat Value for swatch label { fields[(int)Column.swatchWheel]} did not register as a number.", ex));
                             }
 
                             polish.ColorID = colorID;
@@ -228,7 +228,7 @@ namespace PolishWarehouse.Models
         {
             using (var db = new PolishWarehouseEntities())
             {
-                var polishes = db.Polishes.Where(p => p.ColorID == colorID).OrderBy(p=> p.ColorNumber).ToArray();
+                var polishes = db.Polishes.Where(p => p.ColorID == colorID).OrderBy(p => p.ColorNumber).ToArray();
 
                 //This is our first one for this color clearly.
                 if (polishes.Length <= 0)
@@ -270,8 +270,7 @@ namespace PolishWarehouse.Models
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
-                    throw new Exception(string.Format("Swatch #{0} did not register as a number.", ColorNumber));
+                    throw new Exception(Logging.LogEvent(LogTypes.Error, string.Format("Swatch #{0} did not register as a number.", ColorNumber), string.Format("Swatch #{0} did not register as a number.", ColorNumber), ex));
                 }
 
                 ColorName = db.Colors.Where(c => c.ID == ColorID).Select(c => c.Name).SingleOrDefault();
@@ -405,7 +404,7 @@ namespace PolishWarehouse.Models
                 var changes = false;
                 var images = db.Polishes_Images.Where(i => i.PolishID == ID.Value).ToArray();
 
-                bool first = images == null ? true : !(images.Any(i=> i.DisplayImage.Value));
+                bool first = images == null ? true : !(images.Any(i => i.DisplayImage.Value));
                 foreach (var file in files)
                 {
                     if (file != null && file.ContentLength > 0)
@@ -429,7 +428,7 @@ namespace PolishWarehouse.Models
                         first = false;
                     }
                 }
-                if(changes)
+                if (changes)
                     db.SaveChanges();
 
                 return new Response(true);
@@ -467,7 +466,7 @@ namespace PolishWarehouse.Models
             }
         }
 
-       
+
 
         public enum Column
         {
@@ -498,7 +497,7 @@ namespace PolishWarehouse.Models
         public string SaleStatus { get; set; }
 
         public PolishDestashModel() { }
-        public PolishDestashModel(int? id, bool colors = true, bool returnimages = false, bool forPublicView = true)
+        public PolishDestashModel(int? id, bool colors = true, bool returnimages = false, bool forPublicView = true, bool reduceImages = true)
         {
             if (!id.HasValue)
                 return;
@@ -544,6 +543,17 @@ namespace PolishWarehouse.Models
                         PublicImage = i.PublicImage,
                         DisplayImage = i.DisplayImage.HasValue ? i.DisplayImage.Value : false
                     }).ToArray();
+
+                    if (reduceImages)
+                    {
+                        foreach (var image in Images)
+                        {
+                            image.MimeType = "image/jpeg";
+                            image.Image = Utilities.ReduceImageSize(image.Image, 10);
+                            image.ImageForHTML = "data:" + image.MimeType + ";base64," + image.Image;
+                        }
+                    }
+
                 }
 
                 SellQty = polish.Polishes_DestashInfo.Qty;
@@ -562,7 +572,7 @@ namespace PolishWarehouse.Models
             {
                 var polish = db.Polishes.Where(p => p.ID == ID).SingleOrDefault();
                 if (polish == null)
-                    return new Response(false,"Polish not found.");
+                    return new Response(false, "Polish not found.");
 
                 var destash = db.Polishes_DestashInfo.Where(p => p.PolishID == ID).SingleOrDefault();
                 if (destash == null)
@@ -607,7 +617,7 @@ namespace PolishWarehouse.Models
             {
                 var image = db.Polishes_Images.Where(i => i.ID == ID).SingleOrDefault();
 
-                if(image == null)
+                if (image == null)
                 {
                     return new Response(false, "Image not found");
                 }
@@ -626,7 +636,7 @@ namespace PolishWarehouse.Models
                         otherImage.DisplayImage = false;
                     }
                 }
-                
+
 
                 if (file != null && file.ContentLength > 0)
                 {

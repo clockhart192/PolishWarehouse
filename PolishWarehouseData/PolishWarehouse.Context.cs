@@ -9,10 +9,9 @@
 
 namespace PolishWarehouseData
 {
-    using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+
     public partial class PolishWarehouseEntities : DbContext
     {
         public PolishWarehouseEntities()
@@ -36,5 +35,7 @@ namespace PolishWarehouseData
         public virtual DbSet<Polishes_DestashInfo> Polishes_DestashInfo { get; set; }
         public virtual DbSet<Polishes_AdditionalInfo> Polishes_AdditionalInfo { get; set; }
         public virtual DbSet<Polishes_Images> Polishes_Images { get; set; }
+        public virtual DbSet<Log> Logs { get; set; }
+        public virtual DbSet<Setting> Settings { get; set; }
     }
 }

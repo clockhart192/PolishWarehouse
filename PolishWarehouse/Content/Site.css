@@ -14,6 +14,16 @@
     max-width:100%;
 }
 
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  padding: 10px;
+}
+
 input,
 select,
 textarea {
@@ -106,6 +116,10 @@ textarea {
         color: #AAAAAA;
     }
 
+.panel-default .panel-heading-private{
+    background-color: #4A148C;
+}
+
 .panel-body {
     background-color: #1A1A1A;
 }
@@ -179,13 +193,10 @@ textarea {
         border-color: #000000;
     }
 
-
 /*Select2*/
 .select2-results__option {
     color: #000000;
 }
-
-
 
 /*Sliders*/
 .switch {
@@ -302,7 +313,6 @@ input:checked + .slider:before {
         max-width: 100%;
     }
 }*/
-
 
 /*Data tables overrides*/
 table.dataTable thead .sorting_asc {

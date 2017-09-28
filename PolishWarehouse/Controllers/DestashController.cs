@@ -10,7 +10,7 @@ namespace PolishWarehouse.Controllers
 {
     public class DestashController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(bool pub = false)
         {
             using (var db = new PolishWarehouseEntities())
             {
@@ -44,7 +44,7 @@ namespace PolishWarehouse.Controllers
                         InternalDestashNotes = p.Polishes_DestashInfo.InternalNotes,
                         SaleStatus = p.Polishes_DestashInfo.SaleStatus
 
-                    }).Where(p => p.SaleStatus != "S").OrderBy(p => p.BrandName).ToArray();
+                    }).Where(p => pub ? (p.SaleStatus != "S") : true).OrderBy(p => p.BrandName).ToArray();
                 return View(polishes);
             }
         }
@@ -52,12 +52,14 @@ namespace PolishWarehouse.Controllers
         public ActionResult Public()
         {
             ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
-            return Index();
+            return Index(true);
         }
 
         public JsonResult DetailsAsync(int id)
         {
-            return Json(new PolishDestashModel(id, false, true, true));
+            var jsonResult = Json(new PolishDestashModel(id, false, true, true), JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
         }
         public ActionResult Details(int? id)
         {
@@ -93,9 +95,9 @@ namespace PolishWarehouse.Controllers
                     polish.DestashPolish();
                     TempData["Messages"] = "Polish Saved!";
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
-                    TempData["Errors"] = "Error: " + ex.Message;
+                    TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving destash info", "There was an error saving your polish",ex);
                 }
                 return RedirectToAction(action);
             }
@@ -115,7 +117,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Errors"] = ex.Message;
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error destash polish", "There was an error saving your polish's destash", ex);
             }
 
             return RedirectToAction("Index");

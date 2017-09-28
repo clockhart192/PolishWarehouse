@@ -9,9 +9,8 @@
 
 namespace PolishWarehouseData
 {
-    using System;
     using System.Collections.Generic;
-    
+
     public partial class Color
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]

@@ -10,13 +10,12 @@
 namespace PolishWarehouseData
 {
 
-    public partial class Polishes_Secondary_Colors
+    public partial class Setting
     {
         public long ID { get; set; }
-        public long PolishID { get; set; }
-        public int ColorID { get; set; }
-    
-        public virtual Color Color { get; set; }
-        public virtual Polish Polish { get; set; }
+        public string KeyName { get; set; }
+        public string KeyValue { get; set; }
+        public string KeyDataType { get; set; }
+        public bool PublicSetting { get; set; }
     }
 }

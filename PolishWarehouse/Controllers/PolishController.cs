@@ -46,7 +46,9 @@ namespace PolishWarehouse.Controllers
         public JsonResult DetailsAsync(int id)
         {
             var model = new PolishModel(id, false, true, true);
-            return Json(model);
+            var jsonResult = Json(model, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
         }
         public ActionResult Details(int? id)
         {
@@ -82,7 +84,7 @@ namespace PolishWarehouse.Controllers
                 }
                 catch (Exception ex)
                 {
-                    TempData["Errors"] = "Error: " + ex.Message;
+                    TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving polish info", "There was an error saving your polish", ex);
                 }
                 return RedirectToAction(action);
             }
@@ -135,7 +137,7 @@ namespace PolishWarehouse.Controllers
                 }
                 catch (Exception ex)
                 {
-                    TempData["Errors"] = "Error: " + ex.Message;
+                    TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving images", "There was an error saving your images", ex);
                 }
                 return RedirectToAction("ManageImages", new { id = model.PolishID });
 
@@ -152,7 +154,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex.Message);
+                return Json(Logging.LogEvent(LogTypes.Error, "Error getting next color number", "The server failed to get a color number", ex));
             }
 
         }
@@ -175,7 +177,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex.Message);
+                return Json(Logging.LogEvent(LogTypes.Error, $"Error getting polish quick info for {colorName}", "The server failed to return polish info", ex));
             }
 
         }
@@ -198,7 +200,7 @@ namespace PolishWarehouse.Controllers
                 }
                 catch (Exception ex)
                 {
-                    TempData["Errors"] = "Error: " + ex.Message;
+                    TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error with import", "There was an error importing your polish", ex);
                     return RedirectToAction("Import");
                 }
             }

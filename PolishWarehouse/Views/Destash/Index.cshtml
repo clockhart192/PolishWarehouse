@@ -8,8 +8,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    <a data-toggle="collapse" href=""><h3>Polish Destash</h3></a>
+                <div class="panel-heading panel-heading-private">
+                    <h3>Polish Destash</h3>
                 </div>
                 <div class="panel-collapse" id="Polishcollapse">
                     <div class="panel-body">
@@ -27,7 +27,8 @@
                                             <th>Brand</th>
                                             <th>Name</th>
                                             <th>Description</th>
-                                            <th>Asking Price</th>
+                                            <th>Price</th>
+                                            <th>Status</th>
                                             <th class="hidden-xs">Notes</th>
                                         </tr>
                                     </thead>
@@ -39,6 +40,7 @@
                                                 <td>@Html.ActionLink(polish.PolishName, "Details", new { id = polish.ID })</td>
                                                 <td>@polish.Description</td>
                                                 <td>@polish.AskingPrice.Value.ToString("C2")</td>
+                                                <td>@polish.SaleStatus</td>
                                                 <td class="hidden-xs">@polish.DestashNotes</td>
                                             </tr>
                                         }

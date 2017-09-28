@@ -28,6 +28,8 @@
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_AdditionalInfo_Polish_ID" />
         <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Images" Width="1.5" PointX="5.25" PointY="12" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Images_Polish_ID" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Log" Width="1.5" PointX="7.75" PointY="8.75" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Setting" Width="1.5" PointX="9.75" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

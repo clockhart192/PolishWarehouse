@@ -9,14 +9,18 @@
 
 namespace PolishWarehouseData
 {
+    using System;
 
-    public partial class Polishes_Secondary_Colors
+    public partial class Log
     {
         public long ID { get; set; }
-        public long PolishID { get; set; }
-        public int ColorID { get; set; }
-    
-        public virtual Color Color { get; set; }
-        public virtual Polish Polish { get; set; }
+        public string LogType { get; set; }
+        public string Details { get; set; }
+        public string FriendlyMessage { get; set; }
+        public string Error { get; set; }
+        public string StackTrace { get; set; }
+        public string InputData { get; set; }
+        public string OutputData { get; set; }
+        public Nullable<long> ParentLogID { get; set; }
     }
 }

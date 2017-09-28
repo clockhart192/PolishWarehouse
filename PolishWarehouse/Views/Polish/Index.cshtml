@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
-            <div class="panel-heading">
+            <div class="panel-heading panel-heading-private">
                 <h3>Polish List</h3>
             </div>
             <div class="panel-collapse" id="Polishcollapse">
@@ -43,8 +43,8 @@
                                             <td class="hidden-xs">@polish.Description</td>
                                             <td>@polish.Label</td>
                                             <td class="hidden-xs">@polish.Coats</td>
-                                            <td class="hidden-xs">@Html.CheckBox("HasBeenTried", @polish.HasBeenTried, new { @class = "checkbox disabled" })</td>
-                                            <td class="hidden-xs">@Html.CheckBox("WasGift", @polish.WasGift, new { @class = "checkbox disabled" })</td>
+                                            <td class="hidden-xs">@Html.CheckBox("HasBeenTried", @polish.HasBeenTried, new { @disabled = "disabled" })</td>
+                                            <td class="hidden-xs">@Html.CheckBox("WasGift", @polish.WasGift, new { @disabled = "disabled" })</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

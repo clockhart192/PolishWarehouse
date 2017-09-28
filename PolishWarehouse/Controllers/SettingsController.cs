@@ -1,9 +1,7 @@
 ﻿using PolishWarehouse.Models;
 using PolishWarehouseData;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace PolishWarehouse.Controllers
@@ -45,7 +43,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex.Message);
+                return Json(Logging.LogEvent(LogTypes.Error, "Error getting color ID", "There was an error fetching your color.", ex));
             }
 
         }
@@ -63,7 +61,7 @@ namespace PolishWarehouse.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return Json(ex.Message);
+                    return Json(Logging.LogEvent(LogTypes.Error, "Error getting color details", "There was an error getting the details of the color", ex));
                 }
             }
         }
@@ -82,7 +80,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Errors"] = ex.Message;
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving the color", "There was an error saving the color", ex);
             }
 
             return RedirectToAction("Colors");
@@ -102,7 +100,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Errors"] = ex.Message;
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error deleting color", "There was an error deleting the color", ex);
             }
 
             return RedirectToAction("Colors");
@@ -133,7 +131,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex.Message);
+                return Json(Logging.LogEvent(LogTypes.Error, "Error adding color", "There was an error adding your color", ex));
             }
         }
         #endregion
@@ -182,7 +180,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex.Message);
+                return Json(Logging.LogEvent(LogTypes.Error, "Error getting brand id", "There was an error getting the brand.", ex));
             }
 
         }
@@ -200,7 +198,7 @@ namespace PolishWarehouse.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return Json(ex.Message);
+                    return Json(Logging.LogEvent(LogTypes.Error, "Error getting brand details", "There was an error getting the brand details.", ex));
                 }
             }
         }
@@ -219,7 +217,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Errors"] = ex.Message;
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving the brand.", "There was an error saving the brand.", ex);
             }
 
             return RedirectToAction("Brands");
@@ -239,7 +237,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Errors"] = ex.Message;
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error deleting brand.", "There was an error deleting the brand.", ex);
             }
 
             return RedirectToAction("Brands");
@@ -270,7 +268,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex.Message);
+                return Json(Logging.LogEvent(LogTypes.Error, "Error adding brand.", "There was an error adding your brand", ex));
             }
         }
         #endregion
@@ -307,7 +305,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex.Message);
+                return Json(Logging.LogEvent(LogTypes.Error, "Error getting polish type id", "There was an error getting the polish type", ex));
             }
 
         }
@@ -325,7 +323,7 @@ namespace PolishWarehouse.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return Json(ex.Message);
+                    return Json(Logging.LogEvent(LogTypes.Error, "Error getting polish type details", "There was an error getting the polish type details", ex));
                 }
             }
         }
@@ -344,7 +342,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Errors"] = ex.Message;
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving the polish type", "There was an error saving the polish type", ex);
             }
 
             return RedirectToAction("PolishTypes");
@@ -364,7 +362,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Errors"] = ex.Message;
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error deleting polish type", "There was an error deleting the polish type.", ex);
             }
 
             return RedirectToAction("PolishTypes");
@@ -395,7 +393,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex.Message);
+                return Json(Logging.LogEvent(LogTypes.Error, "Error adding polish type", "There was an error adding your polish type", ex));
             }
         }
         #endregion
@@ -432,7 +430,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex.Message);
+                return Json(Logging.LogEvent(LogTypes.Error, "Error getting brand category id", "There was an error getting the brand category", ex));
             }
 
         }
@@ -450,7 +448,7 @@ namespace PolishWarehouse.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return Json(ex.Message);
+                    return Json(Logging.LogEvent(LogTypes.Error, "Error getting brand category details", "There was an error getting the brand category details.", ex));
                 }
             }
         }
@@ -469,7 +467,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Errors"] = ex.Message;
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving brand category", "There was an error saving the brand category.", ex);
             }
 
             return RedirectToAction("BrandCategories");
@@ -489,7 +487,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Errors"] = ex.Message;
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error deleting brand category", "There was an error deleting the brand category.", ex);
             }
 
             return RedirectToAction("BrandCategories");
@@ -520,7 +518,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex.Message);
+                return Json(Logging.LogEvent(LogTypes.Error, "Error adding brand category", "There was an error adding the brand category.", ex));
             }
         }
         #endregion
