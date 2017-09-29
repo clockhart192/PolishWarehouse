@@ -549,7 +549,7 @@ namespace PolishWarehouse.Models
                         foreach (var image in Images)
                         {
                             image.MimeType = "image/jpeg";
-                            image.Image = Utilities.ReduceImageSize(image.Image, 10);
+                            image.Image = Utilities.ResizeImage(image.Image,720,960);
                             image.ImageForHTML = "data:" + image.MimeType + ";base64," + image.Image;
                         }
                     }
