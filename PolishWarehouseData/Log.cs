@@ -10,7 +10,8 @@
 namespace PolishWarehouseData
 {
     using System;
-
+    using System.Collections.Generic;
+    
     public partial class Log
     {
         public long ID { get; set; }

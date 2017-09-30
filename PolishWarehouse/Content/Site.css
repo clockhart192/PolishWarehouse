@@ -134,6 +134,11 @@ textarea {
 }
 
 /*Modal*/
+    .modal-sm {
+        width: 300px;
+        text-align: center;
+    }
+
 @media screen and (min-width: 768px){
     body{
             background-color:      #000000;
@@ -142,10 +147,6 @@ textarea {
             background-position:   center center;              /* optional, center the image */
             background-attachment: fixed;
             background-image:      url("../Content/Images/galaxy-wallpaper.jpg");
-    }
-    .modal-sm {
-        width: 300px;
-        text-align: center;
     }
 
     .modal-md {

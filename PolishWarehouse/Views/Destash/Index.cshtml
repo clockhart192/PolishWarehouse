@@ -21,7 +21,7 @@
                         <div class="row margin-top-5">
                             <div class="col-md-12 table-responsive">
                                 @*<input type="text" onkeyup="SortTable('salestable',this)" />*@
-                                <table class="table table-hover table-condensed datatable" id="polishtable">
+                                <table class="table table-hover table-condensed datatable" id="polishtable" style="display:none;">
                                     <thead>
                                         <tr>
                                             <th>Brand</th>
@@ -56,8 +56,11 @@
                 $(document).ready(function () {
                     $('#polishtable').dataTable({
                         "pageLength": 100,
-                        "deferLoading": true,
+                        "deferRender": true,
                         "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
+                        "initComplete": function (settings, json) {
+                            $("#polishtable").show();
+                        }
                     });
                 });
             </script>

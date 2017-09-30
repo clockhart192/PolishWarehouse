@@ -5,6 +5,7 @@ using System.Web;
 using Microsoft.VisualBasic.FileIO;
 using System.Collections.Generic;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace PolishWarehouse.Models
 {
@@ -41,6 +42,18 @@ namespace PolishWarehouse.Models
 
             using (var db = new PolishWarehouseEntities())
             {
+                var useOriginal = false;
+                var useDatabase = false;
+                try
+                {
+                    useOriginal = Convert.ToBoolean(Utilities.GetConfigurationValue("Use original quality image"));
+                    useDatabase = Convert.ToBoolean(Utilities.GetConfigurationValue("Use database image"));
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogEvent(LogTypes.Error, "Error getting image config settings", "Error getting image config settings", ex);
+                }
+
                 var p = db.Polishes.Where(po => po.ID == id).SingleOrDefault();
 
                 ID = p.ID;
@@ -68,9 +81,9 @@ namespace PolishWarehouse.Models
                     {
                         ID = i.ID,
                         PolishID = i.PolishID,
-                        Image = i.Image,
-                        MimeType = i.MIMEType,
-                        ImageForHTML = "data:" + i.MIMEType + ";base64," + i.Image,
+                        //Image = i.Image,
+                        //MimeType = i.MIMEType,
+                        ImageForHTML = (useDatabase ? (useOriginal ? "data:" + i.MIMEType + ";base64," + i.Image : "data:" + i.CompressedMIMEType + ";base64," + i.CompressedImage) : (useOriginal ? i.ImagePath : i.CompressedImagePath)),
                         Description = i.Description,
                         Notes = i.Notes,
                         MakerImage = i.MakerImage.HasValue ? i.MakerImage.Value : false,
@@ -401,35 +414,27 @@ namespace PolishWarehouse.Models
 
             using (var db = new PolishWarehouseEntities())
             {
-                var changes = false;
                 var images = db.Polishes_Images.Where(i => i.PolishID == ID.Value).ToArray();
+                var maxWidth = Convert.ToInt32(Utilities.GetConfigurationValue("Image max width"));
+                var maxHeight = Convert.ToInt32(Utilities.GetConfigurationValue("Image max height"));
 
                 bool first = images == null ? true : !(images.Any(i => i.DisplayImage.Value));
                 foreach (var file in files)
                 {
                     if (file != null && file.ContentLength > 0)
                     {
-                        changes = true;
-                        MemoryStream target = new MemoryStream();
-                        file.InputStream.CopyTo(target);
-                        byte[] data = target.ToArray();
-                        var fileBase64 = Convert.ToBase64String(data);
-
-                        var image = new Polishes_Images()
+                        var model = new PolishImageModel()
                         {
                             PolishID = ID.Value,
-                            Image = fileBase64,
-                            MIMEType = file.ContentType,
-                            MakerImage = false,
-                            DisplayImage = first,
-                            PublicImage = true,
+                            MaxHeight = maxHeight,
+                            MaxWidth = maxWidth,
+                            DisplayImage = first
                         };
-                        db.Polishes_Images.Add(image);
+
                         first = false;
+                        model.Save(file);
                     }
                 }
-                if (changes)
-                    db.SaveChanges();
 
                 return new Response(true);
             }
@@ -439,6 +444,7 @@ namespace PolishWarehouse.Models
         {
             using (var db = new PolishWarehouseEntities())
             {
+                string basePath = HttpContext.Current.Server.MapPath($"/Content/PolishImages/{BrandName.Replace(" ", "").Replace("&", "AND")}/{PolishName.Replace(" ", "")}/");
                 //Remove the dependants
                 var additional = db.Polishes_AdditionalInfo.Where(a => a.PolishID == ID).SingleOrDefault();
                 if (additional != null)
@@ -456,6 +462,27 @@ namespace PolishWarehouse.Models
                 if (types != null)
                     db.Polishes_PolishTypes.RemoveRange(types);
 
+                var images = db.Polishes_Images.Where(a => a.PolishID == ID).ToArray();
+                if (images != null)
+                {
+                    //Kill current images
+                    if (Directory.Exists(basePath))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(basePath);
+                        foreach (FileInfo f in di.GetFiles())
+                        {
+                            f.Delete();
+                        }
+                        foreach (DirectoryInfo dir in di.GetDirectories())
+                        {
+                            dir.Delete(true);
+                        }
+                    }
+
+                    db.Polishes_Images.RemoveRange(images);
+                }
+
+
                 //Remove the polish
                 var polish = db.Polishes.Where(p => p.ID == ID.Value).SingleOrDefault();
 
@@ -465,8 +492,6 @@ namespace PolishWarehouse.Models
                 return new Response(false, "Polishes can't be removed yet like this because your husband didn't do it right.");
             }
         }
-
-
 
         public enum Column
         {
@@ -497,13 +522,25 @@ namespace PolishWarehouse.Models
         public string SaleStatus { get; set; }
 
         public PolishDestashModel() { }
-        public PolishDestashModel(int? id, bool colors = true, bool returnimages = false, bool forPublicView = true, bool reduceImages = true)
+        public PolishDestashModel(int? id, bool colors = true, bool returnimages = false, bool forPublicView = true)
         {
             if (!id.HasValue)
                 return;
 
             using (var db = new PolishWarehouseEntities())
             {
+                var useOriginal = false;
+                var useDatabase = false;
+                try
+                {
+                    useOriginal = Convert.ToBoolean(Utilities.GetConfigurationValue("Use original quality image"));
+                    useDatabase = Convert.ToBoolean(Utilities.GetConfigurationValue("Use database image"));
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogEvent(LogTypes.Error, "Error getting image config settings", "Error getting image config settings", ex);
+                }
+
                 var polish = db.Polishes.Join(db.Polishes_DestashInfo,
                                             p => p.ID,
                                             pdi => pdi.PolishID,
@@ -534,26 +571,15 @@ namespace PolishWarehouse.Models
                     {
                         ID = i.ID,
                         PolishID = i.PolishID,
-                        Image = i.Image,
-                        MimeType = i.MIMEType,
-                        ImageForHTML = "data:" + i.MIMEType + ";base64," + i.Image,
+                        //Image = i.Image,
+                        //MimeType = i.MIMEType,
+                        ImageForHTML = (useDatabase ? (useOriginal ? "data:" + i.MIMEType + ";base64," + i.Image : "data:" + i.CompressedMIMEType + ";base64," + i.CompressedImage) : (useOriginal ? i.ImagePath : i.CompressedImagePath)),
                         Description = i.Description,
                         Notes = i.Notes,
                         MakerImage = i.MakerImage.HasValue ? i.MakerImage.Value : false,
                         PublicImage = i.PublicImage,
                         DisplayImage = i.DisplayImage.HasValue ? i.DisplayImage.Value : false
                     }).ToArray();
-
-                    if (reduceImages)
-                    {
-                        foreach (var image in Images)
-                        {
-                            image.MimeType = "image/jpeg";
-                            image.Image = Utilities.ResizeImage(image.Image,720,960);
-                            image.ImageForHTML = "data:" + image.MimeType + ";base64," + image.Image;
-                        }
-                    }
-
                 }
 
                 SellQty = polish.Polishes_DestashInfo.Qty;
@@ -608,20 +634,41 @@ namespace PolishWarehouse.Models
         public string Description { get; set; }
         public string Notes { get; set; }
         public bool MakerImage { get; set; }
-        public bool PublicImage { get; set; }
+        public bool PublicImage { get; set; } = true;
         public bool DisplayImage { get; set; }
+        public int MaxWidth { get; set; }
+        public int MaxHeight { get; set; }
+
 
         public Response Save(HttpPostedFileBase file)
         {
+
             using (var db = new PolishWarehouseEntities())
             {
+                var polish = db.Polishes.Where(p => p.ID == PolishID).SingleOrDefault();
+                if (polish == null)
+                    return new Response(false, "Polish not found");
+
+                //string basePath = HttpContext.Current.Server.MapPath($"/Content/PolishImages/{polish.Brand.Name.Replace(" ", "").Replace("&", "AND")}/{polish.Name.Replace(" ", "")}/{ID.ToString()}/");
+                string basePath = $"/Content/PolishImages/{polish.Brand.ID.ToString()}/{polish.ID.ToString()}/{ID.ToString()}/";
+
                 var image = db.Polishes_Images.Where(i => i.ID == ID).SingleOrDefault();
+                var imgCount = 0;
 
                 if (image == null)
                 {
-                    return new Response(false, "Image not found");
+                    image = new Polishes_Images();
+                    image.PolishID = PolishID;
+                    image.Image = "";
+                    image.MIMEType = file.ContentType;
+                    image.PublicImage = PublicImage;
+                    image.DisplayImage = DisplayImage;
+                    image.MakerImage = MakerImage;
+                    db.Polishes_Images.Add(image);
+                    db.SaveChanges();
                 }
 
+                ID = image.ID;
                 image.Description = Description;
                 image.Notes = Notes;
                 image.MakerImage = MakerImage;
@@ -634,21 +681,208 @@ namespace PolishWarehouse.Models
                     foreach (var otherImage in otherImages)
                     {
                         otherImage.DisplayImage = false;
+                        imgCount++;
+                    }
+                }
+                if (file != null && file.ContentLength > 0)
+                {
+                    //do image magic
+                    var imageBase64 = Utilities.ConvertFileToBase64(file);
+                    var compressedBase64 = Utilities.ResizeImage(imageBase64, MaxWidth, MaxHeight);
+                    //var compressedImage = Utilities.ConvertBase64ToImage(compressedBase64);
+
+                    //set up dirs
+                    var path = $"{basePath}\\original\\";
+                    var compressedPath = $"{basePath}\\compressed\\";
+
+                    //Kill current images
+                    if (Directory.Exists(HttpContext.Current.Server.MapPath(path)))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(HttpContext.Current.Server.MapPath(path));
+                        foreach (FileInfo f in di.GetFiles())
+                        {
+                            f.Delete();
+                        }
+                        foreach (DirectoryInfo dir in di.GetDirectories())
+                        {
+                            dir.Delete(true);
+                        }
+                    }
+
+                    if (Directory.Exists(HttpContext.Current.Server.MapPath(path)))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(HttpContext.Current.Server.MapPath(compressedPath));
+                        foreach (FileInfo f in di.GetFiles())
+                        {
+                            f.Delete();
+                        }
+                        foreach (DirectoryInfo dir in di.GetDirectories())
+                        {
+                            dir.Delete(true);
+                        }
+                    }
+
+                    //Remake the folders
+                    Directory.CreateDirectory((HttpContext.Current.Server.MapPath(path)));
+                    Directory.CreateDirectory((HttpContext.Current.Server.MapPath(compressedPath)));
+
+                    //Set up the paths
+                    var imagePath = $"{path}{ID.Value.ToString()}_{imgCount.ToString()}_{Utilities.ToUnixTime(DateTime.Now).ToString()}{Path.GetExtension(file.FileName)}";
+                    var compressedImagePath = $"{compressedPath}{ID.Value.ToString()}_{imgCount.ToString()}_{Utilities.ToUnixTime(DateTime.Now).ToString()}.jpeg";
+
+                    //save
+                    file.SaveAs(HttpContext.Current.Server.MapPath(imagePath));
+                    var resp = Utilities.ConvertBase64ToImageAndSave(compressedBase64, HttpContext.Current.Server.MapPath(compressedImagePath));
+                    //compressedImage.Save(compressedImagePath, ImageFormat.Jpeg);
+
+                    //dump into db fields
+                    image.Image = imageBase64;
+                    image.MIMEType = file.ContentType;
+                    image.CompressedImage = compressedBase64;
+                    image.CompressedMIMEType = "image/jpeg";
+                    image.ImagePath = imagePath;
+                    image.CompressedImagePath = compressedImagePath;
+                }
+
+                db.SaveChanges();
+
+                return new Response(true);
+            }
+
+        }
+
+        public Response Save(System.Drawing.Image img)
+        {
+            if (img != null)
+            {
+                using (var db = new PolishWarehouseEntities())
+                {
+                    var polish = db.Polishes.Where(p => p.ID == PolishID).SingleOrDefault();
+                    if (polish == null)
+                        return new Response(false, "Polish not found");
+
+                    string basePath = $"/Content/PolishImages/{polish.Brand.ID.ToString()}/{polish.ID.ToString()}/{ID.ToString()}/";
+
+                    var image = db.Polishes_Images.Where(i => i.ID == ID).SingleOrDefault();
+                    var imgCount = 0;
+
+                    if (image == null)
+                    {
+                        image = new Polishes_Images();
+                        image.PolishID = PolishID;
+                        image.Image = "";
+                        image.MIMEType = "image/jpeg";
+                        image.PublicImage = PublicImage;
+                        image.DisplayImage = DisplayImage;
+                        image.MakerImage = MakerImage;
+                        db.Polishes_Images.Add(image);
+                        db.SaveChanges();
+                    }
+
+                    ID = image.ID;
+                    image.Description = Description;
+                    image.Notes = Notes;
+                    image.MakerImage = MakerImage;
+                    image.PublicImage = PublicImage;
+                    image.DisplayImage = DisplayImage;
+
+                    if (DisplayImage)//Kill the rest of the Display Images for this polish if this is the primary.
+                    {
+                        var otherImages = db.Polishes_Images.Where(i => i.PolishID == PolishID && i.ID != ID).ToArray();
+                        foreach (var otherImage in otherImages)
+                        {
+                            otherImage.DisplayImage = false;
+                            imgCount++;
+                        }
+                    }
+
+                    //do image magic
+                    var imageBase64 = Utilities.ConvertImageToBase64(img);
+                    var compressedBase64 = Utilities.ResizeImage(imageBase64, MaxWidth, MaxHeight);
+                    //var compressedImage = Utilities.ConvertBase64ToImage(compressedBase64);
+
+                    //set up dirs
+                    var path = $"{basePath}\\original\\";
+                    var compressedPath = $"{basePath}\\compressed\\";
+
+                    //Kill current images
+                    if (Directory.Exists(HttpContext.Current.Server.MapPath(path)))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(HttpContext.Current.Server.MapPath(path));
+                        foreach (FileInfo f in di.GetFiles())
+                        {
+                            f.Delete();
+                        }
+                        foreach (DirectoryInfo dir in di.GetDirectories())
+                        {
+                            dir.Delete(true);
+                        }
+                    }
+
+                    if (Directory.Exists(HttpContext.Current.Server.MapPath(compressedPath)))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(HttpContext.Current.Server.MapPath(compressedPath));
+                        foreach (FileInfo f in di.GetFiles())
+                        {
+                            f.Delete();
+                        }
+                        foreach (DirectoryInfo dir in di.GetDirectories())
+                        {
+                            dir.Delete(true);
+                        }
+                    }
+
+                    //Remake the folders
+                    Directory.CreateDirectory((HttpContext.Current.Server.MapPath(path)));
+                    Directory.CreateDirectory((HttpContext.Current.Server.MapPath(compressedPath)));
+
+                    //Set up the paths
+                    var imagePath = $"{path}{ID.Value.ToString()}_{imgCount.ToString()}_{Utilities.ToUnixTime(DateTime.Now).ToString()}.jpeg";
+                    var compressedImagePath = $"{compressedPath}{ID.Value.ToString()}_{imgCount.ToString()}_{Utilities.ToUnixTime(DateTime.Now).ToString()}.jpeg";
+
+                    //save
+                    Utilities.ConvertBase64ToImageAndSave(imageBase64, HttpContext.Current.Server.MapPath(imagePath));
+                    var resp = Utilities.ConvertBase64ToImageAndSave(compressedBase64, HttpContext.Current.Server.MapPath(compressedImagePath));
+                    //compressedImage.Save(compressedImagePath, ImageFormat.Jpeg);
+
+                    //dump into db fields
+                    image.Image = imageBase64;
+                    image.MIMEType = "image/jpeg";
+                    image.CompressedImage = compressedBase64;
+                    image.CompressedMIMEType = "image/jpeg";
+                    image.ImagePath = imagePath;
+                    image.CompressedImagePath = compressedImagePath;
+
+                    db.SaveChanges();
+
+                    return new Response(true);
+                }
+            }
+            return new Response(false, "Image not found");
+        }
+        public Response Delete()
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                var polish = db.Polishes.Where(p => p.ID == PolishID).SingleOrDefault();
+                string basePath = HttpContext.Current.Server.MapPath($"/Content/PolishImages/{polish.Brand.Name.Replace(" ", "").Replace("&", "AND")}/{polish.Name.Replace(" ", "")}/{ID.ToString()}/");
+
+                //Kill current images
+                if (Directory.Exists(basePath))
+                {
+                    DirectoryInfo di = new DirectoryInfo(basePath);
+                    foreach (FileInfo f in di.GetFiles())
+                    {
+                        f.Delete();
+                    }
+                    foreach (DirectoryInfo dir in di.GetDirectories())
+                    {
+                        dir.Delete(true);
                     }
                 }
 
-
-                if (file != null && file.ContentLength > 0)
-                {
-                    MemoryStream target = new MemoryStream();
-                    file.InputStream.CopyTo(target);
-                    byte[] data = target.ToArray();
-                    var fileBase64 = Convert.ToBase64String(data);
-
-                    image.Image = fileBase64;
-                    image.MIMEType = file.ContentType;
-                }
-
+                var image = db.Polishes_Images.Where(p => p.ID == ID).SingleOrDefault();
+                db.Polishes_Images.Remove(image);
                 db.SaveChanges();
                 return new Response(true);
             }

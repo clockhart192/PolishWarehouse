@@ -10,8 +10,10 @@ namespace PolishWarehouse.Controllers
 {
     public class PolishController : Controller
     {
-        public ActionResult Index()
+
+        public ActionResult Index(string cheatCode)
         {
+            Server.ScriptTimeout = 600;
             using (var db = new PolishWarehouseEntities())
             {
                 var polishes = db.Polishes.Where(p => p.Polishes_DestashInfo == null).Select(p => new PolishModel
@@ -33,14 +35,24 @@ namespace PolishWarehouse.Controllers
                     Notes = p.Polishes_AdditionalInfo.Notes,
 
                 }).OrderBy(p => p.BrandName).ToArray();
+
+
+
+                if (cheatCode == "upupdowndownleftrightleftrightbastart")
+                {
+                    if (Convert.ToBoolean(Utilities.GetConfigurationValue("Konami Code Active")))
+                    {
+                        Utilities.ReSaveAllImages();
+                        TempData["Messages"] = "Konami Code Activated!";
+                    }
+                }
                 return View(polishes);
             }
         }
-
         public ActionResult Public()
         {
             ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
-            return Index();
+            return Index(null);
         }
 
         public JsonResult DetailsAsync(int id)
@@ -94,18 +106,40 @@ namespace PolishWarehouse.Controllers
         {
             using (var db = new PolishWarehouseEntities())
             {
-                var images = db.Polishes_Images.Where(p => p.PolishID == id).Select(p => new PolishImageModel
+                var useOriginal = false;
+                var useDatabase = false;
+                try
                 {
-                    ID = p.ID,
-                    PolishID = p.PolishID,
-                    Image = p.Image,
-                    MimeType = p.MIMEType,
-                    ImageForHTML = "data:" + p.MIMEType + ";base64," + p.Image,
-                    Description = p.Description,
-                    Notes = p.Notes,
-                    MakerImage = p.MakerImage.HasValue ? p.MakerImage.Value : false,
-                    PublicImage = p.PublicImage,
-                    DisplayImage = p.DisplayImage.HasValue ? p.DisplayImage.Value : false
+                    useOriginal = Convert.ToBoolean(Utilities.GetConfigurationValue("Use original quality image"));
+                    useDatabase = Convert.ToBoolean(Utilities.GetConfigurationValue("Use database image"));
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogEvent(LogTypes.Error, "Error getting image config settings", "Error getting image config settings", ex);
+                }
+
+                var images = db.Polishes_Images.Where(p => p.PolishID == id).Select(i => new PolishImageModel
+                {
+                    ID = i.ID,
+                    PolishID = i.PolishID,
+                    //Image = i.Image,
+                    //MimeType = i.MIMEType,
+                    ImageForHTML = (useDatabase ? (useOriginal ? "data:" + i.MIMEType + ";base64," + i.Image : "data:" + i.CompressedMIMEType + ";base64," + i.CompressedImage) : (useOriginal ? i.ImagePath : i.CompressedImagePath)),
+                    Description = i.Description,
+                    Notes = i.Notes,
+                    MakerImage = i.MakerImage.HasValue ? i.MakerImage.Value : false,
+                    PublicImage = i.PublicImage,
+                    DisplayImage = i.DisplayImage.HasValue ? i.DisplayImage.Value : false
+                    //ID = p.ID,
+                    //PolishID = p.PolishID,
+                    //Image = p.Image,
+                    //MimeType = p.MIMEType,
+                    //ImageForHTML = "data:" + p.MIMEType + ";base64," + p.Image,
+                    //Description = p.Description,
+                    //Notes = p.Notes,
+                    //MakerImage = p.MakerImage.HasValue ? p.MakerImage.Value : false,
+                    //PublicImage = p.PublicImage,
+                    //DisplayImage = p.DisplayImage.HasValue ? p.DisplayImage.Value : false
                 }).ToArray();
 
                 var polish = db.Polishes.Where(p => p.ID == id).SingleOrDefault();

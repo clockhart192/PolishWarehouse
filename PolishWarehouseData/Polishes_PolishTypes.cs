@@ -9,7 +9,9 @@
 
 namespace PolishWarehouseData
 {
-
+    using System;
+    using System.Collections.Generic;
+    
     public partial class Polishes_PolishTypes
     {
         public long ID { get; set; }

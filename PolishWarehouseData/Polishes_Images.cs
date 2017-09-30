@@ -10,7 +10,8 @@
 namespace PolishWarehouseData
 {
     using System;
-
+    using System.Collections.Generic;
+    
     public partial class Polishes_Images
     {
         public long ID { get; set; }
@@ -22,6 +23,10 @@ namespace PolishWarehouseData
         public Nullable<bool> MakerImage { get; set; }
         public bool PublicImage { get; set; }
         public Nullable<bool> DisplayImage { get; set; }
+        public string CompressedImage { get; set; }
+        public string CompressedMIMEType { get; set; }
+        public string ImagePath { get; set; }
+        public string CompressedImagePath { get; set; }
     
         public virtual Polish Polish { get; set; }
     }

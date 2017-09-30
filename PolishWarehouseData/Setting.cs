@@ -9,7 +9,9 @@
 
 namespace PolishWarehouseData
 {
-
+    using System;
+    using System.Collections.Generic;
+    
     public partial class Setting
     {
         public long ID { get; set; }
@@ -17,5 +19,6 @@ namespace PolishWarehouseData
         public string KeyValue { get; set; }
         public string KeyDataType { get; set; }
         public bool PublicSetting { get; set; }
+        public bool PrivateSetting { get; set; }
     }
 }

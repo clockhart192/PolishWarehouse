@@ -125,7 +125,7 @@
                                     <div class="col-md-3">
                                         <label for="Coats">Quantity</label>
                                         <br />
-                                        <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" value="@polish.Quantity" />
+                                        <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" value="@(polish.Quantity.HasValue ? polish.Quantity.Value : 1)" />
                                     </div>
                                     <div class="col-md-6">
                                         <label for="submit"></label>
@@ -156,7 +156,7 @@
                                 {
                                     <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
                                 }
-                              
+
                             </div>
                         </div>
                     </div>
@@ -178,7 +178,7 @@
                             <div class="col-md-4">
                                 <label for="GiftFromName">Gifter's Name</label>
                                 <br />
-                                <input type="text" 2" id="GiftFromName" name="GiftFromName" placeholder="Name" class="form-control" value="@polish.GiftFromName" />
+                                <input type="text" id="GiftFromName" name="GiftFromName" placeholder="Name" class="form-control" value="@polish.GiftFromName" />
                             </div>
                             <div class="col-md-4">
                                 <label for="HasBeenTried">Has been tried?</label>
@@ -302,14 +302,20 @@
                         }
                     </div>
                     <script>
+                        var gallery = null;
                         $('#Image-Gallery-Modal').on('shown.bs.modal', function (e) {
-                            blueimp.Gallery(
+                            if (gallery == null) {
+                                gallery = blueimp.Gallery(
                                     document.getElementById('links').getElementsByTagName('a'),
                                     {
                                         container: '#blueimp-gallery-carousel',
-                                        carousel: true
+                                        carousel: true,
+                                        onclosed: function () {
+                                            alert("hi");
+                                        }
                                     }
                                 );
+                            }
                         });
                     </script>
                 </div>

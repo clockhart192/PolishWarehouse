@@ -9,9 +9,10 @@
 
 namespace PolishWarehouseData
 {
+    using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-
+    
     public partial class PolishWarehouseEntities : DbContext
     {
         public PolishWarehouseEntities()

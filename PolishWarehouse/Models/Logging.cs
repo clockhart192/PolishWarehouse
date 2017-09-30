@@ -17,6 +17,7 @@ namespace PolishWarehouse.Models
 
                 if(ex != null)
                 {
+                    db.Logs.Add(log);
                     db.SaveChanges();
                     log.Error = ex.Message;
                     log.StackTrace = ex.StackTrace;
@@ -25,6 +26,10 @@ namespace PolishWarehouse.Models
                     {
                         LogEvent(type, $"Inner Exception for details: {details}", friendlyMessage,ex.InnerException,log.ID);
                     }
+                }
+                else
+                {
+                    db.Logs.Add(log);
                 }
 
                 db.SaveChanges();

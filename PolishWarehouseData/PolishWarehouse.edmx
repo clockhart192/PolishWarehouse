@@ -109,6 +109,10 @@
           <Property Name="MakerImage" Type="bit" />
           <Property Name="PublicImage" Type="bit" Nullable="false" />
           <Property Name="DisplayImage" Type="bit" />
+          <Property Name="CompressedImage" Type="varchar(max)" />
+          <Property Name="CompressedMIMEType" Type="varchar" MaxLength="50" />
+          <Property Name="ImagePath" Type="varchar(max)" />
+          <Property Name="CompressedImagePath" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Polishes_PolishTypes">
           <Key>
@@ -143,6 +147,7 @@
           <Property Name="KeyValue" Type="nvarchar(max)" />
           <Property Name="KeyDataType" Type="nvarchar" MaxLength="100" />
           <Property Name="PublicSetting" Type="bit" Nullable="false" />
+          <Property Name="PrivateSetting" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_Brand_Category_ID">
           <End Role="BrandCategory" Type="Self.BrandCategory" Multiplicity="1" />
@@ -688,6 +693,10 @@
           <NavigationProperty Name="Polish" Relationship="PolishWarehouseModel.FK_Polishes_Images_Polish_ID" FromRole="Polishes_Images" ToRole="Polish" />
           <Property Name="PublicImage" Type="Boolean" Nullable="false" />
           <Property Name="DisplayImage" Type="Boolean" />
+          <Property Name="CompressedImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CompressedMIMEType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CompressedImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Polishes_Images_Polish_ID">
           <End Type="PolishWarehouseModel.Polish" Role="Polish" Multiplicity="1" />
@@ -724,6 +733,7 @@
           <Property Name="KeyValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="KeyDataType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="PublicSetting" Type="Boolean" Nullable="false" />
+          <Property Name="PrivateSetting" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -845,6 +855,10 @@
           <EntitySetMapping Name="Polishes_Images">
             <EntityTypeMapping TypeName="PolishWarehouseModel.Polishes_Images">
               <MappingFragment StoreEntitySet="Polishes_Images">
+                <ScalarProperty Name="CompressedImagePath" ColumnName="CompressedImagePath" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CompressedMIMEType" ColumnName="CompressedMIMEType" />
+                <ScalarProperty Name="CompressedImage" ColumnName="CompressedImage" />
                 <ScalarProperty Name="DisplayImage" ColumnName="DisplayImage" />
                 <ScalarProperty Name="PublicImage" ColumnName="PublicImage" />
                 <ScalarProperty Name="MakerImage" ColumnName="MakerImage" />
@@ -875,6 +889,7 @@
           <EntitySetMapping Name="Settings">
             <EntityTypeMapping TypeName="PolishWarehouseModel.Setting">
               <MappingFragment StoreEntitySet="Settings">
+                <ScalarProperty Name="PrivateSetting" ColumnName="PrivateSetting" />
                 <ScalarProperty Name="PublicSetting" ColumnName="PublicSetting" />
                 <ScalarProperty Name="KeyDataType" ColumnName="KeyDataType" />
                 <ScalarProperty Name="KeyValue" ColumnName="KeyValue" />
