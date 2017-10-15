@@ -1,314 +1,386 @@
 ﻿@model PolishWarehouse.Models.PolishDestashModel[]
-@{
+@if (ViewBag.ShowPublicDestash || Request.IsAuthenticated)
+{
     ViewBag.Title = "Polish List";
-
     var polishTypes = ViewBag.PolishTypes;
-}
 
-@Html.Partial("MessageControl")
+    @Html.Partial("MessageControl")
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-               <h3>Polish Destash</h3>
-            </div>
-            <div class="panel-collapse" id="Polishcollapse">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-12 table-responsive">
-                            @*<input type="text" onkeyup="SortTable('salestable',this)" />*@
-                            <table class="table table-hover table-condensed datatable" id="polishtable" style="display:none;">
-                                <thead>
-                                    <tr>
-                                        <th>Brand</th>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Asking Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var polish in Model)
-                                    {
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Polish Destash</h3>
+                    <p>Click the polish name for more information</p>
+                </div>
+                <div class="panel-collapse" id="Polishcollapse">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 table-responsive">
+                                @*<input type="text" onkeyup="SortTable('salestable',this)" />*@
+                                <table class="table table-hover table-condensed datatable" id="polishtable" style="display:none;">
+                                    <thead>
                                         <tr>
-                                            <td>@polish.BrandName</td>
-                                            <td><a href="#" onclick="getDetailsModal('@polish.ID'); return false;">@polish.PolishName</a></td>
-                                            <td>@polish.Description</td>
-                                            <td>@polish.AskingPrice.Value.ToString("C2")</td>
+                                            <th>Brand</th>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Asking Price</th>
                                         </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var polish in Model)
+                                        {
+                                            <tr>
+                                                <td>@polish.BrandName</td>
+                                                <td><a href="#" onclick="getDetailsModal('@polish.ID'); return false;">@polish.PolishName</a></td>
+                                                <td>@polish.Description</td>
+                                                <td>@polish.AskingPrice.Value.ToString("C2")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
+
         </div>
-
     </div>
-</div>
-<div class="modal fade" id="Details" role="dialog">
-    <div class="modal-dialog modal-md">
-        <!-- Modal content-->
-        <div class="modal-content" id="Modal-Details-Content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Details</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3>Polish Info</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label for="BrandID">Brand Name</label>
-                                                <br />
-                                                <input id="BrandName" name="BrandName" class="form-control" disabled placeholder="Brand Name">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="PolishName">Polish Name*</label>
-                                                <br />
-                                                <input type="text" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" disabled />
-                                            </div>
-
-                                        </div>
-                                        <div class="row hidden">
-                                            <div class="col-md-6">
-                                                <label for="ColorID">Color</label>
-                                                <br />
-                                                <input id="ColorName" name="ColorName" class="form-control" disabled placeholder="Primary Color">
-                                            </div>
-                                            @*<div class="col-md-6">
-                                                    <label for="PolishName">Color Number</label>
-                                                    <br />
-                                                    <input type="text" id="ColorNumber" name="ColorNumber" placeholder="Color Number" class="form-control" disabled />
-                                                </div>*@
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <label for="PolishName">Description</label>
-                                                <br />
-                                                <textarea class="form-control" disabled rows="5" id="Description" name="Description" placeholder="Description"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="row hidden">
-                                            <div class="col-md-6">
-                                                <label for="SecondaryColorsIDs">Secondary Colors</label>
-                                                <br />
-                                                <select multiple id="SecondaryColorsIDs" name="SecondaryColorsIDs" class="form-control" disabled>
-                                                    <option></option>
-
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="GlitterColorsIDs">Glitter Colors</label>
-                                                <br />
-                                                <select multiple id="GlitterColorsIDs" name="GlitterColorsIDs" class="form-control" disabled>
-                                                    <option></option>
-
-                                                </select>
-                                            </div>
-
-                                        </div>
-                                        <div class="row hidden">
-                                            <div class="col-md-3">
-                                                <label for="Coats">Coats</label>
-                                                <br />
-                                                <input type="number" id="Coats" name="Coats" placeholder="Coats" class="form-control" disabled />
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label for="Coats">Quantity</label>
-                                                <br />
-                                                <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" disabled />
-                                            </div>
-                                        </div>
-                                    </div>
-                                   
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3>Destash Info</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="destash-sellQty">Asking Price</label>
-                                        <br />
-                                        <input id="SskingPrice" name="AskingPrice" class="form-control" disabled />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="PolishName">Qty</label>
-                                        <br />
-                                        <input id="SellQty" name="SellQty" class="form-control" disabled />
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label for="Notes">Notes</label>
-                                        <br />
-                                        <textarea class="form-control" disabled rows="5" id="DestashNotes" name="DestashNotes" placeholder="Notes"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 hidden">
+    <div class="modal fade" id="Details" role="dialog">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content" id="Modal-Details-Content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">Polish Types</h3>
+                                    <h3>Polish Info</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <br />
                                     <div class="row">
-                                        @foreach (var type in polishTypes)
-                                        {
-                                            <div class="col-sm-3">
-                                                <span>@type.Name</span>
-                                                <br />
-                                                <label class="switch">
-                                                    <input id="polish-type-@type.Name" type="checkbox">
-                                                    <span class="slider round"></span>
-                                                </label>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label for="BrandID">Brand Name</label>
+                                                    <br />
+                                                    <input id="BrandName" name="BrandName" class="form-control" disabled placeholder="Brand Name">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="PolishName">Polish Name*</label>
+                                                    <br />
+                                                    <input type="text" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" disabled />
+                                                </div>
+
                                             </div>
+                                            <div class="row hidden">
+                                                <div class="col-md-6">
+                                                    <label for="ColorID">Color</label>
+                                                    <br />
+                                                    <input id="ColorName" name="ColorName" class="form-control" disabled placeholder="Primary Color">
+                                                </div>
+                                                @*<div class="col-md-6">
+                                                        <label for="PolishName">Color Number</label>
+                                                        <br />
+                                                        <input type="text" id="ColorNumber" name="ColorNumber" placeholder="Color Number" class="form-control" disabled />
+                                                    </div>*@
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label for="PolishName">Description</label>
+                                                    <br />
+                                                    <textarea class="form-control" disabled rows="5" id="Description" name="Description" placeholder="Description"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="row hidden">
+                                                <div class="col-md-6">
+                                                    <label for="SecondaryColorsIDs">Secondary Colors</label>
+                                                    <br />
+                                                    <select multiple id="SecondaryColorsIDs" name="SecondaryColorsIDs" class="form-control" disabled>
+                                                        <option></option>
+
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="GlitterColorsIDs">Glitter Colors</label>
+                                                    <br />
+                                                    <select multiple id="GlitterColorsIDs" name="GlitterColorsIDs" class="form-control" disabled>
+                                                        <option></option>
+
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                            <div class="row hidden">
+                                                <div class="col-md-3">
+                                                    <label for="Coats">Coats</label>
+                                                    <br />
+                                                    <input type="number" id="Coats" name="Coats" placeholder="Coats" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="Coats">Quantity</label>
+                                                    <br />
+                                                    <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" disabled />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3>Destash Info</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="destash-sellQty">Asking Price</label>
+                                            <br />
+                                            <input id="SskingPrice" name="AskingPrice" class="form-control" disabled />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="PolishName">Qty</label>
+                                            <br />
+                                            <input id="SellQty" name="SellQty" class="form-control" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label for="Notes">Notes</label>
+                                            <br />
+                                            <textarea class="form-control" disabled rows="5" id="DestashNotes" name="DestashNotes" placeholder="Notes"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 hidden">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Polish Types</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <br />
+                                        <div class="row">
+                                            @foreach (var type in polishTypes)
+                                        {
+                                        <div class="col-sm-3">
+                                            <span>@type.Name</span>
+                                            <br />
+                                            <label class="switch">
+                                                <input id="polish-type-@type.Name" type="checkbox">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
                                         }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6" id="Images-div">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
-                                <div id="blueimp-gallery-carousel" class="blueimp-gallery blueimp-gallery-carousel">
-                                    <div class="slides"></div>
-                                    <h3 class="title"></h3>
-                                    <a class="prev">‹</a>
-                                    <a class="next">›</a>
-                                    <a class="play-pause"></a>
-                                    <ol class="indicator"></ol>
+                        <div class="col-md-6" id="Images-div">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
+                                    <div id="blueimp-gallery-carousel" class="blueimp-gallery blueimp-gallery-carousel">
+                                        <div class="slides"></div>
+                                        <h3 class="title"></h3>
+                                        <a class="prev">‹</a>
+                                        <a class="next">›</a>
+                                        <a class="play-pause"></a>
+                                        <ol class="indicator"></ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a class="btn btn-default" href="#" onclick="$('#Modal-Details-Content').hide(); $('#Image-Viewer').modal('show'); return false;">Larger</a>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="Image-Viewer" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
+                    <div id="blueimp-gallery-carousel-full" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls">
+                        <div class="slides"></div>
+                        <h3 class="title"></h3>
+                        <a class="prev">‹</a>
+                        <a class="next">›</a>
+                        <a class="play-pause"></a>
+                        <ol class="indicator"></ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var carouselLinks = [];
+        var gallery = null;
+        var biggallery = null;
+
+        $(document).ready(function () {
+            $('#polishtable').dataTable({
+                "pageLength": 100,
+                "deferLoading": true,
+                "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
+                "initComplete": function (settings, json) {
+                    $("#polishtable").show();
+                }
+            });
+        });
+
+        function getDetailsModal(id) {
+            loading();
+            var token = $('[name=__RequestVerificationToken]').val();
+            var data = {
+                __RequestVerificationToken: token,
+                id: id
+            };
+            $.ajax({
+                url: "@Url.Action("DetailsAsync", "Destash")",
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                    $("#BrandName").val(response.BrandName);
+                    $("#PolishName").val(response.PolishName);
+                    $("#ColorName").val(response.ColorName);
+                    $("#Description").val(response.Description);
+                    $("#AskingPrice").val(response.AskingPrice);
+                    $("#SellQty").val(response.SellQty);
+                    $("#DestashNotes").val(response.DestashNotes);
+
+                    //for(var i=0;i<response.Types.Length;i++){
+                    //    $('#polish-type-' + response.Types[i].Name).prop('checked', true);
+                    //}
+
+                    carouselLinks = [];
+                    if (response.Images.length > 0) {
+                        $("#Images-div").show();
+                        $.each(response.Images, function (index, image) {
+                            carouselLinks.push({
+                                href: image.ImageForHTML,
+                                title: image.Description
+                            });
+                        });
+                    }
+                    else {
+                        $("#Images-div").hide();
+                    }
+
+                    doneLoading();
+                    $("#Details").modal("show");
+                },
+                failure: function (response) {
+                    alert(response);
+                },
+                error: function (response) {
+                    alert(response);
+                }
+            });
+        }
+        //$('#Details').on('shown.bs.modal', function (e) {
+        //    blueimp.Gallery(carouselLinks, {
+        //        container: '#blueimp-gallery-carousel',
+        //        carousel: true,
+        //        clearSlides: true
+        //    });
+        //});
+        //$('#Image-Viewer').on('shown.bs.modal', function (e) {
+        //    blueimp.Gallery(carouselLinks, {
+        //        container: '#blueimp-gallery-carousel-full',
+        //        carousel: true,
+        //        clearSlides: true
+        //    });
+        //});
+        //$('#Image-Viewer').on('hidden.bs.modal', function () {
+        //    $('#Modal-Details-Content').show();
+        //})
+
+        $('#Details').on('shown.bs.modal', function (e) {
+            if (carouselLinks.length > 0) {
+                gallery = blueimp.Gallery(carouselLinks, {
+                    container: '#blueimp-gallery-carousel',
+                    carousel: true,
+                    clearSlides: true,
+                    onclosed: function () {
+                        gallery = null;
+                        $('#Details').modal('hide');
+                    }
+                });
+            }
+        });
+        $('#Details').on('hide.bs.modal', function () {
+            if (gallery) {
+                gallery.close();
+                return false;
+            }
+        });
+        $('#Image-Viewer').on('shown.bs.modal', function (e) {
+            if (carouselLinks.length > 0) {
+                biggallery = blueimp.Gallery(carouselLinks, {
+                    container: '#blueimp-gallery-carousel-full',
+                    carousel: true,
+                    clearSlides: true,
+                    onclosed: function () {
+                        biggallery = null;
+                        $('#Image-Viewer').modal('hide');
+                    }
+                });
+            }
+        });
+        $('#Image-Viewer').on('hide.bs.modal', function () {
+            if (biggallery) {
+                biggallery.close();
+                return false;
+            }
+        });
+        $('#Image-Viewer').on('hidden.bs.modal', function () {
+            $('#Modal-Details-Content').show();
+        });
+    </script>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Page Temporarily Unavailble</h3>
+                </div>
+                <div class="panel-collapse" id="Polishcollapse">
+                    <div class="panel-body text-center">
                         <div class="row">
-                            <div class="col-md-12">
-                                <a class="btn btn-default" href="#" onclick="$('#Modal-Details-Content').hide(); $('#Image-Viewer').modal('show'); return false;">Larger</a>
+                            <div class="col-lg-12">
+                                <h2>This page is currently not available for you to view. As an apology, here's a picture of a kitten to make you feel better.</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <img src="~/Content/Images/NotAvailable.jpg" class="error-image" />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-
-                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="Image-Viewer" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Modal content-->
-        <div class="row">
-            <div class="col-md-12">
-                <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
-                <div id="blueimp-gallery-carousel-full" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls">
-                    <div class="slides"></div>
-                    <h3 class="title"></h3>
-                    <a class="prev">‹</a>
-                    <a class="next">›</a>
-                    <a class="play-pause"></a>
-                    <ol class="indicator"></ol>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    var carouselLinks = [];
-    $(document).ready(function () {
-        $('#polishtable').dataTable({
-            "pageLength": 100,
-            "deferLoading": true,
-            "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
-            "initComplete": function (settings, json) {
-                $("#polishtable").show();
-            }
-        });
-    });
-
-    function getDetailsModal(id) {
-        loading();
-        var token = $('[name=__RequestVerificationToken]').val();
-        var data = {
-            __RequestVerificationToken: token,
-            id: id
-        };
-        $.ajax({
-            url: "@Url.Action("DetailsAsync", "Destash")",
-            type: 'POST',
-            data: data,
-            success: function (response) {
-                $("#BrandName").val(response.BrandName);
-                $("#PolishName").val(response.PolishName);
-                $("#ColorName").val(response.ColorName);
-                $("#Description").val(response.Description);
-                $("#AskingPrice").val(response.AskingPrice);
-                $("#SellQty").val(response.SellQty);
-                $("#DestashNotes").val(response.DestashNotes);
-
-                //for(var i=0;i<response.Types.Length;i++){
-                //    $('#polish-type-' + response.Types[i].Name).prop('checked', true);
-                //}
-
-                carouselLinks = [];
-                if (response.Images.length > 0) {
-                    $("#Images-div").show();
-                    $.each(response.Images, function (index, image) {
-                        carouselLinks.push({
-                            href: image.ImageForHTML,
-                            title: image.Description
-                        });
-                    });
-                }
-                else {
-                    $("#Images-div").hide();
-                }
-
-                doneLoading();
-                $("#Details").modal("show");
-            },
-            failure: function (response) {
-                alert(response);
-            },
-            error: function (response) {
-                alert(response);
-            }
-        });
-    }
-    $('#Details').on('shown.bs.modal', function (e) {
-        blueimp.Gallery(carouselLinks, {
-            container: '#blueimp-gallery-carousel',
-            carousel: true,
-            clearSlides: true
-        });
-    });
-    $('#Image-Viewer').on('shown.bs.modal', function (e) {
-        blueimp.Gallery(carouselLinks, {
-            container: '#blueimp-gallery-carousel-full',
-            carousel: true,
-            clearSlides: true
-        });
-    });
-    $('#Image-Viewer').on('hidden.bs.modal', function () {
-        $('#Modal-Details-Content').show();
-    })
-</script>
+}

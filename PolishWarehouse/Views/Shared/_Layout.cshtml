@@ -61,6 +61,60 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="Mark-All-Pending-As-Sold-Confirm" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Confirm</h4>
+                    </div>
+                    <div class="modal-body">
+                        Confirm marking all pending Destash as sold?
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-md-2">
+                                @using (Html.BeginForm("MarkAllPendingAsSold", "Destash", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="submit" value="Yes" class="btn btn-default" />
+                                }
+                            </div>
+                            <div class="col-md-8"></div>
+                            <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Mark-All-Pending-As-Sold-Confirm').modal('hide'); return false;">No</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="Archive-All-Sold-Confirm" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Confirm</h4>
+                    </div>
+                    <div class="modal-body">
+                        Archive all polish currently marked as sold?
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-md-2">
+                                @using (Html.BeginForm("ArchiveAllSold", "Destash", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="submit" value="Yes" class="btn btn-default" />
+                                }
+                            </div>
+                            <div class="col-md-8"></div>
+                            <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Archive-All-Sold-Confirm').modal('hide'); return false;">No</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script>
             function loading() { $("#loadingModal").modal(); }
             function doneLoading() { $("#loadingModal").modal("hide"); }

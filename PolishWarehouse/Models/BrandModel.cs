@@ -86,5 +86,10 @@ namespace PolishWarehouse.Models
                 return new Response(true);
             }
         }
+
+        public static BrandModel GetModel(Brand brand)
+        {
+            return new BrandModel(brand);
+        }
     }
 }

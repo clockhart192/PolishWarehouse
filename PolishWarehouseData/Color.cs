@@ -20,6 +20,7 @@ namespace PolishWarehouseData
             this.Polishes = new HashSet<Polish>();
             this.Polishes_Glitter_Colors = new HashSet<Polishes_Glitter_Colors>();
             this.Polishes_Secondary_Colors = new HashSet<Polishes_Secondary_Colors>();
+            this.IncomingOrderLines_Polishes = new HashSet<IncomingOrderLines_Polishes>();
         }
     
         public int ID { get; set; }
@@ -35,5 +36,7 @@ namespace PolishWarehouseData
         public virtual ICollection<Polishes_Glitter_Colors> Polishes_Glitter_Colors { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Polishes_Secondary_Colors> Polishes_Secondary_Colors { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<IncomingOrderLines_Polishes> IncomingOrderLines_Polishes { get; set; }
     }
 }

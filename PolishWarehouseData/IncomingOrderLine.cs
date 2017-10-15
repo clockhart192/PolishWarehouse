@@ -12,24 +12,30 @@ namespace PolishWarehouseData
     using System;
     using System.Collections.Generic;
     
-    public partial class Brand
+    public partial class IncomingOrderLine
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Brand()
+        public IncomingOrderLine()
         {
-            this.Polishes = new HashSet<Polish>();
             this.IncomingOrderLines_Polishes = new HashSet<IncomingOrderLines_Polishes>();
         }
     
-        public int ID { get; set; }
+        public long ID { get; set; }
+        public byte[] Timestamp { get; set; }
+        public System.DateTime CreatedOn { get; set; }
+        public long IncomingOrderID { get; set; }
+        public long IncomingLineTypeID { get; set; }
+        public decimal Price { get; set; }
+        public int Qty { get; set; }
+        public string Notes { get; set; }
+        public string Tracking { get; set; }
+        public Nullable<int> ShippingProviderID { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public int CategoryID { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Polish> Polishes { get; set; }
-        public virtual BrandCategory BrandCategory { get; set; }
+        public virtual IncomingLineType IncomingLineType { get; set; }
+        public virtual IncomingOrder IncomingOrder { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IncomingOrderLines_Polishes> IncomingOrderLines_Polishes { get; set; }
+        public virtual ShippingProvider ShippingProvider { get; set; }
     }
 }

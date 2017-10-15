@@ -14,14 +14,19 @@
     max-width:100%;
 }
 
-input[type=checkbox]
+/*input[type=checkbox]
 {
-  /* Double-sized Checkboxes */
-  -ms-transform: scale(2); /* IE */
-  -moz-transform: scale(2); /* FF */
-  -webkit-transform: scale(2); /* Safari and Chrome */
-  -o-transform: scale(2); /* Opera */
+   Double-sized Checkboxes 
+  -ms-transform: scale(2);  IE 
+  -moz-transform: scale(2);  FF 
+  -webkit-transform: scale(2);  Safari and Chrome 
+  -o-transform: scale(2);  Opera 
   padding: 10px;
+}*/
+
+.error-image{
+    border-radius: 10px;
+    max-height: 650px;
 }
 
 input,
@@ -80,6 +85,16 @@ textarea {
     max-width: 200px;
     display: block;
     margin: auto;
+}
+
+td.selectable {
+    background: url("details_open.png") no-repeat center center;
+    cursor: pointer;
+}
+
+tr.shown td.selectable {
+    background: url("details_close.png") no-repeat center center;
+    cursor: pointer;
 }
 
 /*Bootstrap Replacements*/
@@ -357,6 +372,14 @@ table.dataTable thead .sorting_desc:after {
 table.dataTable thead .sorting_asc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:after {
   color: #eee;
+}
+
+td.details-control {
+    
+    cursor: pointer;
+}
+tr.shown td.details-control {
+  
 }
 
 /*Gallery Overrides*/

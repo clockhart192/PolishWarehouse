@@ -28,6 +28,16 @@
                             <li>@Html.ActionLink("List", "", "Destash")</li>
                             <li>@Html.ActionLink(" Public List", "Public", "Destash")</li>
                             <li>@Html.ActionLink("Add", "Details", "Destash", new { id = string.Empty }, null)</li>
+                            <li><a href="#" onclick="$('#Mark-All-Pending-As-Sold-Confirm').modal('show'); return false;">Mark Pending As Sold</a></li>
+                            <li><a href="#" onclick="$('#Archive-All-Sold-Confirm').modal('show'); return false;">Archive Sold</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Incoming Orders <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("List", "", "Incoming")</li>
+                            <li>@Html.ActionLink("Completed", "", "Incoming", new { viewComplete = true }, null)</li>
+                            <li>@Html.ActionLink("Add", "Details", "Incoming", new { id = string.Empty }, null)</li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -42,6 +52,7 @@
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">Utilities <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Random!", "Random", "Polish")</li>
                             <li>@Html.ActionLink("Import", "Import", "Polish")</li>
                             <li>@Html.ActionLink("New User", "Register", "Account")</li>
                         </ul>

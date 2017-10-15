@@ -14,6 +14,7 @@ namespace PolishWarehouse.Controllers
         {
             using (var db = new PolishWarehouseEntities())
             {
+                
                 var polishes = db.Polishes.Join(db.Polishes_DestashInfo,
                     p => p.ID,
                     pdi => pdi.PolishID,
@@ -51,6 +52,12 @@ namespace PolishWarehouse.Controllers
 
         public ActionResult Public()
         {
+            ViewBag.ShowPublicDestash = true;
+            try
+            {
+                ViewBag.ShowPublicDestash = Convert.ToBoolean(Utilities.GetConfigurationValue("Show Public Destash"));
+            }
+            catch { };
             ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
             return Index(true);
         }
@@ -118,6 +125,46 @@ namespace PolishWarehouse.Controllers
             catch (Exception ex)
             {
                 TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error destash polish", "There was an error saving your polish's destash", ex);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MarkAllPendingAsSold()
+        {
+            try
+            {
+                var resp = PolishDestashModel.MarkAllPendingAsSold();
+                if (resp.WasSuccessful)
+                    TempData["Messages"] = "All pending marked as sold!";
+                else
+                    TempData["Errors"] = resp.Message;
+            }
+            catch (Exception ex)
+            {
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error pending marked as sold", "There was an error marking pending as sold", ex);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ArchiveAllSold()
+        {
+            try
+            {
+                var resp = PolishDestashModel.ArchiveAllSold();
+                if (resp.WasSuccessful)
+                    TempData["Messages"] = "Polish Archived!";
+                else
+                    TempData["Errors"] = resp.Message;
+            }
+            catch (Exception ex)
+            {
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error archiving destasah polish", "There was an error archiving your sold destash", ex);
             }
 
             return RedirectToAction("Index");

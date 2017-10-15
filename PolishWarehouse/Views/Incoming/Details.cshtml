@@ -1,0 +1,644 @@
+﻿@model PolishWarehouse.Models.IncomingOrderModel
+@if (Request.IsAuthenticated)
+{
+    ViewBag.Title = "Details";
+    var order = Model;
+    var linetypes = ViewBag.LineTypes;
+    var providers = ViewBag.ShippingProviders;
+    var primaryColors = ViewBag.PrimaryColors;
+    var secondaryColors = ViewBag.SecondaryColors;
+    var glitterColors = ViewBag.GlitterColors;
+    var brands = ViewBag.Brands;
+    var polishTypes = ViewBag.PolishTypes;
+    bool isNew = ViewBag.IsNew ?? false;
+
+    @Html.Partial("MessageControl")
+
+    using (Html.BeginForm("Details", "Incoming", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="ID" id="ID" value="@order.ID">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Order Info</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="Name">Name</label>
+                                        <br />
+                                        <input type="text" id="Name" name="Name" placeholder="Order Name" class="form-control" value="@order.Name" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="destash-sellQty">Total</label>
+                                        <br />
+                                        @if (order.Price.HasValue)
+                                        {
+                                            <input type="number" id="Price" step="0.01" name="Price" value="@order.Price.Value.ToString("N2")" class="form-control" />
+                                        }
+                                        else
+                                        {
+                                            <input type="number" id="Price" step="0.01" name="Price" class="form-control" />
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="PurchaseDate">Purchase Date</label>
+                                        <br />
+                                        <input type="date" id="PurchaseDate" name="PurchaseDate" placeholder="Order Name" class="form-control" value="@order.PurchaseDate.ToString("yyyy-MM-dd")" />
+                                    </div>
+                                    <div class="col-md-6">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="TrackingProviderID">Shipping Provider</label>
+                                        <br />
+                                        <select id="TrackingProviderID" name="TrackingProviderID" class="form-control">
+                                            @foreach (var provider in providers)
+                                            {
+                                                <option value="@provider.ID">@provider.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="Tracking">Tracking</label>
+                                        <br />
+                                        <input type="text" id="Tracking" name="Tracking" placeholder="Tracking #" class="form-control" value="@order.Tracking" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="Notes">Notes</label>
+                                        <br />
+                                        <textarea class="form-control" rows="5" id="Notes" name="Notes" placeholder="Notes">@order.Notes</textarea>
+                                    </div>
+                                </div>
+                                <div class="row margin-top-5">
+                                    @if (!isNew)
+                                    {
+                                    <div class="col-md-6">
+                                        <label for="OrderComplete">Order Complete</label>
+                                        <br />
+                                        <label class="switch">
+                                            <input id="OrderComplete" name="OrderComplete" value="true" type="checkbox" @(order.OrderComplete ? "checked" : "")>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <br />
+                                        <button type="submit" class="btn btn-default">Save</button>
+                                    </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-default">Save</button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    if (!isNew)
+    {
+        <datalist id="BrandList">
+            @foreach (var brand in brands)
+            {
+                <option value="@brand.Name"></option>
+            }
+        </datalist>
+        <datalist id="ColorList">
+            @foreach (var color in primaryColors)
+            {
+                <option value="@color.Name"></option>
+            }
+        </datalist>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Order Lines</h3>
+                    </div>
+                    <div class="panel-body">
+                        <script type="text/template" id="other-order-lines-template">
+                            <div class="other-order-line">
+                                <div class="row">
+                                    <h4>Line Info</h4>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="IncomingOrderLine-Name">Name</label>
+                                                        <br />
+                                                        <input type="text" id="IncomingOrderLine-Name" name="Name" placeholder="Name" class="form-control" />
+                                                        <input type="hidden" name="IncomingOrderLineID" id="IncomingOrderLine-ID" value="2">
+                                                        <input type="hidden" name="LineNumber" class="LineNumber">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="IncomingOrderLine-Qty">Quantity</label>
+                                                        <br />
+                                                        <input type="number" id="IncomingOrderLine-Qty" name="Qty" placeholder="Quantity" class="form-control" />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="IncomingOrderLine-Price">Price</label>
+                                                        <br />
+                                                        <input type="number" id="IncomingOrderLine-Price" step="0.01" name="Price" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="IncomingOrderLine-TrackingProviderID">Shipping Provider</label>
+                                                        <br />
+                                                        <select id="IncomingOrderLine-TrackingProviderID" name="TrackingProviderID" class="form-control">
+                                                            @foreach (var provider in providers)
+                                                            {
+                                                                <option value="@provider.ID">@provider.Name</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="IncomingOrderLine-Tracking">Tracking</label>
+                                                        <br />
+                                                        <input type="text" id="IncomingOrderLine-Tracking" name="Tracking" placeholder="Tracking #" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="row margin-top-5">
+                                                    <div class="col-md-12">
+                                                        <a href="#" class="btn btn-default" onclick="saveOther(this); return false;">Save</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label for="IncomingOrderLine-Notes">Notes</label>
+                                                        <br />
+                                                        <textarea class="form-control" rows="5" id="IncomingOrderLine-Notes" name="Notes" placeholder="Notes"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                            </div>
+                        </script>
+
+                        <script type="text/template" id="polish-order-lines-template">
+                            <div class="polish-order-line">
+                                <div class="row">
+                                    <h4>Line Info</h4>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="IncomingOrderLine-Name">Name</label>
+                                                        <br />
+                                                        <input type="text" id="IncomingOrderLine-Name" name="Name" placeholder="Name" class="form-control" />
+                                                        <input type="hidden" name="IncomingOrderLineID" id="IncomingOrderLine-ID" value="1">
+                                                        <input type="hidden" name="LineNumber" class="LineNumber">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="IncomingOrderLine-Qty">Quantity</label>
+                                                        <br />
+                                                        <input type="number" id="IncomingOrderLine-Qty" name="Qty" placeholder="Quantity" class="form-control" />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="IncomingOrderLine-Price">Price</label>
+                                                        <br />
+                                                        <input type="number" id="IncomingOrderLine-Price" step="0.01" name="Price" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="IncomingOrderLine-TrackingProviderID">Shipping Provider</label>
+                                                        <br />
+                                                        <select id="IncomingOrderLine-TrackingProviderID" name="TrackingProviderID" class="form-control">
+                                                            @foreach (var provider in providers)
+                                                            {
+                                                                <option value="@provider.ID">@provider.Name</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="IncomingOrderLine-Tracking">Tracking</label>
+                                                        <br />
+                                                        <input type="text" id="IncomingOrderLine-Tracking" name="Tracking" placeholder="Tracking #" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label for="IncomingOrderLine-Notes">Notes</label>
+                                                        <br />
+                                                        <textarea class="form-control" rows="5" id="IncomingOrderLine-Notes" name="Notes" placeholder="Notes"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <h4>Polish Info</h4>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="BrandID">Brand Name*</label>
+                                                        <br />
+                                                        <input list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" onblur="GetBrandID(this);">
+
+                                                        <input type="hidden" name="BrandID" id="BrandID">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="PolishName">Polish Name*</label>
+                                                        <br />
+                                                        <input type="text" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="ColorID">Color*</label>
+                                                        <br />
+                                                        <input list="ColorList" id="ColorName" name="ColorName" class="form-control" placeholder="Primary Color" onblur="GetPolishQuickInfo(this);">
+
+                                                        <input type="hidden" name="ColorID" id="ColorID">
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label for="WasGift">Gift</label>
+                                                        <br />
+                                                        <label class="switch">
+                                                            <input id="WasGift" name="WasGift" value="true" type="checkbox">
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="GiftFromName">Gifter's Name</label>
+                                                        <br />
+                                                        <input type="text" id="GiftFromName" name="GiftFromName" placeholder="Name" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="row margin-top-5">
+                                                    <div class="col-md-12">
+                                                        <a href="#" class="btn btn-default" onclick="savePolish(this); return false;">Save</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label for="PolishName">Description</label>
+                                                        <br />
+                                                        <textarea class="form-control" rows="5" id="Description" name="Description" placeholder="Description"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <hr />
+                            </div>
+                        </script>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton-newline" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="glyphicon glyphicon-plus"></span> New Line
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-newline">
+                                        <li><a class="dropdown-item" href="#" onclick="newOrderLine('#polish-order-lines-template'); return false;">New Polish</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="newOrderLine('#other-order-lines-template'); return false;">New Other</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" id="orderlines-holder">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="modal fade" id="Add-New-Brand-Confirm" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add New Brand?</h4>
+                </div>
+                <div class="modal-body">
+                    <span id="Add-New-Brand-Text"></span>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-2"><button id="Add-New-Brand-Confirm-Btn" class="btn btn-default">Yes</button></div>
+                        <div class="col-md-8"></div>
+                        <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Add-New-Brand-Confirm').modal('hide'); return false;">No</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var brand = null;
+        var color = null;
+        var lines = 0;
+        $(document).ready(function () {
+            $("#Add-New-Brand-Confirm-Btn").on("click", function () {
+                var token = $('[name=__RequestVerificationToken]').val();
+                var data = {
+                    __RequestVerificationToken: token,
+                    BrandName: $(brand).val()
+                };
+
+                loading();
+                $.ajax({
+                    url: "@Url.Action("AddBrand", "Settings")",
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        if (response > 0) {
+                            $(brand).parent().find("input[type=hidden]").val(response);
+                            $("#Add-New-Brand-Confirm").modal("hide");
+                        }
+                        else {
+                            alert("Unknown error adding brand.");
+                        }
+                        doneLoading();
+                    },
+                    failure: function (response) {
+                        alert(response);
+                    },
+                    error: function (response) {
+                        alert(response);
+                    }
+                });
+            });
+
+            $("#Name").focus();
+            @if (!isNew)
+            {
+                int i = 0;
+                foreach(var line in order.Lines)
+                {
+                    if(line.IncomingOrderLinePolish != null)
+                    {
+                        <text>
+                            newOrderLine('#polish-order-lines-template');
+                            $("#IncomingOrderLine-ID-" + @i.ToString()).val("@line.ID");
+                            $("#IncomingOrderLine-Name-" + @i.ToString()).val("@line.Name");
+                            $("#IncomingOrderLine-Price-" + @i.ToString()).val("@line.Price");
+                            $("#IncomingOrderLine-Qty-" + @i.ToString()).val("@line.Qty");
+                            $("#IncomingOrderLine-Notes-" + @i.ToString()).val("@line.Notes");
+                            $("#IncomingOrderLine-Tracking-" + @i.ToString()).val("@line.Tracking");
+                            $("#IncomingOrderLine-TrackingProviderID-" + @i.ToString()).val("@line.ShippingProviderID");
+
+                            $("#ColorID-" + @i.ToString()).val("@line.IncomingOrderLinePolish.ColorID");
+                            $("#BrandID-" + @i.ToString()).val("@line.IncomingOrderLinePolish.BrandID");
+                            $("#PolishName-" + @i.ToString()).val("@line.IncomingOrderLinePolish.PolishName");
+                            $("#HasBeenTried-" + @i.ToString()).val("@line.IncomingOrderLinePolish.HasBeenTried");
+                            $("#WasGift-" + @i.ToString()).prop('checked',@line.IncomingOrderLinePolish.WasGift.ToString().ToLower());
+                            $("#GiftFromName-" + @i.ToString()).val("@line.IncomingOrderLinePolish.GiftFromName");
+                            $("#Description" + @i.ToString()).val("@line.IncomingOrderLinePolish.Description");
+
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            newOrderLine('#other-order-lines-template');
+                            $("#IncomingOrderLine-ID-" + @i.ToString()).val("@line.ID");
+                            $("#IncomingOrderLine-Name-" + @i.ToString()).val("@line.Name");
+                            $("#IncomingOrderLine-Price-" + @i.ToString()).val("@line.Price");
+                            $("#IncomingOrderLine-Qty-" + @i.ToString()).val("@line.Qty");
+                            $("#IncomingOrderLine-Notes-" + @i.ToString()).val("@line.Notes");
+                            $("#IncomingOrderLine-Tracking-" + @i.ToString()).val("@line.Tracking");
+                            $("#IncomingOrderLine-TrackingProviderID-" + @i.ToString()).val("@line.ShippingProviderID");
+                        </text>
+                    }
+                    i++;
+                }
+            }
+        });
+
+        function GetPolishQuickInfo(e) {
+            var token = $('[name=__RequestVerificationToken]').val();
+            var data = {
+                __RequestVerificationToken: token,
+                colorName: $(e).val()
+            };
+
+            color = e;
+            $.ajax({
+                url: "@Url.Action("GetPolishQuickInfo", "Polish")",
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                    //$("#ColorNumber").val(response.number);
+                    $(color).parent().find("input[type=hidden]").val(response.id);
+                },
+                failure: function (response) {
+                    alert(response);
+                },
+                error: function (response) {
+                    alert(response);
+                }
+            });
+        }
+
+        function GetBrandID(e) {
+            if ($(e).val() != "") {
+                var token = $('[name=__RequestVerificationToken]').val();
+                var data = {
+                    __RequestVerificationToken: token,
+                    BrandName: $(e).val()
+                };
+                brand = e;
+                $.ajax({
+                    url: "@Url.Action("GetBrandID", "Settings")",
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        if (response > 0) {
+                            $(brand).parent().find("input[type=hidden]").val(response);
+                        }
+                        else {
+                            var n = $(brand).val();
+                            $("#Add-New-Brand-Text").text('Are you sure you want to add " ' + n + '" as a brand?');
+                            $("#Add-New-Brand-Confirm").modal("show");
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response);
+                    },
+                    error: function (response) {
+                        alert(response);
+                    }
+                });
+            };
+        }
+
+        function newOrderLine(template) {
+            var template = $($(template).html());
+
+            $("#orderlines-holder").append(template.clone().attr('id', 'order-line-number-' + lines));
+
+            recursiveEach($("#order-line-number-" + lines));
+
+            $("#order-line-number-" + lines).find(".LineNumber").val(lines);
+
+            lines++;
+        }
+
+        function saveOther(e) {
+            //console.log(e);
+            var lineNum = $(e).closest('.other-order-line').find(".LineNumber").val();
+            var token = $('[name=__RequestVerificationToken]').val();
+            var model = {
+                IncomingOrderID: $("#ID").val(),
+                IncomingLineTypeID: $("#IncomingOrderLine-ID-" + lineNum).val(),
+                Name: $("#IncomingOrderLine-Name-" + lineNum).val(),
+                Price: $("#IncomingOrderLine-Price-" + lineNum).val(),
+                Qty: $("#IncomingOrderLine-Qty-" + lineNum).val(),
+                Notes: $("#IncomingOrderLine-Notes-" + lineNum).val(),
+                Tracking: $("#IncomingOrderLine-Tracking-" + lineNum).val(),
+                ShippingProviderID: $("#IncomingOrderLine-TrackingProviderID-" + lineNum).val(),
+            };
+            var data = {
+                __RequestVerificationToken: token,
+                model: model
+            };
+
+            loading();
+            $.ajax({
+                url: "@Url.Action("SaveLine", "Incoming")",
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                    if (response.WasSuccessful) {
+                        alert("Success!");
+                    }
+                    else {
+                        alert("Unknown error saving.");
+                    }
+                    doneLoading();
+                },
+                failure: function (response) {
+                    alert(response);
+                },
+                error: function (response) {
+                    alert(response);
+                }
+            });
+        }
+
+        function savePolish(e) {
+            //console.log(e);
+            var lineNum = $(e).closest('.polish-order-line').find(".LineNumber").val();
+            var token = $('[name=__RequestVerificationToken]').val();
+            var model = {
+                IncomingOrderID: $("#ID").val(),
+                IncomingLineTypeID: $("#IncomingOrderLine-ID-" + lineNum).val(),
+                Name: $("#IncomingOrderLine-Name-" + lineNum).val(),
+                Price: $("#IncomingOrderLine-Price-" + lineNum).val(),
+                Qty: $("#IncomingOrderLine-Qty-" + lineNum).val(),
+                Notes: $("#IncomingOrderLine-Notes-" + lineNum).val(),
+                Tracking: $("#IncomingOrderLine-Tracking-" + lineNum).val(),
+                ShippingProviderID: $("#IncomingOrderLine-TrackingProviderID-" + lineNum).val(),
+
+                ColorID: $("#ColorID-" + lineNum).val(),
+                BrandID: $("#BrandID-" + lineNum).val(),
+                PolishName: $("#PolishName-" + lineNum).val(),
+                HasBeenTried: $("#HasBeenTried-" + lineNum).val(),
+                WasGift: $("#WasGift-" + lineNum).val(),
+                GiftFromName: $("#GiftFromName-" + lineNum).val(),
+                Description: $("#Description" + lineNum).val(),
+
+
+            };
+            var data = {
+                __RequestVerificationToken: token,
+                model: model
+            };
+
+            loading();
+            $.ajax({
+                url: "@Url.Action("SavePolishLine", "Incoming")",
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                    if (response.WasSuccessful) {
+                        alert("Success!");
+                    }
+                    else {
+                        alert("Unknown error saving.");
+                    }
+                    doneLoading();
+                },
+                failure: function (response) {
+                    alert(response);
+                },
+                error: function (response) {
+                    alert(response);
+                }
+            });
+        }
+
+        function recursiveEach($element) {
+            $element.children().each(function () {
+                var $currentElement = $(this);
+                updateID($currentElement);
+                recursiveEach($currentElement);
+            });
+        }
+
+        function updateID(e) {
+            if ($(e).attr('id')) {
+                var newID = $(e).attr('id') + "-" + lines;
+                $(e).attr('id', newID);
+                //console.log(newID);
+            }
+        }
+    </script>
+}
+else
+{
+    //TempData["Errors"] = "Please Log in.";
+    Response.Redirect("~/Account/Login");
+}

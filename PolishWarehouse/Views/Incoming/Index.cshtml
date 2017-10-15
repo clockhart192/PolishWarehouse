@@ -1,0 +1,358 @@
+﻿@model PolishWarehouse.Models.IncomingOrderModel[]
+@if (Request.IsAuthenticated)
+{
+    ViewBag.Title = Convert.ToBoolean(ViewBag.ViewingComplete) ? "Completed Order List": "Incoming Order List";
+    int i = 0;
+    @Html.Partial("MessageControl")
+
+    <script type="text/template" id="polish-order-lines-template">
+        <div class="polish-order-line">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Name</label>
+                                    <br />
+                                    <input type="text" placeholder="Name" value="{{name}}" class="form-control  disabled"  disabled />
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Tracking</label>
+                                    <br />
+                                    <input type="text" placeholder="Tracking #" value="{{tracking}}" class="form-control  disabled"  disabled />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Quantity</label>
+                                    <br />
+                                    <input type="text" placeholder="Quantity" value="{{quantity}}" class="form-control  disabled"  disabled />
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Price</label>
+                                    <br />
+                                    <input type="text" name="Price" value="{{price}}" class="form-control  disabled"  disabled />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Notes</label>
+                                    <br />
+                                    <textarea class="form-control  disabled"  disabled rows="5" placeholder="Notes">{{notes}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Polish Info</h4>
+                    </div>
+                </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Brand Name</label>
+                                    <br />
+                                    <input type="text" placeholder="Brand Name" value="{{brand}}" class="form-control  disabled"  disabled />
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Polish Name</label>
+                                    <br />
+                                    <input type="text" name="PolishName" value="{{polishName}}" placeholder="Polish Name" class="form-control  disabled"  disabled />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Color</label>
+                                    <br />
+                                    <input type="text" placeholder="Color" value="{{color}}" class="form-control  disabled"  disabled />
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Gift</label>
+                                    <br />
+                                    <label class="switch">
+                                        <input id="WasGift" name="WasGift" value="true" type="checkbox" class="disabled"  disabled {{wasGift}}>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Gifter's Name</label>
+                                    <br />
+                                    <input type="text" name="GiftFromName" value="{{giftFromName}}" placeholder="Name" class="form-control  disabled"  disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Description</label>
+                                    <br />
+                                    <textarea class="form-control  disabled"  disabled rows="5" name="Description" placeholder="Description">{{description}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <hr />
+        </div>
+
+    </script>
+    <script type="text/template" id="other-order-lines-template">
+        <div class="other-order-line">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Name</label>
+                                    <br />
+                                    <input type="text" placeholder="Name" value="{{name}}" class="form-control disabled" disabled  />
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Tracking</label>
+                                    <br />
+                                    <input type="text" placeholder="Tracking #" value="{{tracking}}" class="form-control  disabled"  disabled />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Quantity</label>
+                                    <br />
+                                    <input type="text" placeholder="Quantity" value="{{quantity}}" class="form-control  disabled"  disabled />
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Price</label>
+                                    <br />
+                                    <input type="text" name="Price" value="{{price}}" class="form-control  disabled"  disabled />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Notes</label>
+                                    <br />
+                                    <textarea class="form-control  disabled"  disabled rows="5" placeholder="Notes">{{notes}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading-private">
+                        <h3>@ViewBag.Title</h3>
+                    </div>
+                    <div class="panel-collapse">
+                        <div class="panel-body">
+                            <div class="row margin-top-5">
+                                <div class="col-md-12 table-responsive">
+
+                                    <table class="table table-hover table-condensed datatable" id="table">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Name</th>
+                                                <th>Total</th>
+                                                <th>Purchase Date</th>
+                                                <th class="hidden-xs">Notes</th>
+                                                <th>Tracking</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                          
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+
+                var tableData =
+                     [
+                        @foreach(var order in Model)
+                        {
+                            <text>
+                                {
+                                    "id":"@order.ID",
+                                    "name": "@order.Name",
+                                    "total": "@order.Price.Value.ToString("C2")",
+                                    "date": "@order.PurchaseDate.ToShortDateString()",
+                                    "tracking": "@order.Tracking",
+                                    "notes": "@Html.Raw(order.Notes)",
+                                    "trackingUrl": "@order.TrackingURL",
+                                    "shippingProvider": "@order.ShippingProviderName",
+                                    "lines": [
+                                        @foreach(var line in order.Lines)
+                                          {
+                                              if(line.IncomingOrderLinePolish != null)
+                                              {
+                                                <text>
+                                                        {
+                                                            "type": "polish",
+                                                            "name": "@line.Name",
+                                                            "price": "@line.Price.ToString("C2")",
+                                                            "qty": "@line.Qty",
+                                                            "tracking": "@line.Tracking",
+                                                            "trackingUrl": "@line.TrackingURL",
+                                                            "notes": "@Html.Raw(line.Notes)",
+                                                            "shippingProvider": "@line.ShippingProviderName",
+
+                                                            "polishName": "@line.IncomingOrderLinePolish.PolishName",
+                                                            "color": "@line.IncomingOrderLinePolish.Color.Name",
+                                                            "brand": "@line.IncomingOrderLinePolish.Brand.Name",
+                                                            "wasGift": "@line.IncomingOrderLinePolish.WasGift.ToString()",
+                                                            "giftFromName": "@line.IncomingOrderLinePolish.GiftFromName",
+                                                            "description": "@line.IncomingOrderLinePolish.Description",
+                                                        },
+                                                         </text>
+                                              }
+                                              else
+                                              {
+                                                <text>
+                                                        {
+                                                            "type": "other",
+                                                            "name": "@line.Name",
+                                                            "price": "@line.Price.ToString("C2")",
+                                                            "qty": "@line.Qty",
+                                                            "tracking": "@line.Tracking",
+                                                            "trackingUrl": "@line.TrackingURL",
+                                                            "notes": "@line.Notes",
+                                                            "shippingProvider": "@line.ShippingProviderName",
+                                                        },
+                                                        </text>
+                                              }
+                                          }
+                                    ]
+                                },
+                            </text>
+                        }
+                    ];
+
+                console.log(tableData);
+                console.log(JSON.stringify(tableData));
+                var table = $('#table').DataTable({
+                    "data": tableData,
+                    "pageLength": 100,
+                    "deferRender": true,
+                    "responsive": true,
+                    "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
+                    "initComplete": function (settings, json) {
+                        $("#table").show();
+                    },
+                    "columns": [
+                        {
+                            "defaultContent": "",
+                            "className": "selectable",
+                            "orderable": "false"
+                        },
+                        {
+                            "data": "name",
+                            "render": function (data, type, row, meta) {
+                                return '<a href="/Incoming/Details/' + row.id + '">'+ data +'</a>';
+                            }
+                        },
+                        { "data": "total"
+                        },
+                        { "data": "date" },
+                        { "data": "notes" },
+                        {
+                            "data": "tracking",
+                            "render": function (data, type, row, meta) {
+                                return '<a href="' + row.trackingUrl + '" target="_blank" >' + data + '</a>';
+                            }
+                        },
+                    ]
+                });
+
+
+
+                // Add event listener for opening and closing details
+                $('#table tbody').on('click', 'td.selectable', function () {
+                    var tr = $(this).closest('tr');
+                    var row = table.row(tr);
+
+                    if (row.child.isShown()) {
+                        // This row is already open - close it
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    }
+                    else {
+                        // Open this row
+                        row.child(format(row.data())).show();
+                        tr.addClass('shown');
+                    }
+                });
+            });
+
+            /* Formatting function for row details - modify as you need */
+            function format(d) {
+                // `d` is the original data object for the row
+                var children = "";
+
+                d.lines.forEach(function (e) {
+                    switch (e.type) {
+                        case "polish":
+                            var checked = e.wasGift ? "checked='checked'" : "";
+                            children += document.getElementById("polish-order-lines-template").innerHTML.replace("{{price}}", e.price)
+                                                                                                        .replace("{{name}}", e.name)
+                                                                                                        .replace("{{quantity}}", e.qty)
+                                                                                                        .replace("{{tracking}}", e.tracking)
+                                                                                                        .replace("{{trackingUrl}}", e.trackingUrl)
+                                                                                                        .replace("{{notes}}", e.notes)
+                                                                                                        .replace("{{shippingProvider}}", e.shippingProvider)
+                                                                                                        .replace("{{polishName}}", e.polishName)
+                                                                                                        .replace("{{color}}", e.color)
+                                                                                                        .replace("{{brand}}", e.brand)
+                                                                                                        .replace("{{wasGift}}", checked)
+                                                                                                        .replace("{{giftFromName}}", e.giftFromName)
+                                                                                                        .replace("{{description}}", e.description);
+                            break;
+                        default:
+                            children += document.getElementById("other-order-lines-template").innerHTML.replace("{{price}}", e.price)
+                                                                                                       .replace("{{name}}", e.name)
+                                                                                                       .replace("{{quantity}}", e.qty)
+                                                                                                       .replace("{{tracking}}", e.tracking)
+                                                                                                       .replace("{{trackingUrl}}", e.trackingUrl)
+                                                                                                       .replace("{{notes}}", e.notes)
+                                                                                                       .replace("{{shippingProvider}}", e.shippingProvider);
+                            break;
+                    }
+                });
+
+                return children;
+            }
+        </script>
+
+}

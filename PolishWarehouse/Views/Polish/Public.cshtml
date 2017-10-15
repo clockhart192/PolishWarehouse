@@ -1,203 +1,203 @@
 ﻿@model PolishWarehouse.Models.PolishModel[]
-@{
+@if (ViewBag.ShowPublicList || Request.IsAuthenticated)
+{
     ViewBag.Title = "Polish List";
-
     var polishTypes = ViewBag.PolishTypes;
-}
 
-@Html.Partial("MessageControl")
+    @Html.Partial("MessageControl")
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3>Polish List</h3>
-            </div>
-            <div class="panel-collapse" id="Polishcollapse">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-12 table-responsive">
-                            @*<input type="text" onkeyup="SortTable('salestable',this)" />*@
-                            <table class="table table-hover table-condensed datatable" id="polishtable" style="display:none;">
-                                <thead>
-                                    <tr>
-                                        <th>Brand</th>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var polish in Model)
-                                    {
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Polish List</h3>
+                    <p>Click the polish name for more information</p>
+                </div>
+                <div class="panel-collapse" id="Polishcollapse">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 table-responsive">
+                                @*<input type="text" onkeyup="SortTable('salestable',this)" />*@
+                                <table class="table table-hover table-condensed datatable" id="polishtable" style="display:none;">
+                                    <thead>
                                         <tr>
-                                            <td>@polish.BrandName</td>
-                                            <td><a href="#" onclick="getDetailsModal('@polish.ID'); return false;">@polish.PolishName</a></td>
-                                            <td>@polish.Description</td>
+                                            <th>Brand</th>
+                                            <th>Name</th>
+                                            <th>Description</th>
                                         </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var polish in Model)
+                                        {
+                                            <tr>
+                                                <td>@polish.BrandName</td>
+                                                <td><a href="#" onclick="getDetailsModal('@polish.ID'); return false;">@polish.PolishName</a></td>
+                                                <td>@polish.Description</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="Details" role="dialog">
-    <div class="modal-dialog modal-md">
-        <!-- Modal content-->
-        <div class="modal-content" id="Modal-Details-Content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Details</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3>Polish Info</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <label for="BrandID">Brand Name</label>
-                                                <br />
-                                                <input id="BrandName" name="BrandName" class="form-control" disabled placeholder="Brand Name">
+    <div class="modal fade" id="Details" role="dialog">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content" id="Modal-Details-Content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3>Polish Info</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label for="BrandID">Brand Name</label>
+                                                    <br />
+                                                    <input id="BrandName" name="BrandName" class="form-control" disabled placeholder="Brand Name">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <label for="PolishName">Polish Name</label>
-                                                <br />
-                                                <input type="text" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" disabled />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label for="PolishName">Polish Name</label>
+                                                    <br />
+                                                    <input type="text" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" disabled />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row hidden">
-                                            <div class="col-md-6">
-                                                <label for="ColorID">Color</label>
-                                                <br />
-                                                <input id="ColorName" name="ColorName" class="form-control" disabled placeholder="Primary Color">
+                                            <div class="row hidden">
+                                                <div class="col-md-6">
+                                                    <label for="ColorID">Color</label>
+                                                    <br />
+                                                    <input id="ColorName" name="ColorName" class="form-control" disabled placeholder="Primary Color">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <label for="PolishName">Description</label>
-                                                <br />
-                                                <textarea class="form-control" disabled rows="5" id="Description" name="Description" placeholder="Description"></textarea>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label for="PolishName">Description</label>
+                                                    <br />
+                                                    <textarea class="form-control" disabled rows="5" id="Description" name="Description" placeholder="Description"></textarea>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row hidden">
-                                            <div class="col-md-6">
-                                                <label for="SecondaryColorsIDs">Secondary Colors</label>
-                                                <br />
-                                                <select multiple id="SecondaryColorsIDs" name="SecondaryColorsIDs" class="form-control" disabled>
-                                                    <option></option>
+                                            <div class="row hidden">
+                                                <div class="col-md-6">
+                                                    <label for="SecondaryColorsIDs">Secondary Colors</label>
+                                                    <br />
+                                                    <select multiple id="SecondaryColorsIDs" name="SecondaryColorsIDs" class="form-control" disabled>
+                                                        <option></option>
 
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="GlitterColorsIDs">Glitter Colors</label>
-                                                <br />
-                                                <select multiple id="GlitterColorsIDs" name="GlitterColorsIDs" class="form-control" disabled>
-                                                    <option></option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="GlitterColorsIDs">Glitter Colors</label>
+                                                    <br />
+                                                    <select multiple id="GlitterColorsIDs" name="GlitterColorsIDs" class="form-control" disabled>
+                                                        <option></option>
 
-                                                </select>
-                                            </div>
+                                                    </select>
+                                                </div>
 
-                                        </div>
-                                        <div class="row hidden">
-                                            <div class="col-md-3">
-                                                <label for="Coats">Coats</label>
-                                                <br />
-                                                <input type="number" id="Coats" name="Coats" placeholder="Coats" class="form-control" disabled />
                                             </div>
-                                            <div class="col-md-3">
-                                                <label for="Coats">Quantity</label>
-                                                <br />
-                                                <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" disabled />
+                                            <div class="row hidden">
+                                                <div class="col-md-3">
+                                                    <label for="Coats">Coats</label>
+                                                    <br />
+                                                    <input type="number" id="Coats" name="Coats" placeholder="Coats" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="Coats">Quantity</label>
+                                                    <br />
+                                                    <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" disabled />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6" id="Images-div">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
-                                <div id="blueimp-gallery-carousel" class="blueimp-gallery blueimp-gallery-carousel">
-                                    <div class="slides"></div>
-                                    <h3 class="title"></h3>
-                                    <a class="prev">‹</a>
-                                    <a class="next">›</a>
-                                    <a class="play-pause"></a>
-                                    <ol class="indicator"></ol>
+                        <div class="col-md-6" id="Images-div">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
+                                    <div id="blueimp-gallery-carousel" class="blueimp-gallery blueimp-gallery-carousel">
+                                        <div class="slides"></div>
+                                        <h3 class="title"></h3>
+                                        <a class="prev">‹</a>
+                                        <a class="next">›</a>
+                                        <a class="play-pause"></a>
+                                        <ol class="indicator"></ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a class="btn btn-default" href="#" onclick="$('#Modal-Details-Content').hide(); $('#Image-Viewer').modal('show'); return false;">Larger</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <a class="btn btn-default" href="#" onclick="$('#Modal-Details-Content').hide(); $('#Image-Viewer').modal('show'); return false;">Larger</a>
-                            </div>
-                        </div>
                     </div>
-                </div>
-                <div class="row hidden">
-                    <div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Polish Types</h3>
-                            </div>
-                            <div class="panel-body">
-                                <br />
-                                <div class="row">
-                                    @foreach (var type in polishTypes)
+                    <div class="row hidden">
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Polish Types</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <br />
+                                    <div class="row">
+                                        @foreach (var type in polishTypes)
                                     {
-                                        <div class="col-sm-3">
-                                            <span>@type.Name</span>
-                                            <br />
-                                            <label class="switch">
-                                                <input id="polish-type-@type.Name" type="checkbox">
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </div>
+                                    <div class="col-sm-3">
+                                        <span>@type.Name</span>
+                                        <br />
+                                        <label class="switch">
+                                            <input id="polish-type-@type.Name" type="checkbox">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
                                     }
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
-                
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="Image-Viewer" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Modal content-->
-        <div class="row">
-            <div class="col-md-12">
-                <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
-                <div id="blueimp-gallery-carousel-full" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls">
-                    <div class="slides"></div>
-                    <h3 class="title"></h3>
-                    <a class="prev">‹</a>
-                    <a class="next">›</a>
-                    <a class="play-pause"></a>
-                    <ol class="indicator"></ol>
+                <div class="modal-footer">
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script>
+    <div class="modal fade" id="Image-Viewer" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
+                    <div id="blueimp-gallery-carousel-full" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls">
+                        <div class="slides"></div>
+                        <h3 class="title"></h3>
+                        <a class="prev">‹</a>
+                        <a class="next">›</a>
+                        <a class="play-pause"></a>
+                        <ol class="indicator"></ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
     var carouselLinks = [];
     var gallery = null;
     var biggallery = null;
@@ -257,35 +257,39 @@
     }
 
     $('#Details').on('shown.bs.modal', function (e) {
-        gallery = blueimp.Gallery(carouselLinks, {
-            container: '#blueimp-gallery-carousel',
-            carousel: true,
-            clearSlides: true,
-            onclosed: function () {
-                gallery = null;
-                $('#Details').modal('hide');
-            }
-        });
+        if (carouselLinks.length > 0) {
+            gallery = blueimp.Gallery(carouselLinks, {
+                container: '#blueimp-gallery-carousel',
+                carousel: true,
+                clearSlides: true,
+                onclosed: function () {
+                    gallery = null;
+                    $('#Details').modal('hide');
+                }
+            });
+        }
     });
     $('#Details').on('hide.bs.modal', function () {
-        if (gallery != null) {
+        if (gallery) {
             gallery.close();
             return false;
         }
     });
     $('#Image-Viewer').on('shown.bs.modal', function (e) {
-        biggallery = blueimp.Gallery(carouselLinks, {
-            container: '#blueimp-gallery-carousel-full',
-            carousel: true,
-            clearSlides: true,
-            onclosed: function () {
-                biggallery = null;
-                $('#Image-Viewer').modal('hide');
-            }
-        });
+        if (carouselLinks.length > 0) {
+            biggallery = blueimp.Gallery(carouselLinks, {
+                container: '#blueimp-gallery-carousel-full',
+                carousel: true,
+                clearSlides: true,
+                onclosed: function () {
+                    biggallery = null;
+                    $('#Image-Viewer').modal('hide');
+                }
+            });
+        }
     });
     $('#Image-Viewer').on('hide.bs.modal', function () {
-        if (biggallery != null) {
+        if (biggallery) {
             biggallery.close();
             return false;
         }
@@ -294,4 +298,31 @@
         $('#Modal-Details-Content').show();
     })
 
-</script>
+    </script>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Page Temporarily Unavailble</h3>
+                </div>
+                <div class="panel-collapse" id="Polishcollapse">
+                    <div class="panel-body text-center">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h2>This page is currently not available for you to view. As an apology, here's a picture of a kitten to make you feel better.</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <img src="~/Content/Images/NotAvailable.jpg" class="error-image" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

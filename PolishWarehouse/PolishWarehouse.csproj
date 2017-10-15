@@ -174,9 +174,15 @@
     <Content Include="Content\bootstrap-table.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\details_close.png" />
+    <Content Include="Content\details_open.png" />
+    <Content Include="Content\Images\404.jpg" />
+    <Content Include="Content\Images\500.jpg" />
+    <Content Include="Content\Images\503.jpg" />
     <Content Include="Content\Images\default.png" />
     <Content Include="Content\Images\favicon.ico" />
     <Content Include="Content\Images\galaxy-wallpaper.jpg" />
+    <Content Include="Content\Images\NotAvailable.jpg" />
     <Content Include="Content\select2-bootstrap.css" />
     <Content Include="Content\select2-bootstrap.min.css" />
     <Content Include="Content\select2-spinner.gif" />
@@ -187,6 +193,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Offline\Unavailable.aspx" />
     <Content Include="Scripts\blueimp-gallery-fullscreen.js" />
     <Content Include="Scripts\blueimp-gallery-indicator.js" />
     <Content Include="Scripts\blueimp-gallery-video.js" />
@@ -286,8 +293,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ArchiveController.cs" />
     <Compile Include="Controllers\DestashController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IncomingController.cs" />
     <Compile Include="Controllers\PolishController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -297,6 +307,7 @@
     <Compile Include="Models\BrandCategoryModel.cs" />
     <Compile Include="Models\ColorModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\IncomingOrderModel.cs" />
     <Compile Include="Models\Logging.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\PolishTypeModel.cs" />
@@ -317,7 +328,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\Errorqwert.cshtml" />
     <Content Include="Views\Shared\MessageControl.cshtml" />
     <Content Include="Views\Polish\Import.cshtml" />
     <Content Include="Views\Polish\Index.cshtml" />
@@ -346,6 +357,17 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_HeaderPartial.cshtml" />
     <Content Include="Views\Polish\ManageImages.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Error\Unavailable.cshtml" />
+    <Content Include="Views\Shared\_ErrorLayout.cshtml" />
+    <Content Include="Views\Incoming.cshtml" />
+    <Content Include="Views\Incoming\Index.cshtml" />
+    <Content Include="Views\Incoming\Details.cshtml" />
+    <Content Include="Views\Shared\IncomingPolish.cshtml" />
+    <Content Include="Views\Polish\Random.cshtml" />
+    <Content Include="Views\Archive\Index.cshtml" />
+    <Content Include="Views\Archive\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

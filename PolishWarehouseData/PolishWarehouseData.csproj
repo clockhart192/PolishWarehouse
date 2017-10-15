@@ -60,6 +60,18 @@
     <Compile Include="Color.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
+    <Compile Include="IncomingLineType.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IncomingOrder.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IncomingOrderLine.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IncomingOrderLines_Polishes.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
     <Compile Include="Log.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
@@ -69,19 +81,40 @@
     <Compile Include="Polishes_AdditionalInfo.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
+    <Compile Include="Polishes_AdditionalInfo_ARCHIVE.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Polishes_ARCHIVE.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
     <Compile Include="Polishes_DestashInfo.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Polishes_DestashInfo_ARCHIVE.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
     <Compile Include="Polishes_Glitter_Colors.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
+    <Compile Include="Polishes_Glitter_Colors_ARCHIVE.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
     <Compile Include="Polishes_Images.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Polishes_Images_ARCHIVE.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
     <Compile Include="Polishes_PolishTypes.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
+    <Compile Include="Polishes_PolishTypes_ARCHIVE.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
     <Compile Include="Polishes_Secondary_Colors.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Polishes_Secondary_Colors_ARCHIVE.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
     <Compile Include="PolishType.cs">
@@ -104,6 +137,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setting.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingProvider.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
   </ItemGroup>

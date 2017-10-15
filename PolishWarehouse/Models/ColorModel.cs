@@ -98,5 +98,10 @@ namespace PolishWarehouse.Models
                 return new Response(true);
             }
         }
+
+        public static ColorModel GetModel(Color c)
+        {
+            return new ColorModel(c);
+        }
     }
 }

@@ -51,6 +51,12 @@ namespace PolishWarehouse.Controllers
         }
         public ActionResult Public()
         {
+            ViewBag.ShowPublicList = true;
+            try
+            {
+                ViewBag.ShowPublicList = Convert.ToBoolean(Utilities.GetConfigurationValue("Show Public List"));
+            }
+            catch { };
             ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
             return Index(null);
         }
@@ -241,6 +247,24 @@ namespace PolishWarehouse.Controllers
 
             TempData["Messages"] = "File Uploaded!";
             return RedirectToAction("Import");
+        }
+
+        public ActionResult Random()
+        {
+            ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
+            //ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
+            //ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
+            ViewBag.Brands = PolishModel.getBrands().OrderBy(c => c.Name);
+            //ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Random(string color, string brand, bool includeTried = false)
+        {
+            var p = PolishModel.GetRandom(color, brand, includeTried);
+            return RedirectToAction("Details", new { id = p.ID });
         }
     }
 }

@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <link rel="shortcut icon" href="~/Content/Images/favicon.ico" type="image/x-icon">
+
+    <link rel="icon" href="~/Content/Images/favicon.ico" type="image/x-icon">
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/select2.min.js"></script>
+    @*<script src="~/Scripts/modernizr-2.6.2.js"></script>*@
+    <script src="~/Scripts/blueimp-helper.js"></script>
+    <script src="~/Scripts/blueimp-gallery.js"></script>
+    @*<script src="~/Scripts/blueimp-gallery-fullscreen.js"></script>
+        <script src="~/Scripts/blueimp-gallery-indicator.js"></script>
+        <script src="~/Scripts/blueimp-gallery-video.js"></script>
+        <script src="~/Scripts/blueimp-gallery-vimeo.js"></script>
+        <script src="~/Scripts/blueimp-gallery-youtube.js"></script>*@
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Scripts/DataTables/datatables.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap-table.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/select2.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/select2-bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/blueimp-gallery.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/blueimp-gallery-indicator.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/blueimp-gallery-video.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+    <div class="container body-content">
+        <br />
+        @RenderBody()
+        <hr />
+        <footer></footer>
+        <div class="modal fade" id="loadingModal" data-backdrop="static" data-keyboard="false" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Processing...</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <span class="glyphicon glyphicon-refresh glyphicon-spin large-glyphicon text-center"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function loading() { $("#loadingModal").modal(); }
+            function doneLoading() { $("#loadingModal").modal("hide"); }
+            //$(document).ready(function () { loading(); });
+        </script>
+    </div>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
