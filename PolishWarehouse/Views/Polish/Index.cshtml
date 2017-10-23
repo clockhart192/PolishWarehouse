@@ -1,6 +1,7 @@
 ﻿@model PolishWarehouse.Models.PolishModel[]
 @if (Request.IsAuthenticated)
 {
+    Dictionary<string, bool> displayConfiguration = ViewBag.DisplayConfiguration;
     ViewBag.Title = "Polish List";
 
     @Html.Partial("MessageControl")
@@ -24,13 +25,39 @@
                                 <table class="table table-hover table-condensed datatable" id="polishtable" style="display:none;">
                                     <thead>
                                         <tr>
-                                            <th>Brand</th>
-                                            <th>Name</th>
-                                            <th class="hidden-xs">Description</th>
-                                            <th>Label</th>
-                                            <th class="hidden-xs">Coats</th>
-                                            <th class="hidden-xs">Tried</th>
-                                            <th class="hidden-xs">Gift</th>
+                                            @foreach (var configuration in displayConfiguration)
+                                            {
+                                                if (configuration.Value)
+                                                {
+                                                    switch (configuration.Key)
+                                                    {
+                                                        case "BrandName":
+                                                            <th>Brand</th>
+                                                            break;
+                                                        case "PolishName":
+                                                            <th>Name</th>
+                                                            break;
+                                                        case "Description":
+                                                            <th class="hidden-xs">Description</th>
+                                                            break;
+                                                        case "Label":
+                                                            <th>Label</th>
+                                                            break;
+                                                        case "Coats":
+                                                            <th class="hidden-xs">Coats</th>
+                                                            break;
+                                                        case "HasBeenTried":
+                                                            <th class="hidden-xs">Tried</th>
+                                                            break;
+                                                        case "WasGift":
+                                                            <th class="hidden-xs">Gift</th>
+                                                            break;
+                                                        case "Notes":
+                                                            <th class="hidden-xs">Notes</th>
+                                                            break;
+                                                    }
+                                                }
+                                            }
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -38,23 +65,49 @@
                                         @foreach (var polish in Model)
                                         {
                                             <tr>
-                                                <td>@polish.BrandName</td>
-                                                <td>@Html.ActionLink(polish.PolishName, "Details", new { id = polish.ID })</td>
-                                                <td class="hidden-xs">@polish.Description</td>
-                                                <td>@polish.Label</td>
-                                                <td class="hidden-xs">@polish.Coats</td>
-                                                <td class="hidden-xs">
-                                                    <label class="switch">
-                                                        <input id="HasBeenTried" name="HasBeenTried" value="true" type="checkbox" class="disabled" disabled @(polish.HasBeenTried ? "checked" : "")>
-                                                        <span class="slider round"></span>
-                                                    </label>
-                                                </td>
-                                                <td class="hidden-xs">
-                                                    <label class="switch">
-                                                        <input id="WasGift" name="WasGift" value="true" type="checkbox" class="disabled" disabled @(polish.WasGift ? "checked" : "")>
-                                                        <span class="slider round"></span>
-                                                    </label>
-                                                </td>
+                                                @foreach (var configuration in displayConfiguration)
+                                                {
+                                                    if (configuration.Value)
+                                                    {
+                                                        switch (configuration.Key)
+                                                        {
+                                                            case "BrandName":
+                                                                <td>@polish.BrandName</td>
+                                                                break;
+                                                            case "PolishName":
+                                                                <td>@Html.ActionLink(polish.PolishName, "Details", new { id = polish.ID })</td>
+                                                                break;
+                                                            case "Description":
+                                                                <td class="hidden-xs">@polish.Description</td>
+                                                                break;
+                                                            case "Label":
+                                                                <td>@polish.Label</td>
+                                                                break;
+                                                            case "Coats":
+                                                                <td class="hidden-xs">@polish.Coats</td>
+                                                                break;
+                                                            case "HasBeenTried":
+                                                                <td class="hidden-xs">
+                                                                    <label class="switch">
+                                                                        <input id="HasBeenTried" name="HasBeenTried" value="true" type="checkbox" class="disabled" disabled @(polish.HasBeenTried ? "checked" : "")>
+                                                                        <span class="slider round"></span>
+                                                                    </label>
+                                                                </td>
+                                                                break;
+                                                            case "WasGift":
+                                                                <td class="hidden-xs">
+                                                                    <label class="switch">
+                                                                        <input id="WasGift" name="WasGift" value="true" type="checkbox" class="disabled" disabled @(polish.WasGift ? "checked" : "")>
+                                                                        <span class="slider round"></span>
+                                                                    </label>
+                                                                </td>
+                                                                break;
+                                                            case "Notes":
+                                                                <td class="hidden-xs">@polish.Notes</td>
+                                                                break;
+                                                        }
+                                                    }
+                                                }
                                                 <td>
                                                     <div class="dropdown">
                                                         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

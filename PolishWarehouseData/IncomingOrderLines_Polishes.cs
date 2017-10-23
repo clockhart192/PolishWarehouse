@@ -18,15 +18,16 @@ namespace PolishWarehouseData
         public byte[] Timestamp { get; set; }
         public System.DateTime CreatedOn { get; set; }
         public long IncomingOrderLinesID { get; set; }
-        public int ColorID { get; set; }
-        public int BrandID { get; set; }
+        public Nullable<int> ColorID { get; set; }
+        public Nullable<int> BrandID { get; set; }
         public string PolishName { get; set; }
         public int Coats { get; set; }
         public bool HasBeenTried { get; set; }
         public bool WasGift { get; set; }
         public string GiftFromName { get; set; }
-        public Nullable<long> PolishID { get; set; }
         public string Description { get; set; }
+        public Nullable<long> PolishID { get; set; }
+        public bool Converted { get; set; }
     
         public virtual Brand Brand { get; set; }
         public virtual Color Color { get; set; }

@@ -1,166 +1,125 @@
 ﻿@model PolishWarehouse.Models.IncomingOrderModel[]
 @if (Request.IsAuthenticated)
 {
-    ViewBag.Title = Convert.ToBoolean(ViewBag.ViewingComplete) ? "Completed Order List": "Incoming Order List";
-    int i = 0;
+    ViewBag.Title = Convert.ToBoolean(ViewBag.ViewingComplete) ? "Completed Order List" : "Incoming Order List";
+    //int i = 0;
     @Html.Partial("MessageControl")
 
-    <script type="text/template" id="polish-order-lines-template">
-        <div class="polish-order-line">
+    <script type="text/template" id="order-lines-container-template">
+        <div class="lines-container">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>Name</label>
-                                    <br />
-                                    <input type="text" placeholder="Name" value="{{name}}" class="form-control  disabled"  disabled />
-                                </div>
-                                <div class="col-md-6">
-                                    <label>Tracking</label>
-                                    <br />
-                                    <input type="text" placeholder="Tracking #" value="{{tracking}}" class="form-control  disabled"  disabled />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>Quantity</label>
-                                    <br />
-                                    <input type="text" placeholder="Quantity" value="{{quantity}}" class="form-control  disabled"  disabled />
-                                </div>
-                                <div class="col-md-6">
-                                    <label>Price</label>
-                                    <br />
-                                    <input type="text" name="Price" value="{{price}}" class="form-control  disabled"  disabled />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label>Notes</label>
-                                    <br />
-                                    <textarea class="form-control  disabled"  disabled rows="5" placeholder="Notes">{{notes}}</textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 line-info-header">
                     <h4>Polish Info</h4>
-                    </div>
-                </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>Brand Name</label>
-                                    <br />
-                                    <input type="text" placeholder="Brand Name" value="{{brand}}" class="form-control  disabled"  disabled />
-                                </div>
-                                <div class="col-md-6">
-                                    <label>Polish Name</label>
-                                    <br />
-                                    <input type="text" name="PolishName" value="{{polishName}}" placeholder="Polish Name" class="form-control  disabled"  disabled />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>Color</label>
-                                    <br />
-                                    <input type="text" placeholder="Color" value="{{color}}" class="form-control  disabled"  disabled />
-                                </div>
-                                <div class="col-md-2">
-                                    <label>Gift</label>
-                                    <br />
-                                    <label class="switch">
-                                        <input id="WasGift" name="WasGift" value="true" type="checkbox" class="disabled"  disabled {{wasGift}}>
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label>Gifter's Name</label>
-                                    <br />
-                                    <input type="text" name="GiftFromName" value="{{giftFromName}}" placeholder="Name" class="form-control  disabled"  disabled />
-                                </div>
-                            </div>
+                    <div class="row bold">
+                        <div class="col-md-1">
                         </div>
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label>Description</label>
-                                    <br />
-                                    <textarea class="form-control  disabled"  disabled rows="5" name="Description" placeholder="Description">{{description}}</textarea>
-                                </div>
-                            </div>
+                        <div class="col-md-2">
+                            Brand
                         </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <hr />
-        </div>
-
-    </script>
-    <script type="text/template" id="other-order-lines-template">
-        <div class="other-order-line">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>Name</label>
-                                    <br />
-                                    <input type="text" placeholder="Name" value="{{name}}" class="form-control disabled" disabled  />
-                                </div>
-                                <div class="col-md-6">
-                                    <label>Tracking</label>
-                                    <br />
-                                    <input type="text" placeholder="Tracking #" value="{{tracking}}" class="form-control  disabled"  disabled />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>Quantity</label>
-                                    <br />
-                                    <input type="text" placeholder="Quantity" value="{{quantity}}" class="form-control  disabled"  disabled />
-                                </div>
-                                <div class="col-md-6">
-                                    <label>Price</label>
-                                    <br />
-                                    <input type="text" name="Price" value="{{price}}" class="form-control  disabled"  disabled />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                </div>
-                            </div>
+                        <div class="col-md-2">
+                            Name
                         </div>
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label>Notes</label>
-                                    <br />
-                                    <textarea class="form-control  disabled"  disabled rows="5" placeholder="Notes">{{notes}}</textarea>
-                                </div>
-                            </div>
+                        <div class="col-md-2">
+                            Description
+                        </div>
+                        <div class="col-md-1">
+                            Color
+                        </div>
+                        <div class="col-md-1">
+                            Price
+                        </div>
+                        <div class="col-md-3">
+                            Tracking
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{polishlines}}
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12 line-info-header">
+                    <h4>Other Info</h4>
+                    <div class="row bold">
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-2">
+                            Name
+                        </div>
+                        <div class="col-md-5">
+                           Notes
+                        </div>
+                        <div class="col-md-2">
+                           Price
+                        </div>
+                        <div class="col-md-2">
+                            Tracking
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{otherlines}}
+                </div>
+            </div>
         </div>
+        
     </script>
+        <script type="text/template" id="polish-order-lines-template">
+            <div class="polish-order-line">
+                <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-2">
+                        {{brand}}
+                    </div>
+                    <div class="col-md-2">
+                        {{polishName}}
+                    </div>
+                    <div class="col-md-2">
+                        {{description}}
+                    </div>
+                    <div class="col-md-1">
+                        {{color}}
+                    </div>
+                    <div class="col-md-1">
+                        {{price}}
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{trackingURL}}">{{tracking}}</a>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/template" id="other-order-lines-template">
+            <div class="other-order-line">
+                <div class="row">
+                    <div class="col-md-1">
+
+                    </div>
+                    <div class="col-md-2">
+                        {{name}}
+                    </div>
+                    <div class="col-md-5">
+                        {{notes}}
+                    </div>
+                    <div class="col-md-2">
+                        {{price}}
+                    </div>
+                    <div class="col-md-2">
+                        {{tracking}}
+                    </div>
+                </div>
+            </div>
+        </script>
+
+
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
@@ -171,8 +130,7 @@
                         <div class="panel-body">
                             <div class="row margin-top-5">
                                 <div class="col-md-12 table-responsive">
-
-                                    <table class="table table-hover table-condensed datatable" id="table">
+                                    <table class="table table-hover table-condensed datatable order-table" id="table">
                                         <thead>
                                             <tr>
                                                 <th></th>
@@ -183,12 +141,8 @@
                                                 <th>Tracking</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                          
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
-
-
                                 </div>
                             </div>
                         </div>
@@ -205,7 +159,7 @@
                         {
                             <text>
                                 {
-                                    "id":"@order.ID",
+                                    "id": "@order.ID",
                                     "name": "@order.Name",
                                     "total": "@order.Price.Value.ToString("C2")",
                                     "date": "@order.PurchaseDate.ToShortDateString()",
@@ -230,7 +184,7 @@
                                                             "shippingProvider": "@line.ShippingProviderName",
 
                                                             "polishName": "@line.IncomingOrderLinePolish.PolishName",
-                                                            "color": "@line.IncomingOrderLinePolish.Color.Name",
+                                                            "color": "@(line.IncomingOrderLinePolish.Color != null ? line.IncomingOrderLinePolish.Color.Name : "")",
                                                             "brand": "@line.IncomingOrderLinePolish.Brand.Name",
                                                             "wasGift": "@line.IncomingOrderLinePolish.WasGift.ToString()",
                                                             "giftFromName": "@line.IncomingOrderLinePolish.GiftFromName",
@@ -258,7 +212,7 @@
                                 },
                             </text>
                         }
-                    ];
+                     ];
 
                 console.log(tableData);
                 console.log(JSON.stringify(tableData));
@@ -280,10 +234,11 @@
                         {
                             "data": "name",
                             "render": function (data, type, row, meta) {
-                                return '<a href="/Incoming/Details/' + row.id + '">'+ data +'</a>';
+                                return '<a href="/Incoming/Details/' + row.id + '">' + data + '</a>';
                             }
                         },
-                        { "data": "total"
+                        {
+                            "data": "total"
                         },
                         { "data": "date" },
                         { "data": "notes" },
@@ -319,13 +274,14 @@
             /* Formatting function for row details - modify as you need */
             function format(d) {
                 // `d` is the original data object for the row
-                var children = "";
-
+                var children = document.getElementById("order-lines-container-template").innerHTML;
+                var polishLines = "";
+                var otherLines = "";
                 d.lines.forEach(function (e) {
                     switch (e.type) {
                         case "polish":
                             var checked = e.wasGift ? "checked='checked'" : "";
-                            children += document.getElementById("polish-order-lines-template").innerHTML.replace("{{price}}", e.price)
+                            polishLines += document.getElementById("polish-order-lines-template").innerHTML.replace("{{price}}", e.price)
                                                                                                         .replace("{{name}}", e.name)
                                                                                                         .replace("{{quantity}}", e.qty)
                                                                                                         .replace("{{tracking}}", e.tracking)
@@ -340,7 +296,7 @@
                                                                                                         .replace("{{description}}", e.description);
                             break;
                         default:
-                            children += document.getElementById("other-order-lines-template").innerHTML.replace("{{price}}", e.price)
+                            otherLines += document.getElementById("other-order-lines-template").innerHTML.replace("{{price}}", e.price)
                                                                                                        .replace("{{name}}", e.name)
                                                                                                        .replace("{{quantity}}", e.qty)
                                                                                                        .replace("{{tracking}}", e.tracking)
@@ -351,8 +307,9 @@
                     }
                 });
 
+                children = children.replace("{{polishlines}}", polishLines);
+                children = children.replace("{{otherlines}}", otherLines);
                 return children;
             }
         </script>
-
 }

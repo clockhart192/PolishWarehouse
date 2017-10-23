@@ -148,7 +148,7 @@ namespace PolishWarehouse.Models
                             TrackingURL = p.IncomingOrderLine.ShippingProvider.TrackingBaseURL + p.IncomingOrderLine.Tracking,
                             ShippingProviderName = p.IncomingOrderLine.ShippingProvider.Name,
 
-                            Color = new ColorModel()
+                            Color = (p.Color != null) ? new ColorModel()
                             {
                                 ID = p.Color.ID,
                                 Name = p.Color.Name,
@@ -156,13 +156,13 @@ namespace PolishWarehouse.Models
                                 IsPrimary = p.Color.IsPrimary,
                                 IsSecondary = p.Color.IsSecondary,
                                 IsGlitter = p.Color.IsGlitter,
-                            },
-                            Brand = new BrandModel()
+                            } : null,
+                            Brand = (p.Brand != null) ? new BrandModel()
                             {
                                 ID = p.Brand.ID,
                                 Name = p.Brand.Name,
                                 Description = p.Brand.Description,
-                            },
+                            } : null,
                             ColorID = p.ColorID,
                             BrandID = p.BrandID,
                             PolishName = p.PolishName,
@@ -172,7 +172,7 @@ namespace PolishWarehouse.Models
                             GiftFromName = p.GiftFromName,
                             Description = p.Description,
                         }).FirstOrDefault(),
-                    }),
+                    }).OrderBy(p=> p.IncomingLineTypeID),
 
                 }).ToArray();
 
@@ -279,8 +279,8 @@ namespace PolishWarehouse.Models
         public ShippingProviderModel ShippingProvider { get; set; }
         //public IncomingOrderModel IncomingOrder { get; set; }
 
-        public int ColorID { get; set; }
-        public int BrandID { get; set; }
+        public int? ColorID { get; set; }
+        public int? BrandID { get; set; }
         public string PolishName { get; set; }
         public int Coats { get; set; } = 1;
         public bool HasBeenTried { get; set; }
@@ -288,9 +288,10 @@ namespace PolishWarehouse.Models
         public string GiftFromName { get; set; }
         public string Description { get; set; }
         public long? PolishID { get; set; }
+        public bool Converted { get; set; } = false;
 
-        public virtual BrandModel Brand { get; set; }
-        public virtual ColorModel Color { get; set; }
+        public BrandModel Brand { get; set; }
+        public ColorModel Color { get; set; }
 
         public IncomingOrderLinePolishModel() { }
         public IncomingOrderLinePolishModel(IncomingOrderLines_Polishes o)
@@ -317,13 +318,14 @@ namespace PolishWarehouse.Models
             WasGift = o.WasGift;
             GiftFromName = o.GiftFromName;
             Description = o.Description;
+            Converted = o.Converted;
 
             IncomingLineType = new IncomingOrderLineTypeModel(o.IncomingOrderLine.IncomingLineType);
             ShippingProvider = new ShippingProviderModel(o.IncomingOrderLine.ShippingProvider);
 
 
-            Brand = new BrandModel(o.Brand);
-            Color = new ColorModel(o.Color);
+            Brand = o.Brand == null ? null : new BrandModel(o.Brand);
+            Color = o.Color == null ? null : new ColorModel(o.Color);
 
         }
 
@@ -332,7 +334,7 @@ namespace PolishWarehouse.Models
             using (var db = new PolishWarehouseEntities())
             {
                 //Save the Order
-                var incomingOrderline = db.IncomingOrderLines.Where(p => p.ID == ID).SingleOrDefault();
+                var incomingOrderline = db.IncomingOrderLines.Where(p => p.ID == IncomingOrderLinesID).SingleOrDefault();
                 if (incomingOrderline == null)
                 {
                     incomingOrderline = new IncomingOrderLine();
@@ -351,7 +353,7 @@ namespace PolishWarehouse.Models
 
                 db.SaveChanges();
 
-                var incomingPolish = db.IncomingOrderLines_Polishes.Where(p => p.ID == IncomingOrderLinesID).SingleOrDefault();
+                var incomingPolish = db.IncomingOrderLines_Polishes.Where(p => p.ID == ID).SingleOrDefault();
                 if (incomingPolish == null)
                 {
                     incomingPolish = new IncomingOrderLines_Polishes();
@@ -368,10 +370,85 @@ namespace PolishWarehouse.Models
                 incomingPolish.WasGift = WasGift;
                 incomingPolish.GiftFromName = GiftFromName;
                 incomingPolish.Description = Description;
+                incomingPolish.Converted = Converted;
 
                 db.SaveChanges();
             }
             return new Response(true);
+        }
+
+        public Response ConvertToPolish(DupeAction dupeAction = DupeAction.DoNotImport)
+        {
+            if (Converted)
+                return new Response(false, "Line already imported");
+
+            if (Brand == null)
+               return new Response(false,"Polish brand required.");
+
+            if (Color == null)
+                return new Response(false, "Polish primary color required.");
+
+
+            using (var db = new PolishWarehouseEntities())
+            {
+                var existing = db.Polishes.Where(p => p.Name == PolishName && p.Brand.ID == Brand.ID).ToArray();
+                var inc = db.IncomingOrderLines_Polishes.Where(p => p.ID == ID).SingleOrDefault();
+                if (existing.Count() > 0)
+                {
+                    switch (dupeAction)
+                    {
+                        case DupeAction.DoNotImport:
+                            return new Response(true, "Polish Already exists.", null);
+                        case DupeAction.AddQty:
+                            existing[0].Quantity += Qty;
+                            inc.Converted = true;
+                            db.SaveChanges();
+                            return new Response(true, $"Incoming polish quantity was added to existing polish", new PolishModel(existing[0]));
+                        case DupeAction.AddNew:
+                            break;
+                        case DupeAction.Prompt:
+                            return new Response(false, "Prompt", new { prompt = true });
+                    }
+                }
+
+
+                var colorNum = PolishModel.getNextColorNumber(Color.ID.Value);
+
+                var label = $"{Color.Name} {colorNum.ToString()}";
+
+                var polish = new PolishModel()
+                {
+                    BrandID = Brand.ID.Value,
+                    ColorID = Color.ID.Value,
+                    BrandName = Brand.Name,
+                    PolishName = PolishName,
+                    ColorName = Color.Name,
+                    ColorNumber = colorNum,
+                    Description = Description,
+                    Label = label,
+                    Coats = Coats,
+                    Quantity = Qty,
+                    HasBeenTried = HasBeenTried,
+                    WasGift = WasGift,
+                    GiftFromName = GiftFromName,
+                    Notes = Notes,
+                };
+
+                polish.Save();
+                Converted = true;
+                inc.Converted = true;
+                db.SaveChanges();
+
+                return new Response(true, returnobj: polish);
+            }
+        }
+
+        public enum DupeAction
+        {
+            Prompt,
+            DoNotImport,
+            AddQty,
+            AddNew
         }
     }
 

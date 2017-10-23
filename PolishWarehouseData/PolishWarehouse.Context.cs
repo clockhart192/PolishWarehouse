@@ -40,7 +40,6 @@ namespace PolishWarehouseData
         public virtual DbSet<Setting> Settings { get; set; }
         public virtual DbSet<IncomingLineType> IncomingLineTypes { get; set; }
         public virtual DbSet<IncomingOrderLine> IncomingOrderLines { get; set; }
-        public virtual DbSet<IncomingOrderLines_Polishes> IncomingOrderLines_Polishes { get; set; }
         public virtual DbSet<IncomingOrder> IncomingOrders { get; set; }
         public virtual DbSet<ShippingProvider> ShippingProviders { get; set; }
         public virtual DbSet<Polishes_AdditionalInfo_ARCHIVE> Polishes_AdditionalInfo_ARCHIVE { get; set; }
@@ -50,5 +49,6 @@ namespace PolishWarehouseData
         public virtual DbSet<Polishes_PolishTypes_ARCHIVE> Polishes_PolishTypes_ARCHIVE { get; set; }
         public virtual DbSet<Polishes_Secondary_Colors_ARCHIVE> Polishes_Secondary_Colors_ARCHIVE { get; set; }
         public virtual DbSet<Polishes_DestashInfo_ARCHIVE> Polishes_DestashInfo_ARCHIVE { get; set; }
+        public virtual DbSet<IncomingOrderLines_Polishes> IncomingOrderLines_Polishes { get; set; }
     }
 }

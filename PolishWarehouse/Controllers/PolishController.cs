@@ -46,6 +46,17 @@ namespace PolishWarehouse.Controllers
                         TempData["Messages"] = "Konami Code Activated!";
                     }
                 }
+
+                string dispConfig = Utilities.GetConfigurationValue("Private List Display Configuration");
+                var dict = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, bool>>(dispConfig);
+
+                //var displayConfig = new List<KeyValuePair<string, bool>>();
+                //foreach(var pair in dict)
+                //{
+                //    displayConfig.Add(new KeyValuePair<string, bool>(pair.Key,pair.Value));
+                //}
+                ViewBag.DisplayConfiguration = dict;
+
                 return View(polishes);
             }
         }

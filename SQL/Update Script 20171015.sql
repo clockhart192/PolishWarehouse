@@ -69,15 +69,16 @@ CREATE TABLE IncomingOrderLines_Polishes
 	Timestamp			  timestamp		  NOT NULL,
 	CreatedOn			  datetime		  NOT NULL DEFAULT GETUTCDATE(),
 	IncomingOrderLinesID  bigint		  NOT NULL,
-	ColorID				  int			  NOT NULL,
-	BrandID				  int			  NOT NULL,
+	ColorID				  int			  NULL,
+	BrandID				  int			  NULL,
 	PolishName			  nvarchar(100)   NOT NULL,
 	Coats				  int			  NOT NULL DEFAULT 1,
 	HasBeenTried		  bit			  NOT NULL DEFAULT 0,
 	WasGift				  bit		      NOT NULL DEFAULT 0,
 	GiftFromName		  nvarchar(100)   NULL,
 	Description			  varchar(max)    NULL,
-	PolishID			  bigint		  NULL
+	PolishID			  bigint		  NULL,
+	Converted			  bit			  NOT NULL DEFAULT 0
 
 	CONSTRAINT FK_Incoming_Order_Lines_ID FOREIGN KEY (IncomingOrderLinesID)  REFERENCES IncomingOrderLines(ID),
 	CONSTRAINT FK_Incoming_Order_Lines_Color_ID FOREIGN KEY (ColorID)  REFERENCES Colors(ID),

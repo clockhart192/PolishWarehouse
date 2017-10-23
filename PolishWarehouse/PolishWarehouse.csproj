@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -24,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -165,6 +167,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\animate.css" />
     <Content Include="Content\blueimp-gallery-indicator.css" />
     <Content Include="Content\blueimp-gallery-video.css" />
     <Content Include="Content\blueimp-gallery.css" />
@@ -194,6 +197,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Offline\Unavailable.aspx" />
+    <Content Include="Scripts\.gitignore" />
     <Content Include="Scripts\blueimp-gallery-fullscreen.js" />
     <Content Include="Scripts\blueimp-gallery-indicator.js" />
     <Content Include="Scripts\blueimp-gallery-video.js" />
@@ -202,6 +206,8 @@
     <Content Include="Scripts\blueimp-gallery.js" />
     <Content Include="Scripts\blueimp-gallery.min.js" />
     <Content Include="Scripts\blueimp-helper.js" />
+    <Content Include="Scripts\bootstrap-notify.js" />
+    <Content Include="Scripts\bootstrap-notify.min.js" />
     <Content Include="Scripts\bootstrap-table.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -211,6 +217,8 @@
     <None Include="Properties\PublishProfiles\Local Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Local IIS.pubxml" />
     <Content Include="Scripts\blueimp-gallery.min.js.map" />
+    <Content Include="Scripts\bower.json" />
+    <Content Include="Scripts\composer.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\DataTables\DataTables-1.10.16\css\dataTables.bootstrap.css" />
     <Content Include="Scripts\DataTables\DataTables-1.10.16\css\dataTables.bootstrap.min.css" />
@@ -269,6 +277,7 @@
     <Content Include="Scripts\DataTables\Responsive-2.2.0\js\responsive.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\Responsive-2.2.0\js\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\Responsive-2.2.0\js\responsive.semanticui.min.js" />
+    <Content Include="Scripts\Gruntfile.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.blueimp-gallery.min.js.map" />
@@ -280,11 +289,17 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\jshintrc.json" />
+    <Content Include="Scripts\LICENSE" />
+    <Content Include="Scripts\package.json" />
+    <Content Include="Scripts\README.md" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\package.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\select2.min.js" />
+    <Content Include="Scripts\test_meteor.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -384,11 +399,15 @@
       <Name>PolishWarehouseData</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>

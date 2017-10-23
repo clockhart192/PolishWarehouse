@@ -13,6 +13,7 @@
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/bootstrap-notify.min.js"></script>
     <script src="~/Scripts/select2.min.js"></script>
     @*<script src="~/Scripts/modernizr-2.6.2.js"></script>*@
     <script src="~/Scripts/blueimp-helper.js"></script>
@@ -31,6 +32,9 @@
     <link href="~/Content/blueimp-gallery.css" rel="stylesheet" type="text/css">
     <link href="~/Content/blueimp-gallery-indicator.css" rel="stylesheet" type="text/css">
     <link href="~/Content/blueimp-gallery-video.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/animate.css" rel="stylesheet" type="text/css" />
+
+
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
 
 </head>
@@ -118,7 +122,22 @@
         <script>
             function loading() { $("#loadingModal").modal(); }
             function doneLoading() { $("#loadingModal").modal("hide"); }
-            //$(document).ready(function () { loading(); });
+            function toast(message, type) {
+                $.notify({
+                    // options
+                    message: message
+                }, {
+                    // settings
+                    type: type,
+                    newest_on_top: true,
+                    placement: {
+                        from: "bottom",
+                        align: "left"
+                    },
+
+                });
+            }
+            //$(document).ready(function () { toast("Hello World", "info"); });
         </script>
     </div>
     

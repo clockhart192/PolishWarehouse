@@ -6,6 +6,7 @@ using Microsoft.VisualBasic.FileIO;
 using System.Collections.Generic;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Reflection;
 
 namespace PolishWarehouse.Models
 {
@@ -405,18 +406,19 @@ namespace PolishWarehouse.Models
 
                 db.SaveChanges();
 
-                if(Images != null)
+                if (Images != null)
                 {
-                    foreach (var image in Images)
+                    foreach (var imageModel in Images)
                     {
+                        var image = db.Polishes_Images.Where(im => im.ID == imageModel.ID).SingleOrDefault();
                         var i = new Polishes_Images_ARCHIVE();
                         i.PolishID = image.PolishID;
                         i.Image = image.Image;
-                        i.MIMEType = image.MimeType;
+                        i.MIMEType = image.MIMEType;
                         i.PublicImage = image.PublicImage;
                         i.DisplayImage = image.DisplayImage;
                         i.MakerImage = image.MakerImage;
-                        i.ID = image.ID.Value;
+                        i.ID = image.ID;
                         i.Description = image.Description;
                         i.Notes = image.Notes;
                         i.MakerImage = image.MakerImage;
@@ -427,7 +429,7 @@ namespace PolishWarehouse.Models
                         db.SaveChanges();
                     }
                 }
-                
+
                 //Polish Types
                 //If this is a new add, this should be empty.
                 //If it is not, we need to purge all of these so that we can refresh the table.
@@ -752,6 +754,27 @@ namespace PolishWarehouse.Models
             gift = 10,
             notes = 11
         }
+
+        public object this[string propertyName]
+        {
+            get
+            {
+                // probably faster without reflection:
+                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
+                // instead of the following
+                Type myType = typeof(PolishModel);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                return myPropInfo.GetValue(this, null);
+            }
+            set
+            {
+                Type myType = typeof(PolishModel);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                myPropInfo.SetValue(this, value, null);
+
+            }
+
+        }
     }
 
     public class PolishDestashModel : PolishModel
@@ -938,7 +961,7 @@ namespace PolishWarehouse.Models
                 var errors = new List<string>();
                 foreach (var polish in polishes)
                 {
-                    var model = new PolishDestashModel(polish);
+                    var model = new PolishDestashModel(polish, true, true);
                     var resp = model.ArchiveDestash();
                     if (!resp.WasSuccessful)
                         errors.Add($"Error Archiving {model.PolishName} : {resp.Message}");
@@ -1243,13 +1266,13 @@ namespace PolishWarehouse.Models
                 }
 
                 var p = db.Polishes_ARCHIVE.Where(po => po.ID == id).SingleOrDefault();
-                var brand = db.Brands.Where(z=> z.ID == p.BrandID).SingleOrDefault();
-                var color = db.Colors.Where(z => z.ID == p.ColorID).SingleOrDefault(); 
+                var brand = db.Brands.Where(z => z.ID == p.BrandID).SingleOrDefault();
+                var color = db.Colors.Where(z => z.ID == p.ColorID).SingleOrDefault();
                 var add = db.Polishes_AdditionalInfo_ARCHIVE.Where(z => z.PolishID == p.ID).SingleOrDefault();
                 var secColor = db.Polishes_Secondary_Colors_ARCHIVE.Join(db.Colors,
                                             sc => sc.ColorID,
                                             c => c.ID,
-                                            (sc,c) => new { Polishes_Secondary_Colors_ARCHIVE = sc, Color = c }).Where(z => z.Polishes_Secondary_Colors_ARCHIVE.PolishID == p.ID).ToArray(); 
+                                            (sc, c) => new { Polishes_Secondary_Colors_ARCHIVE = sc, Color = c }).Where(z => z.Polishes_Secondary_Colors_ARCHIVE.PolishID == p.ID).ToArray();
                 var glitColor = db.Polishes_Glitter_Colors_ARCHIVE.Join(db.Colors,
                                             sc => sc.ColorID,
                                             c => c.ID,

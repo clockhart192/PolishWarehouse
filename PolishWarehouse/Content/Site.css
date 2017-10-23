@@ -10,8 +10,12 @@
     padding-right: 15px;
 }
 
-.container-max{
-    max-width:100%;
+.container-max {
+    max-width: 100%;
+}
+
+.bold {
+    font-weight: bold;
 }
 
 /*input[type=checkbox]
@@ -24,7 +28,7 @@
   padding: 10px;
 }*/
 
-.error-image{
+.error-image {
     border-radius: 10px;
     max-height: 650px;
 }
@@ -39,15 +43,16 @@ textarea {
 .btn-file {
     position: relative;
     overflow: hidden;
-     background-color: #4A148C;
+    background-color: #4A148C;
     color: #EEEEEE;
     border-color: #4A148C;
 }
-.btn-file:hover {
-     background-color: #6A1B9A;
+
+    .btn-file:hover {
+        background-color: #6A1B9A;
         color: #EEEEEE;
         border-color: #6A1B9A;
-}
+    }
 
     .btn-file input[type=file] {
         position: absolute;
@@ -97,6 +102,28 @@ tr.shown td.selectable {
     cursor: pointer;
 }
 
+
+.line-info-header .bold {
+    color: #6A1B9A;
+}
+
+.lines-container {
+    background-color: #1A1A1A;
+}
+
+.order-table td {
+    padding: 0 !important;
+}
+
+
+
+
+
+
+
+
+
+
 /*Bootstrap Replacements*/
 /*Menu*/
 .dropdown-menu {
@@ -108,9 +135,9 @@ tr.shown td.selectable {
         color: #AAAAAA;
     }
 
-    .dropdown-menu li a:hover{
-         background-color: #4A148C;
-    }
+        .dropdown-menu li a:hover {
+            background-color: #4A148C;
+        }
 
 /*Panel*/
 .panel {
@@ -131,7 +158,7 @@ tr.shown td.selectable {
         color: #AAAAAA;
     }
 
-.panel-default .panel-heading-private{
+.panel-default .panel-heading-private {
     background-color: #4A148C;
 }
 
@@ -143,25 +170,25 @@ tr.shown td.selectable {
     background-color: #1A1A1A;
 }
 
-.pagination>li>a, .pagination>li>span,.pagination>.disabled>a{
+.pagination > li > a, .pagination > li > span, .pagination > .disabled > a {
     background-color: #1A1A1A;
     border: #1A1A1A;
 }
 
 /*Modal*/
-    .modal-sm {
-        width: 300px;
-        text-align: center;
-    }
+.modal-sm {
+    width: 300px;
+    text-align: center;
+}
 
-@media screen and (min-width: 768px){
-    body{
-            background-color:      #000000;
-            background-size:       cover;                      /* <------ */
-            background-repeat:     no-repeat;
-            background-position:   center center;              /* optional, center the image */
-            background-attachment: fixed;
-            background-image:      url("../Content/Images/galaxy-wallpaper.jpg");
+@media screen and (min-width: 768px) {
+    body {
+        background-color: #000000;
+        background-size: cover; /* <------ */
+        background-repeat: no-repeat;
+        background-position: center center; /* optional, center the image */
+        background-attachment: fixed;
+        background-image: url("../Content/Images/galaxy-wallpaper.jpg");
     }
 
     .modal-md {
@@ -197,7 +224,7 @@ tr.shown td.selectable {
     border-color: #000000;
 }
 
-    .btn-default:hover,.btn-default:active {
+    .btn-default:hover, .btn-default:active {
         background-color: #6A1B9A;
         color: #EEEEEE;
         border-color: #000000;
@@ -332,57 +359,76 @@ input:checked + .slider:before {
 
 /*Data tables overrides*/
 table.dataTable thead .sorting_asc {
-  background: url("http://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
-  padding-left:20px;
-}
-table.dataTable thead .sorting_desc {
-  background: url("http://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
-  padding-left:20px;
-}
-table.dataTable thead .sorting {
-  background: url("http://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
-  padding-left:20px;
+    background: url("http://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    padding-left: 20px;
 }
 
-table.dataTable thead .sorting:after,
-table.dataTable thead .sorting_asc:after,
-table.dataTable thead .sorting_desc:after,
-table.dataTable thead .sorting_asc_disabled:after,
-table.dataTable thead .sorting_desc_disabled:after {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  display: none;
-  font-family: 'Glyphicons Halflings';
-  opacity: 0.5;
+table.dataTable thead .sorting_desc {
+    background: url("http://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    padding-left: 20px;
 }
-table.dataTable thead .sorting:after {
-  opacity: 0.2;
-  content: "\e150";
-  /* sort */
+
+table.dataTable thead .sorting {
+    background: url("http://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    padding-left: 20px;
 }
+
+    table.dataTable thead .sorting:after,
+    table.dataTable thead .sorting_asc:after,
+    table.dataTable thead .sorting_desc:after,
+    table.dataTable thead .sorting_asc_disabled:after,
+    table.dataTable thead .sorting_desc_disabled:after {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        display: none;
+        font-family: 'Glyphicons Halflings';
+        opacity: 0.5;
+    }
+
+    table.dataTable thead .sorting:after {
+        opacity: 0.2;
+        content: "\e150";
+        /* sort */
+    }
+
 table.dataTable thead .sorting_asc:after {
-  content: "\e155";
-  /* sort-by-attributes */
+    content: "\e155";
+    /* sort-by-attributes */
 }
+
 table.dataTable thead .sorting_desc:after {
-  content: "\e156";
-  /* sort-by-attributes-alt */
+    content: "\e156";
+    /* sort-by-attributes-alt */
 }
+
 table.dataTable thead .sorting_asc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:after {
-  color: #eee;
+    color: #eee;
 }
 
 td.details-control {
-    
     cursor: pointer;
 }
+
 tr.shown td.details-control {
-  
 }
 
 /*Gallery Overrides*/
-.blueimp-gallery-controls > .prev, .blueimp-gallery-controls > .next{
-    display:block;
+.blueimp-gallery-controls > .prev, .blueimp-gallery-controls > .next {
+    display: block;
+}
+
+/*Bootstrap Notify*/
+[data-notify="progressbar"] {
+    margin-bottom: 0px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 5px;
+}
+
+[data-notify="container"] {
+    width: 300px;
 }

@@ -86,5 +86,31 @@ namespace PolishWarehouse.Controllers
             }
 
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult ConvertToPolish(long id, int dupeAction = 0 )
+        {
+            try
+            {
+                IncomingOrderLinePolishModel.DupeAction action = (IncomingOrderLinePolishModel.DupeAction)dupeAction;
+                
+                using (var db = new PolishWarehouseEntities())
+                {
+                    var incomingPolish = db.IncomingOrderLines_Polishes.Where(p => p.ID == id).SingleOrDefault();
+                    if (incomingPolish == null)
+                        throw new Exception("Record not found.");
+
+                    var model = new IncomingOrderLinePolishModel(incomingPolish);
+                    return Json(model.ConvertToPolish(action));
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                return Json(new Response(false,Logging.LogEvent(LogTypes.Error, "Error converting orderline to polish", "Error converting orderline to polish", ex)));
+            }
+
+        }
     }
 }

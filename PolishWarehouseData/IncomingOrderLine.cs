@@ -34,8 +34,8 @@ namespace PolishWarehouseData
     
         public virtual IncomingLineType IncomingLineType { get; set; }
         public virtual IncomingOrder IncomingOrder { get; set; }
+        public virtual ShippingProvider ShippingProvider { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IncomingOrderLines_Polishes> IncomingOrderLines_Polishes { get; set; }
-        public virtual ShippingProvider ShippingProvider { get; set; }
     }
 }

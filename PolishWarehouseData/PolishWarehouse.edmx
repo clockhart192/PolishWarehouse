@@ -66,8 +66,8 @@
           <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
           <Property Name="IncomingOrderLinesID" Type="bigint" Nullable="false" />
-          <Property Name="ColorID" Type="int" Nullable="false" />
-          <Property Name="BrandID" Type="int" Nullable="false" />
+          <Property Name="ColorID" Type="int" />
+          <Property Name="BrandID" Type="int" />
           <Property Name="PolishName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Coats" Type="int" Nullable="false" />
           <Property Name="HasBeenTried" Type="bit" Nullable="false" />
@@ -75,6 +75,7 @@
           <Property Name="GiftFromName" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="PolishID" Type="bigint" />
+          <Property Name="Converted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="IncomingOrders">
           <Key>
@@ -337,7 +338,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Incoming_Order_Lines_Brand_ID">
-          <End Role="Brands" Type="Self.Brands" Multiplicity="1" />
+          <End Role="Brands" Type="Self.Brands" Multiplicity="0..1" />
           <End Role="IncomingOrderLines_Polishes" Type="Self.IncomingOrderLines_Polishes" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Brands">
@@ -349,7 +350,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Incoming_Order_Lines_Color_ID">
-          <End Role="Colors" Type="Self.Colors" Multiplicity="1" />
+          <End Role="Colors" Type="Self.Colors" Multiplicity="0..1" />
           <End Role="IncomingOrderLines_Polishes" Type="Self.IncomingOrderLines_Polishes" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Colors">
@@ -819,16 +820,7 @@
           <EntitySet Name="Settings" EntityType="PolishWarehouseModel.Setting" />
           <EntitySet Name="IncomingLineTypes" EntityType="PolishWarehouseModel.IncomingLineType" />
           <EntitySet Name="IncomingOrderLines" EntityType="PolishWarehouseModel.IncomingOrderLine" />
-          <EntitySet Name="IncomingOrderLines_Polishes" EntityType="PolishWarehouseModel.IncomingOrderLines_Polishes" />
           <EntitySet Name="IncomingOrders" EntityType="PolishWarehouseModel.IncomingOrder" />
-          <AssociationSet Name="FK_Incoming_Order_Lines_Brand_ID" Association="PolishWarehouseModel.FK_Incoming_Order_Lines_Brand_ID">
-            <End Role="Brand" EntitySet="Brands" />
-            <End Role="IncomingOrderLines_Polishes" EntitySet="IncomingOrderLines_Polishes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Incoming_Order_Lines_Color_ID" Association="PolishWarehouseModel.FK_Incoming_Order_Lines_Color_ID">
-            <End Role="Color" EntitySet="Colors" />
-            <End Role="IncomingOrderLines_Polishes" EntitySet="IncomingOrderLines_Polishes" />
-          </AssociationSet>
           <AssociationSet Name="FK_Incoming_Line_Type_ID" Association="PolishWarehouseModel.FK_Incoming_Line_Type_ID">
             <End Role="IncomingLineType" EntitySet="IncomingLineTypes" />
             <End Role="IncomingOrderLine" EntitySet="IncomingOrderLines" />
@@ -836,10 +828,6 @@
           <AssociationSet Name="FK_Incoming_Order_ID" Association="PolishWarehouseModel.FK_Incoming_Order_ID">
             <End Role="IncomingOrder" EntitySet="IncomingOrders" />
             <End Role="IncomingOrderLine" EntitySet="IncomingOrderLines" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Incoming_Order_Lines_ID" Association="PolishWarehouseModel.FK_Incoming_Order_Lines_ID">
-            <End Role="IncomingOrderLine" EntitySet="IncomingOrderLines" />
-            <End Role="IncomingOrderLines_Polishes" EntitySet="IncomingOrderLines_Polishes" />
           </AssociationSet>
           <EntitySet Name="ShippingProviders" EntityType="PolishWarehouseModel.ShippingProvider" />
           <AssociationSet Name="FK_Shipping_Provider_ID" Association="PolishWarehouseModel.FK_Shipping_Provider_ID">
@@ -857,6 +845,19 @@
           <EntitySet Name="Polishes_PolishTypes_ARCHIVE" EntityType="PolishWarehouseModel.Polishes_PolishTypes_ARCHIVE" />
           <EntitySet Name="Polishes_Secondary_Colors_ARCHIVE" EntityType="PolishWarehouseModel.Polishes_Secondary_Colors_ARCHIVE" />
           <EntitySet Name="Polishes_DestashInfo_ARCHIVE" EntityType="PolishWarehouseModel.Polishes_DestashInfo_ARCHIVE" />
+          <EntitySet Name="IncomingOrderLines_Polishes" EntityType="PolishWarehouseModel.IncomingOrderLines_Polishes" />
+          <AssociationSet Name="FK_Incoming_Order_Lines_Brand_ID" Association="PolishWarehouseModel.FK_Incoming_Order_Lines_Brand_ID">
+            <End Role="Brand" EntitySet="Brands" />
+            <End Role="IncomingOrderLines_Polishes" EntitySet="IncomingOrderLines_Polishes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Incoming_Order_Lines_Color_ID" Association="PolishWarehouseModel.FK_Incoming_Order_Lines_Color_ID">
+            <End Role="Color" EntitySet="Colors" />
+            <End Role="IncomingOrderLines_Polishes" EntitySet="IncomingOrderLines_Polishes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Incoming_Order_Lines_ID" Association="PolishWarehouseModel.FK_Incoming_Order_Lines_ID">
+            <End Role="IncomingOrderLine" EntitySet="IncomingOrderLines" />
+            <End Role="IncomingOrderLines_Polishes" EntitySet="IncomingOrderLines_Polishes" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Polishes_Glitter_Colors">
           <Key>
@@ -1078,30 +1079,9 @@
           <Property Name="ShippingProviderID" Type="Int32" />
           <NavigationProperty Name="IncomingLineType" Relationship="PolishWarehouseModel.FK_Incoming_Line_Type_ID" FromRole="IncomingOrderLine" ToRole="IncomingLineType" />
           <NavigationProperty Name="IncomingOrder" Relationship="PolishWarehouseModel.FK_Incoming_Order_ID" FromRole="IncomingOrderLine" ToRole="IncomingOrder" />
-          <NavigationProperty Name="IncomingOrderLines_Polishes" Relationship="PolishWarehouseModel.FK_Incoming_Order_Lines_ID" FromRole="IncomingOrderLine" ToRole="IncomingOrderLines_Polishes" />
           <NavigationProperty Name="ShippingProvider" Relationship="PolishWarehouseModel.FK_Shipping_Provider_ID" FromRole="IncomingOrderLine" ToRole="ShippingProvider" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="IncomingOrderLines_Polishes">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Timestamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IncomingOrderLinesID" Type="Int64" Nullable="false" />
-          <Property Name="ColorID" Type="Int32" Nullable="false" />
-          <Property Name="BrandID" Type="Int32" Nullable="false" />
-          <Property Name="PolishName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Coats" Type="Int32" Nullable="false" />
-          <Property Name="HasBeenTried" Type="Boolean" Nullable="false" />
-          <Property Name="WasGift" Type="Boolean" Nullable="false" />
-          <Property Name="GiftFromName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="PolishID" Type="Int64" />
-          <NavigationProperty Name="Brand" Relationship="PolishWarehouseModel.FK_Incoming_Order_Lines_Brand_ID" FromRole="IncomingOrderLines_Polishes" ToRole="Brand" />
-          <NavigationProperty Name="Color" Relationship="PolishWarehouseModel.FK_Incoming_Order_Lines_Color_ID" FromRole="IncomingOrderLines_Polishes" ToRole="Color" />
-          <NavigationProperty Name="IncomingOrderLine" Relationship="PolishWarehouseModel.FK_Incoming_Order_Lines_ID" FromRole="IncomingOrderLines_Polishes" ToRole="IncomingOrderLine" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="IncomingOrderLines_Polishes" Relationship="PolishWarehouseModel.FK_Incoming_Order_Lines_ID" FromRole="IncomingOrderLine" ToRole="IncomingOrderLines_Polishes" />
         </EntityType>
         <EntityType Name="IncomingOrder">
           <Key>
@@ -1120,30 +1100,6 @@
           <NavigationProperty Name="ShippingProvider" Relationship="PolishWarehouseModel.FK_IncomingOrders_Shipping_Provider_ID" FromRole="IncomingOrder" ToRole="ShippingProvider" />
           <Property Name="OrderComplete" Type="Boolean" Nullable="false" />
         </EntityType>
-        <Association Name="FK_Incoming_Order_Lines_Brand_ID">
-          <End Type="PolishWarehouseModel.Brand" Role="Brand" Multiplicity="1" />
-          <End Type="PolishWarehouseModel.IncomingOrderLines_Polishes" Role="IncomingOrderLines_Polishes" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Brand">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="IncomingOrderLines_Polishes">
-              <PropertyRef Name="BrandID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Incoming_Order_Lines_Color_ID">
-          <End Type="PolishWarehouseModel.Color" Role="Color" Multiplicity="1" />
-          <End Type="PolishWarehouseModel.IncomingOrderLines_Polishes" Role="IncomingOrderLines_Polishes" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Color">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="IncomingOrderLines_Polishes">
-              <PropertyRef Name="ColorID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Incoming_Line_Type_ID">
           <End Type="PolishWarehouseModel.IncomingLineType" Role="IncomingLineType" Multiplicity="1" />
           <End Type="PolishWarehouseModel.IncomingOrderLine" Role="IncomingOrderLine" Multiplicity="*" />
@@ -1165,18 +1121,6 @@
             </Principal>
             <Dependent Role="IncomingOrderLine">
               <PropertyRef Name="IncomingOrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Incoming_Order_Lines_ID">
-          <End Type="PolishWarehouseModel.IncomingOrderLine" Role="IncomingOrderLine" Multiplicity="1" />
-          <End Type="PolishWarehouseModel.IncomingOrderLines_Polishes" Role="IncomingOrderLines_Polishes" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="IncomingOrderLine">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="IncomingOrderLines_Polishes">
-              <PropertyRef Name="IncomingOrderLinesID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1299,6 +1243,64 @@
           <Property Name="InternalNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SaleStatus" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="IncomingOrderLines_Polishes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Timestamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IncomingOrderLinesID" Type="Int64" Nullable="false" />
+          <Property Name="ColorID" Type="Int32" />
+          <Property Name="BrandID" Type="Int32" />
+          <Property Name="PolishName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Coats" Type="Int32" Nullable="false" />
+          <Property Name="HasBeenTried" Type="Boolean" Nullable="false" />
+          <Property Name="WasGift" Type="Boolean" Nullable="false" />
+          <Property Name="GiftFromName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PolishID" Type="Int64" />
+          <NavigationProperty Name="Brand" Relationship="PolishWarehouseModel.FK_Incoming_Order_Lines_Brand_ID" FromRole="IncomingOrderLines_Polishes" ToRole="Brand" />
+          <NavigationProperty Name="Color" Relationship="PolishWarehouseModel.FK_Incoming_Order_Lines_Color_ID" FromRole="IncomingOrderLines_Polishes" ToRole="Color" />
+          <NavigationProperty Name="IncomingOrderLine" Relationship="PolishWarehouseModel.FK_Incoming_Order_Lines_ID" FromRole="IncomingOrderLines_Polishes" ToRole="IncomingOrderLine" />
+          <Property Name="Converted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Incoming_Order_Lines_Brand_ID">
+          <End Type="PolishWarehouseModel.Brand" Role="Brand" Multiplicity="0..1" />
+          <End Type="PolishWarehouseModel.IncomingOrderLines_Polishes" Role="IncomingOrderLines_Polishes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IncomingOrderLines_Polishes">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Incoming_Order_Lines_Color_ID">
+          <End Type="PolishWarehouseModel.Color" Role="Color" Multiplicity="0..1" />
+          <End Type="PolishWarehouseModel.IncomingOrderLines_Polishes" Role="IncomingOrderLines_Polishes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Color">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IncomingOrderLines_Polishes">
+              <PropertyRef Name="ColorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Incoming_Order_Lines_ID">
+          <End Type="PolishWarehouseModel.IncomingOrderLine" Role="IncomingOrderLine" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.IncomingOrderLines_Polishes" Role="IncomingOrderLines_Polishes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IncomingOrderLine">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IncomingOrderLines_Polishes">
+              <PropertyRef Name="IncomingOrderLinesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1489,25 +1491,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="IncomingOrderLines_Polishes">
-            <EntityTypeMapping TypeName="PolishWarehouseModel.IncomingOrderLines_Polishes">
-              <MappingFragment StoreEntitySet="IncomingOrderLines_Polishes">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="PolishID" ColumnName="PolishID" />
-                <ScalarProperty Name="GiftFromName" ColumnName="GiftFromName" />
-                <ScalarProperty Name="WasGift" ColumnName="WasGift" />
-                <ScalarProperty Name="HasBeenTried" ColumnName="HasBeenTried" />
-                <ScalarProperty Name="Coats" ColumnName="Coats" />
-                <ScalarProperty Name="PolishName" ColumnName="PolishName" />
-                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
-                <ScalarProperty Name="ColorID" ColumnName="ColorID" />
-                <ScalarProperty Name="IncomingOrderLinesID" ColumnName="IncomingOrderLinesID" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="IncomingOrders">
             <EntityTypeMapping TypeName="PolishWarehouseModel.IncomingOrder">
               <MappingFragment StoreEntitySet="IncomingOrders">
@@ -1622,6 +1605,26 @@
                 <ScalarProperty Name="BuyerName" ColumnName="BuyerName" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
                 <ScalarProperty Name="PolishID" ColumnName="PolishID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IncomingOrderLines_Polishes">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.IncomingOrderLines_Polishes">
+              <MappingFragment StoreEntitySet="IncomingOrderLines_Polishes">
+                <ScalarProperty Name="Converted" ColumnName="Converted" />
+                <ScalarProperty Name="PolishID" ColumnName="PolishID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="GiftFromName" ColumnName="GiftFromName" />
+                <ScalarProperty Name="WasGift" ColumnName="WasGift" />
+                <ScalarProperty Name="HasBeenTried" ColumnName="HasBeenTried" />
+                <ScalarProperty Name="Coats" ColumnName="Coats" />
+                <ScalarProperty Name="PolishName" ColumnName="PolishName" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+                <ScalarProperty Name="ColorID" ColumnName="ColorID" />
+                <ScalarProperty Name="IncomingOrderLinesID" ColumnName="IncomingOrderLinesID" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
