@@ -212,15 +212,15 @@ namespace PolishWarehouse.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult GetPolishQuickInfo(string colorName)
+        public JsonResult GetPolishQuickInfo(string colorName,bool onlyPrimary = true)
         {
             try
             {
                 using (var db = new PolishWarehouseEntities())
                 {
-                    var c = db.Colors.Where(b => b.Name == colorName).SingleOrDefault();
+                    var c = db.Colors.Where(b => b.Name == colorName && (onlyPrimary ? b.IsPrimary : true)).SingleOrDefault();
                     if (c == null)
-                        throw new Exception("Color Doesn't exist!");
+                        return Json(new { id = 0, number = 0 });
 
                     return Json(new { id = c.ID, number = PolishModel.getNextColorNumber(c.ID) });
                 }

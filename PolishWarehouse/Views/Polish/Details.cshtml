@@ -338,14 +338,21 @@
                     type: 'POST',
                     data: data,
                     success: function (response) {
-                        $("#ColorNumber").val(response.number);
-                        $("#ColorID").val(response.id);
+                        if (response.id > 0)
+                        {
+                            $("#ColorNumber").val(response.number);
+                            $("#ColorID").val(response.id);
+                        }
+                        else {
+                            toast("Primary Color Not Found", "danger");
+                            toast("TODO: Option to add instead of this alert", "info");
+                        }
                     },
                     failure: function (response) {
-                        alert(response);
+                        toast(response, "danger");
                     },
                     error: function (response) {
-                        alert(response);
+                        toast(response.statusText, "danger");
                     }
                 });
             });

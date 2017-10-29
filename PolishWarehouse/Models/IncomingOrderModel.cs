@@ -176,6 +176,25 @@ namespace PolishWarehouse.Models
 
                 }).ToArray();
 
+                foreach (var order in orders){
+                    foreach(var line in order.Lines)
+                    {
+                        if (string.IsNullOrWhiteSpace(line.Tracking))
+                        {
+                            line.Tracking = order.Tracking;
+                            line.TrackingURL = order.TrackingURL;
+                        }
+                        if(line.IncomingOrderLinePolish != null)
+                        {
+                            if (string.IsNullOrWhiteSpace(line.IncomingOrderLinePolish.Tracking))
+                            {
+                                line.IncomingOrderLinePolish.Tracking = order.Tracking;
+                                line.IncomingOrderLinePolish.TrackingURL = order.TrackingURL;
+                            }
+                        }
+                    }
+                }
+
                 return orders;
             }
         }
@@ -194,7 +213,7 @@ namespace PolishWarehouse.Models
         public System.DateTime CreatedOn { get; set; }
         public long IncomingOrderID { get; set; }
         public long IncomingLineTypeID { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
         public decimal Price { get; set; }
         public int Qty { get; set; }
         public string Notes { get; set; }

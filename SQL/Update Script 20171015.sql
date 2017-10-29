@@ -51,7 +51,7 @@ CREATE TABLE IncomingOrderLines
 	CreatedOn			datetime	  NOT NULL DEFAULT GETUTCDATE(),
 	IncomingOrderID		bigint		  NOT NULL,
 	IncomingLineTypeID  bigint		  NOT NULL,
-	Name				varchar(100)  NOT NULL,
+	Name				varchar(100)  NULL,
 	Price				Money		  NOT NULL,
 	Qty					int			  NOT NULL DEFAULT 1,
 	Notes				nvarchar(MAX) NULL,

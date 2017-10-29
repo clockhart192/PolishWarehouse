@@ -51,7 +51,7 @@
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
           <Property Name="IncomingOrderID" Type="bigint" Nullable="false" />
           <Property Name="IncomingLineTypeID" Type="bigint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Price" Type="money" Nullable="false" />
           <Property Name="Qty" Type="int" Nullable="false" />
           <Property Name="Notes" Type="nvarchar(max)" />
@@ -1080,7 +1080,7 @@
           <NavigationProperty Name="IncomingLineType" Relationship="PolishWarehouseModel.FK_Incoming_Line_Type_ID" FromRole="IncomingOrderLine" ToRole="IncomingLineType" />
           <NavigationProperty Name="IncomingOrder" Relationship="PolishWarehouseModel.FK_Incoming_Order_ID" FromRole="IncomingOrderLine" ToRole="IncomingOrder" />
           <NavigationProperty Name="ShippingProvider" Relationship="PolishWarehouseModel.FK_Shipping_Provider_ID" FromRole="IncomingOrderLine" ToRole="ShippingProvider" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="IncomingOrderLines_Polishes" Relationship="PolishWarehouseModel.FK_Incoming_Order_Lines_ID" FromRole="IncomingOrderLine" ToRole="IncomingOrderLines_Polishes" />
         </EntityType>
         <EntityType Name="IncomingOrder">
