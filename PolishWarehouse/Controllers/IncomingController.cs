@@ -13,6 +13,12 @@ namespace PolishWarehouse.Controllers
         public ActionResult Index(bool viewComplete = false)
         {
             ViewBag.ViewingComplete = viewComplete;
+            ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
+            ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
+            ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
+            ViewBag.Brands = PolishModel.getBrands().OrderBy(c => c.Name);
+            ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
+
             if (viewComplete)
                 return View(IncomingOrderModel.GetIncomingOrderModelList().Where(o => o.OrderComplete).ToArray());
             else
@@ -102,13 +108,44 @@ namespace PolishWarehouse.Controllers
                         throw new Exception("Record not found.");
 
                     var model = new IncomingOrderLinePolishModel(incomingPolish);
-                    return Json(model.ConvertToPolish(action));
+                    var resp = model.ConvertToPolish(action);
+                    return Json(resp);
                 }
                
             }
             catch (Exception ex)
             {
                 return Json(new Response(false,Logging.LogEvent(LogTypes.Error, "Error converting orderline to polish", "Error converting orderline to polish", ex)));
+            }
+
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public JsonResult FinalizeConvert(long PolishLineID, PolishModel polish, IEnumerable<HttpPostedFileBase> files)
+        {
+            try
+            {
+                using (var db = new PolishWarehouseEntities())
+                {
+                    polish.Save();
+                    if (files != null)
+                        polish.SaveImages(files);
+
+                    var incomingPolish = db.IncomingOrderLines_Polishes.Where(p => p.ID == PolishLineID).SingleOrDefault();
+                    if (incomingPolish == null)
+                        throw new Exception("Record not found.");
+
+                    incomingPolish.Converted = true;
+                    db.SaveChanges();
+
+                    return Json(new Response());
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new Response(false, Logging.LogEvent(LogTypes.Error, "Error converting orderline to polish", ex.Message, ex)));
             }
 
         }

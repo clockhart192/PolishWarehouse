@@ -41,6 +41,7 @@ namespace PolishWarehouse.Models
                 TrackingURL = o.ShippingProvider.TrackingBaseURL + o.Tracking;
                 ShippingProviderName = o.ShippingProvider.Name;
                 OrderComplete = o.OrderComplete;
+                PurchaseDate = o.PurchaseDate;
 
                 if (o.IncomingOrderLines != null)
                     Lines = o.IncomingOrderLines.Select(ol => new IncomingOrderLineModel(ol)).ToArray();
@@ -119,6 +120,7 @@ namespace PolishWarehouse.Models
                     TrackingURL = o.ShippingProvider.TrackingBaseURL + o.Tracking,
                     ShippingProviderName = o.ShippingProvider.Name,
                     OrderComplete = o.OrderComplete,
+                    PurchaseDate = o.PurchaseDate,
                     Lines = o.IncomingOrderLines.Select(ol => new IncomingOrderLineModel()
                     {
                         ID = ol.ID,
@@ -301,7 +303,7 @@ namespace PolishWarehouse.Models
         public int? ColorID { get; set; }
         public int? BrandID { get; set; }
         public string PolishName { get; set; }
-        public int Coats { get; set; } = 1;
+        public int? Coats { get; set; }
         public bool HasBeenTried { get; set; }
         public bool WasGift { get; set; }
         public string GiftFromName { get; set; }
@@ -384,7 +386,7 @@ namespace PolishWarehouse.Models
                 incomingPolish.ColorID = ColorID;
                 incomingPolish.BrandID = BrandID;
                 incomingPolish.PolishName = PolishName;
-                incomingPolish.Coats = Coats;
+                incomingPolish.Coats = Coats.Value;
                 incomingPolish.HasBeenTried = HasBeenTried;
                 incomingPolish.WasGift = WasGift;
                 incomingPolish.GiftFromName = GiftFromName;
@@ -401,19 +403,20 @@ namespace PolishWarehouse.Models
             if (Converted)
                 return new Response(false, "Line already imported");
 
-            if (Brand == null)
-               return new Response(false,"Polish brand required.");
+            //if (Brand == null)
+            //   return new Response(false,"Polish brand required.");
 
-            if (Color == null)
-                return new Response(false, "Polish primary color required.");
+            //if (Color == null)
+            //    return new Response(false, "Polish primary color required.");
 
 
             using (var db = new PolishWarehouseEntities())
             {
                 var existing = db.Polishes.Where(p => p.Name == PolishName && p.Brand.ID == Brand.ID).ToArray();
-                var inc = db.IncomingOrderLines_Polishes.Where(p => p.ID == ID).SingleOrDefault();
+               
                 if (existing.Count() > 0)
                 {
+                    var inc = db.IncomingOrderLines_Polishes.Where(p => p.ID == ID).SingleOrDefault();
                     switch (dupeAction)
                     {
                         case DupeAction.DoNotImport:
@@ -431,17 +434,17 @@ namespace PolishWarehouse.Models
                 }
 
 
-                var colorNum = PolishModel.getNextColorNumber(Color.ID.Value);
+                var colorNum = Color == null ? 0: PolishModel.getNextColorNumber(Color.ID.Value);
 
-                var label = $"{Color.Name} {colorNum.ToString()}";
+                var label = Color == null ? "" : $"{Color.Name} {colorNum.ToString()}";
 
                 var polish = new PolishModel()
                 {
                     BrandID = Brand.ID.Value,
-                    ColorID = Color.ID.Value,
+                    ColorID = Color == null ?  0 : Color.ID.Value,
                     BrandName = Brand.Name,
                     PolishName = PolishName,
-                    ColorName = Color.Name,
+                    ColorName = Color == null ? null : Color.Name,
                     ColorNumber = colorNum,
                     Description = Description,
                     Label = label,
@@ -453,12 +456,13 @@ namespace PolishWarehouse.Models
                     Notes = Notes,
                 };
 
-                polish.Save();
-                Converted = true;
-                inc.Converted = true;
-                db.SaveChanges();
+                //polish.Save();
+                //Converted = true;
+                //inc.Converted = true;
+                //db.SaveChanges();
 
-                return new Response(true, returnobj: polish);
+
+                return new Response(p: polish);
             }
         }
 

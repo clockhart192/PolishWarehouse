@@ -94,7 +94,18 @@ namespace PolishWarehouse.Controllers
                     if (polish.ID.HasValue)
                         action = "Index";
 
-                    polish.Save();
+                    var dcolor = db.Colors.Where(c => c.Name.ToLower() == "destash").SingleOrDefault();
+
+                    if(polish.ColorID == 0)
+                    {
+                        polish.ColorID = dcolor.ID;
+                        polish.ColorName = dcolor.Name;
+                    }
+
+                    if (!polish.Coats.HasValue)
+                        polish.Coats = 1;
+
+                        polish.Save();
 
                     if (files != null)
                         polish.SaveImages(files);

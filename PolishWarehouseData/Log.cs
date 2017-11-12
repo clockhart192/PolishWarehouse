@@ -23,5 +23,6 @@ namespace PolishWarehouseData
         public string InputData { get; set; }
         public string OutputData { get; set; }
         public Nullable<long> ParentLogID { get; set; }
+        public System.DateTime CreatedOn { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace PolishWarehouse.Models
                     LogType = type.ToString(),
                     Details = details,
                     FriendlyMessage = friendlyMessage,
+                    CreatedOn = DateTime.UtcNow
                 };
 
                 if(ex != null)

@@ -515,6 +515,22 @@ namespace PolishWarehouse.Models
         {
             using (var db = new PolishWarehouseEntities())
             {
+
+                if (ColorID <= 0)
+                    throw new Exception("Primary color not valid");
+
+                if (!Coats.HasValue)
+                    throw new Exception("Coats amount not valid");
+
+                if (Coats.Value <= 0)
+                    throw new Exception("Coats amount not valid");
+
+                if (!Quantity.HasValue)
+                    throw new Exception("Quantity amount not valid");
+
+                if (Quantity.Value <= 0)
+                    throw new Exception("Quantity amount not valid");
+
                 //Add the polish
                 var polish = db.Polishes.Where(p => p.ID == ID).SingleOrDefault();
                 if (polish == null)
@@ -534,7 +550,11 @@ namespace PolishWarehouse.Models
                 }
 
                 ColorName = db.Colors.Where(c => c.ID == ColorID).Select(c => c.Name).SingleOrDefault();
+
                 Label = string.Format("{0} {1}", ColorName, colornum.ToString());
+                if (db.Polishes.Any(p => p.Label == Label && !Label.ToLower().Contains("Destash")))
+                    throw new Exception("Label already exists");
+
                 Types = TypesIDs == null ? null : db.PolishTypes.Where(pt => TypesIDs.Contains(pt.ID)).ToArray();
                 SecondaryColors = SecondaryColorsIDs == null ? null : db.Colors.Where(c => SecondaryColorsIDs.Contains(c.ID)).ToArray();
                 GlitterColors = GlitterColorsIDs == null ? null : db.Colors.Where(c => GlitterColorsIDs.Contains(c.ID)).ToArray();
@@ -545,7 +565,7 @@ namespace PolishWarehouse.Models
                 polish.CreatedOn = DateTime.UtcNow;
                 polish.Name = PolishName;
                 polish.ColorNumber = colornum;
-                polish.Quantity = 1;
+                polish.Quantity = Quantity.Value;
                 polish.Coats = Coats.HasValue ? Coats.Value : 1;
                 polish.Label = Label;
                 polish.HasBeenTried = HasBeenTried;

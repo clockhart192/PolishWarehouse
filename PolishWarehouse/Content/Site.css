@@ -236,6 +236,12 @@ tr.shown td.selectable {
         border-color: #000000;
     }
 
+    .btn-small-arrow{
+        background-color: #7C74A7;
+        border-color: #7C74A7;
+        margin-top:5px;
+    }
+
 /*Select2*/
 .select2-results__option {
     color: #000000;

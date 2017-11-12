@@ -34,7 +34,7 @@ namespace PolishWarehouse.Controllers
                     GiftFromName = p.Polishes_AdditionalInfo.GiftFromName,
                     Notes = p.Polishes_AdditionalInfo.Notes,
 
-                }).OrderBy(p => p.BrandName).ToArray();
+                }).OrderBy(p => p.BrandName).ThenBy(p=> p.PolishName).ToArray();
 
 
 

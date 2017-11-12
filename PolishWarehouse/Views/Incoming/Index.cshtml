@@ -2,6 +2,11 @@
 @if (Request.IsAuthenticated)
 {
     ViewBag.Title = Convert.ToBoolean(ViewBag.ViewingComplete) ? "Completed Order List" : "Incoming Order List";
+    var primaryColors = ViewBag.PrimaryColors;
+    var secondaryColors = ViewBag.SecondaryColors;
+    var glitterColors = ViewBag.GlitterColors;
+    var brands = ViewBag.Brands;
+    var polishTypes = ViewBag.PolishTypes;
     //int i = 0;
     @Html.Partial("MessageControl")
 
@@ -11,12 +16,11 @@
                 <div class="col-md-12 line-info-header">
                     <h4>Polish Info</h4>
                     <div class="row bold">
-                        <div class="col-md-1">
-                        </div>
+
                         <div class="col-md-2">
                             Brand
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             Name
                         </div>
                         <div class="col-md-2">
@@ -28,8 +32,10 @@
                         <div class="col-md-1">
                             Price
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             Tracking
+                        </div>
+                        <div class="col-md-1">
                         </div>
                     </div>
                 </div>
@@ -51,10 +57,10 @@
                             Name
                         </div>
                         <div class="col-md-5">
-                           Notes
+                            Notes
                         </div>
                         <div class="col-md-2">
-                           Price
+                            Price
                         </div>
                         <div class="col-md-2">
                             Tracking
@@ -68,154 +74,690 @@
                 </div>
             </div>
         </div>
-        
+
     </script>
-        <script type="text/template" id="polish-order-lines-template">
-            <div class="polish-order-line">
-                <div class="row">
-                    <div class="col-md-1">
-                    </div>
-                    <div class="col-md-2">
-                        {{brand}}
-                    </div>
-                    <div class="col-md-2">
-                        {{polishName}}
-                    </div>
-                    <div class="col-md-2">
-                        {{description}}
-                    </div>
-                    <div class="col-md-1">
-                        {{color}}
-                    </div>
-                    <div class="col-md-1">
-                        {{price}}
-                    </div>
-                    <div class="col-md-3">
-                        <a target="_blank" href="{{trackingURL}}">{{tracking}}</a>
+    <script type="text/template" id="polish-order-lines-template">
+        <div class="polish-order-line">
+            <div class="row">
+
+                <div class="col-md-2">
+                    {{brand}}
+                </div>
+                <div class="col-md-3">
+                    {{polishName}}
+                </div>
+                <div class="col-md-2">
+                    {{description}}
+                </div>
+                <div class="col-md-1">
+                    {{color}}
+                </div>
+                <div class="col-md-1">
+                    {{price}}
+                </div>
+                <div class="col-md-2">
+                    <a target="_blank" href="{{trackingURL}}">{{tracking}}</a>
+                </div>
+                <div class="col-md-1">
+                    <div class="dropdown">
+                        <button class="btn btn-default btn-small-arrow dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <b class="caret"></b>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="convertToPolish({{linenum}},0); return false;">Convert</a></li>
+                            <li class="disabled"><a class="dropdown-item" href="#" onclick="return false;">Destash</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </script>
+        </div>
+    </script>
 
-        <script type="text/template" id="other-order-lines-template">
-            <div class="other-order-line">
-                <div class="row">
-                    <div class="col-md-1">
+    <script type="text/template" id="other-order-lines-template">
+        <div class="other-order-line">
+            <div class="row">
+                <div class="col-md-1">
 
-                    </div>
-                    <div class="col-md-2">
-                        {{name}}
-                    </div>
-                    <div class="col-md-5">
-                        {{notes}}
-                    </div>
-                    <div class="col-md-1">
-                        {{price}}
-                    </div>
-                    <div class="col-md-3">
-                        <a target="_blank" href="{{trackingURL}}">{{tracking}}</a>
-                    </div>
+                </div>
+                <div class="col-md-2">
+                    {{name}}
+                </div>
+                <div class="col-md-5">
+                    {{notes}}
+                </div>
+                <div class="col-md-1">
+                    {{price}}
+                </div>
+                <div class="col-md-3">
+                    <a target="_blank" href="{{trackingURL}}">{{tracking}}</a>
                 </div>
             </div>
-        </script>
+        </div>
+    </script>
 
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading panel-heading-private">
-                        <h3>@ViewBag.Title</h3>
-                    </div>
-                    <div class="panel-collapse">
-                        <div class="panel-body">
-                            <div class="row margin-top-5">
-                                <div class="col-md-12 table-responsive">
-                                    <table class="table table-hover table-condensed datatable order-table" id="table">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>Name</th>
-                                                <th>Total</th>
-                                                <th>Purchase Date</th>
-                                                <th class="hidden-xs">Notes</th>
-                                                <th>Tracking</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading-private">
+                    <h3>@ViewBag.Title</h3>
+                </div>
+                <div class="panel-collapse">
+                    <div class="panel-body">
+                        <div class="row margin-top-5">
+                            <div class="col-md-12 table-responsive">
+                                <table class="table table-hover table-condensed datatable order-table" id="table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Name</th>
+                                            <th>Total</th>
+                                            <th>Purchase Date</th>
+                                            <th class="hidden-xs">Notes</th>
+                                            <th>Tracking</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    using (Html.BeginForm("Details", "Polish", FormMethod.Post, new { enctype = "multipart/form-data", id = "FinalizeForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal fade" id="Convert-Polish-Confirm" role="dialog">
+            <div class="modal-dialogmodal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Convert Polish?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="PolishID" id="PolishID">
+                        <input type="hidden" name="PolishLineID" id="PolishLineID">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="BrandID">Brand Name*</label>
+                                                        <br />
+                                                        <input list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name">
+                                                        <datalist id="BrandList">
+                                                            @foreach (var brand in brands)
+                                                            {
+                                                                <option value="@brand.Name"></option>
+                                                            }
+                                                        </datalist>
+                                                        <input type="hidden" name="BrandID" id="BrandID">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="PolishName">Polish Name*</label>
+                                                        <br />
+                                                        <input type="text" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" />
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="ColorID">Color*</label>
+                                                        <br />
+                                                        <input list="ColorList" id="ColorName" name="ColorName" class="form-control" placeholder="Primary Color">
+                                                        <datalist id="ColorList">
+                                                            @foreach (var color in primaryColors)
+                                                            {
+                                                                <option value="@color.Name"></option>
+                                                            }
+                                                        </datalist>
+                                                        <input type="hidden" name="ColorID" id="ColorID">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="PolishName">Color Number*</label>
+                                                        <br />
+                                                        <input type="text" id="ColorNumber" name="ColorNumber" placeholder="Color Number" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label for="PolishName">Description</label>
+                                                        <br />
+                                                        <textarea class="form-control" rows="5" id="Description" name="Description" placeholder="Description"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="SecondaryColorsIDs">Secondary Colors</label>
+                                                        <br />
+                                                        <select multiple id="SecondaryColorsIDs" name="SecondaryColorsIDs" class="form-control">
+                                                            <option></option>
+                                                            @foreach (var color in secondaryColors)
+                                                            {
+                                                                <option value="@color.ID">@color.Name</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="GlitterColorsIDs">Glitter Colors</label>
+                                                        <br />
+                                                        <select multiple id="GlitterColorsIDs" name="GlitterColorsIDs" class="form-control">
+                                                            <option></option>
+                                                            @foreach (var color in glitterColors)
+                                                            {
+                                                                <option value="@color.ID">@color.Name</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <label for="Coats">Coats</label>
+                                                        <br />
+                                                        <input type="number" id="Coats" name="Coats" placeholder="Coats" class="form-control" />
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label for="Coats">Quantity</label>
+                                                        <br />
+                                                        <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label></label>
+                                                        <br />
+                                                        <button type="submit" class="btn btn-default">Save</button>
+                                                        @*<a href="#" class="btn btn-default" onclick="finalizeConvert(); return false;">Save</a>*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Additional Info</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="WasGift">Gift</label>
+                                                <br />
+                                                <label class="switch">
+                                                    <input id="WasGift" name="WasGift" value="true" type="checkbox">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="GiftFromName">Gifter's Name</label>
+                                                <br />
+                                                <input type="text" id="GiftFromName" name="GiftFromName" placeholder="Name" class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="HasBeenTried">Has been tried?</label>
+                                                <br />
+                                                <label class="switch">
+                                                    <input id="HasBeenTried" name="HasBeenTried" value="true" type="checkbox">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label for="PolishName">Notes</label>
+                                                <br />
+                                                <textarea class="form-control" rows="5" id="Notes" name="Notes" placeholder="Notes"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Polish Types</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <br />
+                                        <div class="row">
+                                            @foreach (var type in polishTypes)
+                                            {
+                                                string check = "";
+                                                <div class="col-sm-3">
+                                                    <span>@type.Name</span>
+                                                    <br />
+                                                    <label class="switch">
+                                                        <input value="@type.ID" name="TypesIDs" type="checkbox" @check>
+                                                        <span class="slider round"></span>
+                                                    </label>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Media</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label for="MakerImage">Images</label>
+                                                <br />
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <span class="btn btn-primary btn-file">Browse&nbsp;&nbsp;<span class="glyphicon glyphicon-search"></span><input type="file" name="files" id="files" multiple /></span>
+                                                    </span>
+                                                    <input class="form-control" type="text" readonly="" id="file_display">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @*<div class="row">
+                                <div class="col-md-2"><button id="Add-New-Brand-Confirm-Btn" class="btn btn-default">Yes</button></div>
+                                <div class="col-md-8"></div>
+                                <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Add-New-Brand-Confirm').modal('hide'); return false;">No</button></div>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="modal fade" id="Resolve-Duplicate-Polish-Modal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Duplicate Polish Found</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Select Resolve Action</label>
+                    <br />
+                    <select id="Resolve-Duplicate-Select" class="form-control">
+                        <option value="1" selected>Do not import</option>
+                        <option value="2">Add quantity</option>
+                        <option value="3">Add as new polish</option>
+                    </select>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-2"><button id="Resolve-Duplicate-Polish-Btn" class="btn btn-default" onclick="resolvePrompt(); return false;">Confirm</button></div>
+                        <div class="col-md-8"></div>
+                        <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Resolve-Duplicate-Polish-Modal').modal('hide'); return false;">Cancel</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="Add-New-Brand-Confirm" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add New Brand?</h4>
+                </div>
+                <div class="modal-body">
+                    <span id="Add-New-Brand-Text"></span>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-2"><button id="Add-New-Brand-Confirm-Btn" class="btn btn-default">Yes</button></div>
+                        <div class="col-md-8"></div>
+                        <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Add-New-Brand-Confirm').modal('hide'); return false;">No</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
         <script>
+            //Event Handlers
             $(document).ready(function () {
+                $('#ColorName').on("blur", function (e) {
+                    var token = $('[name=__RequestVerificationToken]').val();
+                    var data = {
+                        __RequestVerificationToken: token,
+                        colorName: $('#ColorName').val()
+                    };
 
-                var tableData =
-                     [
-                        @foreach(var order in Model)
-                        {
-                            <text>
-                                {
-                                    "id": "@order.ID",
-                                    "name": "@order.Name",
-                                    "total": "@order.Price.Value.ToString("C2")",
-                                    "date": "@order.PurchaseDate.ToShortDateString()",
-                                    "tracking": "@order.Tracking",
-                                    "notes": "@Html.Raw(order.Notes)",
-                                    "trackingUrl": "@order.TrackingURL",
-                                    "shippingProvider": "@order.ShippingProviderName",
-                                    "lines": [
-                                        @foreach(var line in order.Lines)
-                                          {
-                                              if(line.IncomingOrderLinePolish != null)
-                                              {
-                                                <text>
-                                                        {
-                                                            "type": "polish",
-                                                            "name": "@line.Name",
-                                                            "price": "@line.Price.ToString("C2")",
-                                                            "qty": "@line.Qty",
-                                                            "tracking": "@line.Tracking",
-                                                            "trackingUrl": "@line.TrackingURL",
-                                                            "notes": "@Html.Raw(line.Notes)",
-                                                            "shippingProvider": "@line.ShippingProviderName",
-
-                                                            "polishName": "@line.IncomingOrderLinePolish.PolishName",
-                                                            "color": "@(line.IncomingOrderLinePolish.Color != null ? line.IncomingOrderLinePolish.Color.Name : "")",
-                                                            "brand": "@line.IncomingOrderLinePolish.Brand.Name",
-                                                            "wasGift": "@line.IncomingOrderLinePolish.WasGift.ToString()",
-                                                            "giftFromName": "@line.IncomingOrderLinePolish.GiftFromName",
-                                                            "description": "@line.IncomingOrderLinePolish.Description",
-                                                        },
-                                                         </text>
-                                              }
-                                              else
-                                              {
-                                                <text>
-                                                        {
-                                                            "type": "other",
-                                                            "name": "@line.Name",
-                                                            "price": "@line.Price.ToString("C2")",
-                                                            "qty": "@line.Qty",
-                                                            "tracking": "@line.Tracking",
-                                                            "trackingUrl": "@line.TrackingURL",
-                                                            "notes": "@line.Notes",
-                                                            "shippingProvider": "@line.ShippingProviderName",
-                                                        },
-                                                        </text>
-                                              }
-                                          }
-                                    ]
-                                },
-                            </text>
+                    $.ajax({
+                        url: "@Url.Action("GetPolishQuickInfo", "Polish")",
+                        type: 'POST',
+                        data: data,
+                        success: function (response) {
+                            if (response.id > 0) {
+                                $("#ColorNumber").val(response.number);
+                                $("#ColorID").val(response.id);
+                            }
+                            else {
+                                toast("Primary Color Not Found", "danger");
+                                toast("TODO: Option to add instead of this alert", "info");
+                            }
+                        },
+                        failure: function (response) {
+                            toast(response, "danger");
+                        },
+                        error: function (response) {
+                            toast(response.statusText, "danger");
                         }
-                     ];
+                    });
+                });
 
-                console.log(tableData);
-                console.log(JSON.stringify(tableData));
+
+                $("#BrandName").on("blur", function () {
+                    if ($('#BrandName').val() != "") {
+                        var token = $('[name=__RequestVerificationToken]').val();
+                        var data = {
+                            __RequestVerificationToken: token,
+                            BrandName: $('#BrandName').val()
+                        };
+
+                        $.ajax({
+                            url: "@Url.Action("GetBrandID", "Settings")",
+                            type: 'POST',
+                            data: data,
+                            success: function (response) {
+                                if (response > 0) {
+                                    $("#BrandID").val(response);
+                                }
+                                else {
+                                    var n = $('#BrandName').val();
+                                    $("#Add-New-Brand-Text").text('Are you sure you want to add " ' + n + '" as a brand?');
+                                    $("#Add-New-Brand-Confirm").modal("show");
+                                }
+                            },
+                            failure: function (response) {
+                                alert(response);
+                            },
+                            error: function (response) {
+                                alert(response);
+                            }
+                        });
+                    };
+                });
+
+                $("#Add-New-Brand-Confirm-Btn").on("click", function () {
+                    var token = $('[name=__RequestVerificationToken]').val();
+                    var data = {
+                        __RequestVerificationToken: token,
+                        BrandName: $('#BrandName').val()
+                    };
+
+                    loading();
+                    $.ajax({
+                        url: "@Url.Action("AddBrand", "Settings")",
+                        type: 'POST',
+                        data: data,
+                        success: function (response) {
+                            if (response > 0) {
+                                $("#BrandID").val(response);
+                                $("#Add-New-Brand-Confirm").modal("hide");
+                            }
+                            else {
+                                alert("Unknown error adding brand.");
+                            }
+                            doneLoading();
+                        },
+                        failure: function (response) {
+                            alert(response);
+                        },
+                        error: function (response) {
+                            alert(response);
+                        }
+                    });
+                });
+
+               
+
+                $(document).on('change', '.btn-file :file', function () {
+                    var input = $(this),
+                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                    $('#file_display').val(label);
+                });
+
+                $("#FinalizeForm").on('submit', function (e) {
+
+                    e.preventDefault() // prevent the form's normal submission
+
+                    var dataToPost = $(this).serialize();
+                    var formdata = new FormData($(this).get(0));
+
+                    loading();
+                    $.ajax({
+                        url: "@Url.Action("FinalizeConvert", "Incoming")",
+                        type: 'POST',
+                        data: formdata,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.WasSuccessful) {
+                                $("#Convert-Polish-Confirm").modal('hide');
+                                toast("Line Updated!", "info");
+                            }
+                            else {
+                                toast("Error Saving", "danger");
+                            }
+                            doneLoading();
+                        },
+                        failure: function (response) {
+                            toast(response, "danger");
+                        },
+                        error: function (response) {
+                            toast(response, "danger");
+                        }
+                    });
+                });
+            });
+
+            
+        </script>
+        <script>
+            //functions
+            /* Formatting function for row details - modify as you need */
+            function format(d) {
+                // `d` is the original data object for the row
+                var children = document.getElementById("order-lines-container-template").innerHTML;
+                var polishLines = "";
+                var otherLines = "";
+                d.lines.forEach(function (e) {
+                    switch (e.type) {
+                        case "polish":
+                            var checked = e.wasGift ? "checked='checked'" : "";
+                            polishLines += document.getElementById("polish-order-lines-template").innerHTML.replace("{{price}}", e.price)
+                                                                                                        .replace("{{name}}", e.name)
+                                                                                                        .replace("{{quantity}}", e.qty)
+                                                                                                        .replace("{{tracking}}", e.tracking)
+                                                                                                        .replace("{{trackingUrl}}", e.trackingUrl)
+                                                                                                        .replace("{{notes}}", e.notes)
+                                                                                                        .replace("{{shippingProvider}}", e.shippingProvider)
+                                                                                                        .replace("{{linenum}}", e.id)
+                                                                                                        .replace("{{polishName}}", e.polishName)
+                                                                                                        .replace("{{color}}", e.color)
+                                                                                                        .replace("{{brand}}", e.brand)
+                                                                                                        .replace("{{wasGift}}", checked)
+                                                                                                        .replace("{{giftFromName}}", e.giftFromName)
+                                                                                                        .replace("{{description}}", e.description);
+                            break;
+                        default:
+                            otherLines += document.getElementById("other-order-lines-template").innerHTML.replace("{{price}}", e.price)
+                                                                                                       .replace("{{name}}", e.name)
+                                                                                                       .replace("{{quantity}}", e.qty)
+                                                                                                       .replace("{{tracking}}", e.tracking)
+                                                                                                       .replace("{{trackingUrl}}", e.trackingUrl)
+                                                                                                       .replace("{{notes}}", e.notes)
+                                                                                                       .replace("{{shippingProvider}}", e.shippingProvider)
+                                                                                                       .replace("{{linenum}}", e.id);
+                            break;
+                    }
+                });
+
+                children = children.replace("{{polishlines}}", polishLines);
+                children = children.replace("{{otherlines}}", otherLines);
+                return children;
+            }
+
+            function convertToPolish(e, action) {
+                var lineNum = e;//$(e).closest('.polish-order-line').find(".LineNumber").val();
+                current = e;
+                $("#PolishLineID").val(current);
+                var token = $('[name=__RequestVerificationToken]').val();
+                var data = {
+                    __RequestVerificationToken: token,
+                    ID: lineNum,
+                    dupeAction: action
+                };
+                brand = e;
+                $.ajax({
+                    url: "@Url.Action("ConvertToPolish", "Incoming")",
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        if (response.Polish) {
+                            $("#BrandID").val(response.Polish.BrandID);
+                            $("#ColorID").val(response.Polish.ColorID);
+                            $("#BrandName").val(response.Polish.BrandName);
+                            $("#PolishName").val(response.Polish.PolishName);
+                            $("#ColorName").val(response.Polish.ColorName);
+                            $("#ColorNumber").val(response.Polish.ColorNumber);
+                            $("#Description").val(response.Polish.Description);
+                            $("#Label").val(response.Polish.Label);
+                            $("#Coats").val(response.Polish.Coats);
+                            $("#Quantity").val(response.Polish.Quantity);
+                            $("#HasBeenTried").prop("checked", response.Polish.HasBeenTried);
+                            $("#WasGift").prop("checked", response.Polish.WasGift);
+                            $("#GiftFromName").val(response.Polish.GiftFromName);
+                            $("#Notes").val(response.Polish.Notes);
+
+                            $("#SecondaryColorsIDs option:selected").prop("selected", false);
+                            $("#GlitterColorsIDs option:selected").prop("selected", false);
+
+                            $("input[name=TypesIDs]").each(function () {
+                                $(this).prop("checked", false);
+                            });
+
+                            $("#Convert-Polish-Confirm").modal('show');
+                        }
+                        else {
+                            if (response.Message == "Prompt") {
+                                $("#Resolve-Duplicate-Polish-Modal").modal("show");
+                            }
+                            else {
+                                var msg = response.Message ? response.Message : "Success!";
+                                $("#Resolve-Duplicate-Polish-Modal").modal("hide");
+                                if (response.WasSuccessful)
+                                    toast(msg, "info")
+                                else
+                                    toast(msg, "danger")
+                            }
+                        }
+
+                    },
+                    failure: function (response) {
+                        toast(response, "danger");
+                    },
+                    error: function (response) {
+                        toast(response, "danger");
+                    }
+                });
+            }
+
+            function resolvePrompt() {
+                convertToPolish(current, $("#Resolve-Duplicate-Select").val());
+            }
+        </script>
+        <script>
+            //Initilizations
+            $('#SecondaryColorsIDs').select2({
+                placeholder: "Select Secondary Colors"
+            });
+
+            $('#GlitterColorsIDs').select2({
+                placeholder: "Select Glitter Colors"
+            });
+
+            //disgustingly initilizing this datatable
+            $(document).ready(function () {
+                var tableData =
+                         [
+                            @foreach(var order in Model)
+                {
+                    <text>
+                        {
+                            "id": "@order.ID",
+                            "name": "@order.Name",
+                            "total": "@order.Price.Value.ToString("C2")",
+                            "date": "@order.PurchaseDate.ToShortDateString()",
+                            "tracking": "@order.Tracking",
+                            "notes": `@Html.Raw(order.Notes)`,
+                            "trackingUrl": "@order.TrackingURL",
+                            "shippingProvider": "@order.ShippingProviderName",
+                            "lines": [
+                                @foreach(var line in order.Lines)
+                            {
+                                      if(line.IncomingOrderLinePolish != null)
+                    {
+                        <text>
+                                {
+                                    "type": "polish",
+                                    "id": "@line.IncomingOrderLinePolish.ID.ToString()",
+                                    "name": "@line.Name",
+                                    "price": "@line.Price.ToString("C2")",
+                                    "qty": "@line.Qty",
+                                    "tracking": "@line.Tracking",
+                                    "trackingUrl": "@line.TrackingURL",
+                                    "notes": `@Html.Raw(line.Notes)`,
+                                    "shippingProvider": "@line.ShippingProviderName",
+
+                                    "polishName": "@line.IncomingOrderLinePolish.PolishName",
+                                    "color": "@(line.IncomingOrderLinePolish.Color != null ? line.IncomingOrderLinePolish.Color.Name : "")",
+                                    "brand": "@line.IncomingOrderLinePolish.Brand.Name",
+                                    "wasGift": "@line.IncomingOrderLinePolish.WasGift.ToString()",
+                                    "giftFromName": "@line.IncomingOrderLinePolish.GiftFromName",
+                                    "description": `@line.IncomingOrderLinePolish.Description`,
+                                },
+                                     </text>
+                }
+            else
+            {
+                <text>
+                        {
+                            "type": "other",
+                            "id": "@line.ID.ToString()",
+                            "name": "@line.Name",
+                            "price": "@line.Price.ToString("C2")",
+                            "qty": "@line.Qty",
+                            "tracking": "@line.Tracking",
+                            "trackingUrl": "@line.TrackingURL",
+                            "notes": `@line.Notes`,
+                            "shippingProvider": "@line.ShippingProviderName",
+                        },
+                                                        </text>
+            }
+            }
+                            ]
+                        },
+                            </text>
+            }
+                         ];
+
+                //console.log(tableData);
+                //console.log(JSON.stringify(tableData));
                 var table = $('#table').DataTable({
                     "data": tableData,
                     "pageLength": 100,
@@ -251,8 +793,6 @@
                     ]
                 });
 
-
-
                 // Add event listener for opening and closing details
                 $('#table tbody').on('click', 'td.selectable', function () {
                     var tr = $(this).closest('tr');
@@ -270,46 +810,5 @@
                     }
                 });
             });
-
-            /* Formatting function for row details - modify as you need */
-            function format(d) {
-                // `d` is the original data object for the row
-                var children = document.getElementById("order-lines-container-template").innerHTML;
-                var polishLines = "";
-                var otherLines = "";
-                d.lines.forEach(function (e) {
-                    switch (e.type) {
-                        case "polish":
-                            var checked = e.wasGift ? "checked='checked'" : "";
-                            polishLines += document.getElementById("polish-order-lines-template").innerHTML.replace("{{price}}", e.price)
-                                                                                                        .replace("{{name}}", e.name)
-                                                                                                        .replace("{{quantity}}", e.qty)
-                                                                                                        .replace("{{tracking}}", e.tracking)
-                                                                                                        .replace("{{trackingUrl}}", e.trackingUrl)
-                                                                                                        .replace("{{notes}}", e.notes)
-                                                                                                        .replace("{{shippingProvider}}", e.shippingProvider)
-                                                                                                        .replace("{{polishName}}", e.polishName)
-                                                                                                        .replace("{{color}}", e.color)
-                                                                                                        .replace("{{brand}}", e.brand)
-                                                                                                        .replace("{{wasGift}}", checked)
-                                                                                                        .replace("{{giftFromName}}", e.giftFromName)
-                                                                                                        .replace("{{description}}", e.description);
-                            break;
-                        default:
-                            otherLines += document.getElementById("other-order-lines-template").innerHTML.replace("{{price}}", e.price)
-                                                                                                       .replace("{{name}}", e.name)
-                                                                                                       .replace("{{quantity}}", e.qty)
-                                                                                                       .replace("{{tracking}}", e.tracking)
-                                                                                                       .replace("{{trackingUrl}}", e.trackingUrl)
-                                                                                                       .replace("{{notes}}", e.notes)
-                                                                                                       .replace("{{shippingProvider}}", e.shippingProvider);
-                            break;
-                    }
-                });
-
-                children = children.replace("{{polishlines}}", polishLines);
-                children = children.replace("{{otherlines}}", otherLines);
-                return children;
-            }
         </script>
 }

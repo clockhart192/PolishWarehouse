@@ -185,6 +185,7 @@
     <Content Include="Content\Images\default.png" />
     <Content Include="Content\Images\favicon.ico" />
     <Content Include="Content\Images\galaxy-wallpaper.jpg" />
+    <Content Include="Content\Images\loading.gif" />
     <Content Include="Content\Images\NotAvailable.jpg" />
     <Content Include="Content\select2-bootstrap.css" />
     <Content Include="Content\select2-bootstrap.min.css" />
@@ -196,6 +197,13 @@
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="img\error.png" />
+    <Content Include="img\error.svg" />
+    <Content Include="img\loading.gif" />
+    <Content Include="img\play-pause.png" />
+    <Content Include="img\play-pause.svg" />
+    <Content Include="img\video-play.png" />
+    <Content Include="img\video-play.svg" />
     <Content Include="Offline\Unavailable.aspx" />
     <Content Include="Scripts\.gitignore" />
     <Content Include="Scripts\blueimp-gallery-fullscreen.js" />
@@ -343,7 +351,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Shared\Errorqwert.cshtml" />
     <Content Include="Views\Shared\MessageControl.cshtml" />
     <Content Include="Views\Polish\Import.cshtml" />
     <Content Include="Views\Polish\Index.cshtml" />
@@ -379,7 +386,7 @@
     <Content Include="Views\Incoming.cshtml" />
     <Content Include="Views\Incoming\Index.cshtml" />
     <Content Include="Views\Incoming\Details.cshtml" />
-    <Content Include="Views\Shared\IncomingPolish.cshtml" />
+    <Content Include="Views\Shared\PolishDetailPartial.cshtml" />
     <Content Include="Views\Polish\Random.cshtml" />
     <Content Include="Views\Archive\Index.cshtml" />
     <Content Include="Views\Archive\Details.cshtml" />

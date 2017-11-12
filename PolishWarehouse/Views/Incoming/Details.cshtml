@@ -147,7 +147,7 @@
                                                         <label for="IncomingOrderLine-Name">Name</label>
                                                         <br />
                                                         <input @disabled type="text" id="IncomingOrderLine-Name" name="Name" placeholder="Name" class="form-control" />
-                                                        <input type="hidden" name="IncomingOrderLineID" id="IncomingOrderLine-ID" value="2">
+                                                        <input type="hidden" name="IncomingOrderLineID" id="IncomingOrderLine-ID">
                                                         <input type="hidden" name="LineNumber" class="LineNumber">
                                                     </div>
                                                 </div>
@@ -207,7 +207,7 @@
                                 <div class="row">
                                     <h4>Polish Info</h4>
                                     <input type="hidden" id="IncomingOrderLine-Name" name="Name" value="" />
-                                    <input type="hidden" name="IncomingOrderLineID" id="IncomingOrderLine-ID" value="1">
+                                    <input type="hidden" name="IncomingOrderLineID" id="IncomingOrderLine-ID">
                                     <input type="hidden" name="IncomingOrderLinePolishID" id="IncomingOrderLine-Polish-ID">
                                     <input type="hidden" name="LineNumber" class="LineNumber">
                                 </div>
@@ -255,7 +255,7 @@
                                                     <div class="col-md-6">
                                                         <label for="IncomingOrderLine-Qty">Quantity</label>
                                                         <br />
-                                                        <input @disabled type="number" id="IncomingOrderLine-Qty" min="1" name="Qty" placeholder="Quantity" class="form-control" />
+                                                        <input @disabled type="number" id="IncomingOrderLine-Qty" min="1" value="1" name="Qty" placeholder="Quantity" class="form-control" />
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="IncomingOrderLine-Price">Price</label>
@@ -375,55 +375,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="Convert-Polish-Confirm" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add New Brand?</h4>
-                </div>
-                <div class="modal-body">
-                    <span id="Add-New-Brand-Text"></span>
-                </div>
-                <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-md-2"><button id="Add-New-Brand-Confirm-Btn" class="btn btn-default">Yes</button></div>
-                        <div class="col-md-8"></div>
-                        <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Add-New-Brand-Confirm').modal('hide'); return false;">No</button></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="Resolve-Duplicate-Polish-Modal" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Duplicate Polish Found</h4>
-                </div>
-                <div class="modal-body">
-                    <label>Select Resolve Action</label>
-                    <br />
-                    <select id="Resolve-Duplicate-Select" class="form-control">
-                        <option value="1" selected>Do not import</option>
-                        <option value="2">Add quantity</option>
-                        <option value="3">Add as new polish</option>
-                    </select>
-
-                </div>
-                <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-md-2"><button id="Resolve-Duplicate-Polish-Btn" class="btn btn-default" onclick="resolvePrompt(); return false;">Confirm</button></div>
-                        <div class="col-md-8"></div>
-                        <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Resolve-Duplicate-Polish-Modal').modal('hide'); return false;">Cancel</button></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  
     <script>
         var brand = null;
         var color = null;
@@ -476,7 +428,7 @@
             $("#IncomingOrderLine-Name-" + @i.ToString()).val("@Html.Raw(line.Name)");
             $("#IncomingOrderLine-Price-" + @i.ToString()).val("@Html.Raw(line.Price)");
             $("#IncomingOrderLine-Qty-" + @i.ToString()).val("@Html.Raw(line.Qty)");
-            $("#IncomingOrderLine-Notes-" + @i.ToString()).val("@Html.Raw(line.Notes)");
+            $("#IncomingOrderLine-Notes-" + @i.ToString()).val(`@Html.Raw(line.Notes)`);
             $("#IncomingOrderLine-Tracking-" + @i.ToString()).val("@Html.Raw(string.IsNullOrWhiteSpace(line.Tracking) ? order.Tracking : line.Tracking)");
             $("#IncomingOrderLine-TrackingProviderID-" + @i.ToString()).val("@Html.Raw(line.ShippingProviderID)");
 
@@ -489,7 +441,7 @@
             $("#HasBeenTried-" + @i.ToString()).val("@Html.Raw(line.IncomingOrderLinePolish.HasBeenTried)");
             $("#WasGift-" + @i.ToString()).prop('checked',@Html.Raw(line.IncomingOrderLinePolish.WasGift.ToString().ToLower()));
             $("#GiftFromName-" + @i.ToString()).val("@Html.Raw(line.IncomingOrderLinePolish.GiftFromName)");
-            $("#Description-" + @i.ToString()).val("@Html.Raw(line.IncomingOrderLinePolish.Description)");
+            $("#Description-" + @i.ToString()).val(`@Html.Raw(line.IncomingOrderLinePolish.Description)`);
             </text>
                     }
                     else
@@ -500,7 +452,7 @@
             $("#IncomingOrderLine-Name-" + @i.ToString()).val("@Html.Raw(line.Name)");
             $("#IncomingOrderLine-Price-" + @i.ToString()).val("@Html.Raw(line.Price)");
             $("#IncomingOrderLine-Qty-" + @i.ToString()).val("@Html.Raw(line.Qty)");
-            $("#IncomingOrderLine-Notes-" + @i.ToString()).val("@Html.Raw(line.Notes)");
+            $("#IncomingOrderLine-Notes-" + @i.ToString()).val(`@Html.Raw(line.Notes)`);
             $("#IncomingOrderLine-Tracking-" + @i.ToString()).val("@Html.Raw(string.IsNullOrWhiteSpace(line.Tracking) ? order.Tracking : line.Tracking)");
             $("#IncomingOrderLine-TrackingProviderID-" + @i.ToString()).val("@Html.Raw(line.ShippingProviderID)");
             </text>
