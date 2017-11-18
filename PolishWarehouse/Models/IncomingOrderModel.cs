@@ -386,7 +386,7 @@ namespace PolishWarehouse.Models
                 incomingPolish.ColorID = ColorID;
                 incomingPolish.BrandID = BrandID;
                 incomingPolish.PolishName = PolishName;
-                incomingPolish.Coats = Coats.Value;
+                incomingPolish.Coats = Coats.HasValue ? Coats.Value : incomingPolish.Coats;
                 incomingPolish.HasBeenTried = HasBeenTried;
                 incomingPolish.WasGift = WasGift;
                 incomingPolish.GiftFromName = GiftFromName;

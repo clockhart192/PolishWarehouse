@@ -644,8 +644,8 @@
                             $("#GiftFromName").val(response.Polish.GiftFromName);
                             $("#Notes").val(response.Polish.Notes);
 
-                            $("#SecondaryColorsIDs option:selected").prop("selected", false);
-                            $("#GlitterColorsIDs option:selected").prop("selected", false);
+                            $("#SecondaryColorsIDs").select2("val", "");
+                            $("#GlitterColorsIDs").select2("val", "");
 
                             $("input[name=TypesIDs]").each(function () {
                                 $(this).prop("checked", false);
