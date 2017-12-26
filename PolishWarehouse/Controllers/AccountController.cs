@@ -175,7 +175,6 @@ namespace PolishWarehouse.Controllers
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
             TempData["Errors"] = "You shouldn't be on this page, this attempt was logged";
-            return RedirectToAction("Login");
             if (userId == null || code == null)
             {
                 return View("Error");
@@ -190,7 +189,6 @@ namespace PolishWarehouse.Controllers
         public ActionResult ForgotPassword()
         {
             TempData["Errors"] = "You shouldn't be on this page, this attempt was logged";
-            return RedirectToAction("Login");
             return View();
         }
 
@@ -202,7 +200,7 @@ namespace PolishWarehouse.Controllers
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             TempData["Errors"] = "You shouldn't be on this page, this attempt was logged";
-            return RedirectToAction("Login");
+            //return RedirectToAction("Login");
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByNameAsync(model.Email);
@@ -230,7 +228,7 @@ namespace PolishWarehouse.Controllers
         public ActionResult ForgotPasswordConfirmation()
         {
             TempData["Errors"] = "You shouldn't be on this page, this attempt was logged";
-            return RedirectToAction("Login");
+            //return RedirectToAction("Login");
             return View();
         }
 
@@ -240,7 +238,7 @@ namespace PolishWarehouse.Controllers
         public ActionResult ResetPassword(string code)
         {
             TempData["Errors"] = "You shouldn't be on this page, this attempt was logged";
-            return RedirectToAction("Login");
+            //return RedirectToAction("Login");
             return code == null ? View("Error") : View();
         }
 
@@ -252,7 +250,7 @@ namespace PolishWarehouse.Controllers
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             TempData["Errors"] = "You shouldn't be on this page, this attempt was logged";
-            return RedirectToAction("Login");
+            //return RedirectToAction("Login");
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -278,7 +276,7 @@ namespace PolishWarehouse.Controllers
         public ActionResult ResetPasswordConfirmation()
         {
             TempData["Errors"] = "You shouldn't be on this page, this attempt was logged";
-            return RedirectToAction("Login");
+            //return RedirectToAction("Login");
             return View();
         }
 
@@ -299,7 +297,7 @@ namespace PolishWarehouse.Controllers
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             TempData["Errors"] = "You shouldn't be on this page, this attempt was logged";
-            return RedirectToAction("Login");
+            //return RedirectToAction("Login");
             var userId = await SignInManager.GetVerifiedUserIdAsync();
             if (userId == null)
             {
@@ -318,7 +316,7 @@ namespace PolishWarehouse.Controllers
         public async Task<ActionResult> SendCode(SendCodeViewModel model)
         {
             TempData["Errors"] = "You shouldn't be on this page, this attempt was logged";
-            return RedirectToAction("Login");
+            //return RedirectToAction("Login");
             if (!ModelState.IsValid)
             {
                 return View();
@@ -338,11 +336,11 @@ namespace PolishWarehouse.Controllers
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             TempData["Errors"] = "You shouldn't be on this page, this attempt was logged";
-            return RedirectToAction("Login");
+            //return RedirectToAction("Login");
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
-                return RedirectToAction("Login");
+                //return RedirectToAction("Login");
             }
 
             // Sign in the user with this external login provider if the user already has a login
@@ -372,7 +370,7 @@ namespace PolishWarehouse.Controllers
         public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
         {
             TempData["Errors"] = "You shouldn't be on this page, this attempt was logged";
-            return RedirectToAction("Login");
+            //return RedirectToAction("Login");
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Manage");
@@ -420,7 +418,7 @@ namespace PolishWarehouse.Controllers
         public ActionResult ExternalLoginFailure()
         {
             TempData["Errors"] = "You shouldn't be on this page, this attempt was logged";
-            return RedirectToAction("Login");
+            //return RedirectToAction("Login");
             return View();
         }
 

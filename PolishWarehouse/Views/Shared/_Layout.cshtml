@@ -18,6 +18,7 @@
     @*<script src="~/Scripts/modernizr-2.6.2.js"></script>*@
     <script src="~/Scripts/blueimp-helper.js"></script>
     <script src="~/Scripts/blueimp-gallery.js"></script>
+    <script src="https://afarkas.github.io/webshim/js-webshim/minified/polyfiller.js"></script>
     @*<script src="~/Scripts/blueimp-gallery-fullscreen.js"></script>
     <script src="~/Scripts/blueimp-gallery-indicator.js"></script>
     <script src="~/Scripts/blueimp-gallery-video.js"></script>
@@ -137,6 +138,11 @@
 
                 });
             }
+
+            String.prototype.replaceAll = function (search, replacement) {
+                var target = this;
+                return target.replace(new RegExp(search, 'g'), replacement);
+            };
             //$(document).ready(function () { toast("Hello World", "info"); });
         </script>
     </div>

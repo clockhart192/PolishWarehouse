@@ -113,7 +113,14 @@ namespace PolishWarehouse.Controllers
                 }
                 catch (Exception ex)
                 {
-                    TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving polish info", "There was an error saving your polish", ex);
+                    TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving polish info", $"There was an error saving your polish: {ex.Message}", ex);
+
+                    ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
+                    ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
+                    ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
+                    ViewBag.Brands = PolishModel.getBrands().OrderBy(c => c.Name);
+                    ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
+                    return View(polish);
                 }
                 return RedirectToAction(action);
             }

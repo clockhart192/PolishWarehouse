@@ -13,7 +13,7 @@
     <script type="text/template" id="order-lines-container-template">
         <div class="lines-container">
             <div class="row">
-                <div class="col-md-12 line-info-header">
+                <div class="col-md-12 {{polishClasses}}">
                     <h4>Polish Info</h4>
                     <div class="row bold">
 
@@ -48,11 +48,9 @@
 
 
             <div class="row">
-                <div class="col-md-12 line-info-header">
+                <div class="col-md-12 {{otherClasses}}">
                     <h4>Other Info</h4>
                     <div class="row bold">
-                        <div class="col-md-1">
-                        </div>
                         <div class="col-md-2">
                             Name
                         </div>
@@ -105,6 +103,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#" onclick="convertToPolish({{linenum}},0); return false;">Convert</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="deleteLine({{linenum}}); return false;">Delete</a></li>
                             <li class="disabled"><a class="dropdown-item" href="#" onclick="return false;">Destash</a></li>
                         </ul>
                     </div>
@@ -116,20 +115,27 @@
     <script type="text/template" id="other-order-lines-template">
         <div class="other-order-line">
             <div class="row">
-                <div class="col-md-1">
-
-                </div>
                 <div class="col-md-2">
                     {{name}}
                 </div>
                 <div class="col-md-5">
                     {{notes}}
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-2">
                     {{price}}
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <a target="_blank" href="{{trackingURL}}">{{tracking}}</a>
+                </div>
+                <div class="col-md-1">
+                    <div class="dropdown">
+                        <button class="btn btn-default btn-small-arrow dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <b class="caret"></b>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="deleteLine({{linenum}}); return false;">Delete</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -404,6 +410,36 @@
             </div>
         </div>
     </div>
+
+    using (Html.BeginForm("DeleteLine", "Incoming", FormMethod.Post, new { enctype = "multipart/form-data", id = "FinalizeForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal fade" id="Delete-Line-Confirm" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Line?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <span>Are you sure you want to delete this line?</span>
+                        <br />
+                        <span><b>* if this is the last line it will delete the order</b></span>
+                        <input type="hidden" name="id" id="deleteLineID">
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-md-2"><button type="submit" class="btn btn-default">Yes</button></div>
+                            <div class="col-md-8"></div>
+                            <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Delete-Line-Confirm').modal('hide'); return false;">No</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
     <div class="modal fade" id="Add-New-Brand-Confirm" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -575,40 +611,52 @@
                 var children = document.getElementById("order-lines-container-template").innerHTML;
                 var polishLines = "";
                 var otherLines = "";
+
+                var showPolish = false;
+                var showOther = false;
+
+                
+
                 d.lines.forEach(function (e) {
                     switch (e.type) {
                         case "polish":
                             var checked = e.wasGift ? "checked='checked'" : "";
-                            polishLines += document.getElementById("polish-order-lines-template").innerHTML.replace("{{price}}", e.price)
-                                                                                                        .replace("{{name}}", e.name)
-                                                                                                        .replace("{{quantity}}", e.qty)
-                                                                                                        .replace("{{tracking}}", e.tracking)
-                                                                                                        .replace("{{trackingUrl}}", e.trackingUrl)
-                                                                                                        .replace("{{notes}}", e.notes)
-                                                                                                        .replace("{{shippingProvider}}", e.shippingProvider)
-                                                                                                        .replace("{{linenum}}", e.id)
-                                                                                                        .replace("{{polishName}}", e.polishName)
-                                                                                                        .replace("{{color}}", e.color)
-                                                                                                        .replace("{{brand}}", e.brand)
-                                                                                                        .replace("{{wasGift}}", checked)
-                                                                                                        .replace("{{giftFromName}}", e.giftFromName)
-                                                                                                        .replace("{{description}}", e.description);
+                            polishLines += document.getElementById("polish-order-lines-template").innerHTML.replaceAll("{{price}}", e.price)
+                                                                                                        .replaceAll("{{name}}", e.name)
+                                                                                                        .replaceAll("{{quantity}}", e.qty)
+                                                                                                        .replaceAll("{{tracking}}", e.tracking)
+                                                                                                        .replaceAll("{{trackingUrl}}", e.trackingUrl)
+                                                                                                        .replaceAll("{{notes}}", e.notes)
+                                                                                                        .replaceAll("{{shippingProvider}}", e.shippingProvider)
+                                                                                                        .replaceAll("{{plinenum}}", e.id)
+                                                                                                        .replaceAll("{{linenum}}", e.lineID)
+                                                                                                        .replaceAll("{{polishName}}", e.polishName)
+                                                                                                        .replaceAll("{{color}}", e.color)
+                                                                                                        .replaceAll("{{brand}}", e.brand)
+                                                                                                        .replaceAll("{{wasGift}}", checked)
+                                                                                                        .replaceAll("{{giftFromName}}", e.giftFromName)
+                                                                                                        .replaceAll("{{description}}", e.description);
+
+                            showPolish = true;
                             break;
                         default:
-                            otherLines += document.getElementById("other-order-lines-template").innerHTML.replace("{{price}}", e.price)
-                                                                                                       .replace("{{name}}", e.name)
-                                                                                                       .replace("{{quantity}}", e.qty)
-                                                                                                       .replace("{{tracking}}", e.tracking)
-                                                                                                       .replace("{{trackingUrl}}", e.trackingUrl)
-                                                                                                       .replace("{{notes}}", e.notes)
-                                                                                                       .replace("{{shippingProvider}}", e.shippingProvider)
-                                                                                                       .replace("{{linenum}}", e.id);
+                            otherLines += document.getElementById("other-order-lines-template").innerHTML.replaceAll("{{price}}", e.price)
+                                                                                                       .replaceAll("{{name}}", e.name)
+                                                                                                       .replaceAll("{{quantity}}", e.qty)
+                                                                                                       .replaceAll("{{tracking}}", e.tracking)
+                                                                                                       .replaceAll("{{trackingUrl}}", e.trackingUrl)
+                                                                                                       .replaceAll("{{notes}}", e.notes)
+                                                                                                       .replaceAll("{{shippingProvider}}", e.shippingProvider)
+                                                                                                       .replaceAll("{{linenum}}", e.id);
+                            showOther = true;
                             break;
                     }
                 });
 
-                children = children.replace("{{polishlines}}", polishLines);
-                children = children.replace("{{otherlines}}", otherLines);
+                children = children.replaceAll("{{polishClasses}}", "line-info-header" + (showPolish ? "" : " hide"));
+                children = children.replaceAll("{{otherClasses}}", "line-info-header" + (showOther ? "" : " hide"));
+                children = children.replaceAll("{{polishlines}}", polishLines);
+                children = children.replaceAll("{{otherlines}}", otherLines);
                 return children;
             }
 
@@ -680,6 +728,11 @@
             function resolvePrompt() {
                 convertToPolish(current, $("#Resolve-Duplicate-Select").val());
             }
+
+            function deleteLine(id) {
+                $("#deleteLineID").val(id);
+                $("#Delete-Line-Confirm").modal('show');
+            }
         </script>
         <script>
             //Initilizations
@@ -730,6 +783,7 @@
                                     "wasGift": "@line.IncomingOrderLinePolish.WasGift.ToString()",
                                     "giftFromName": "@line.IncomingOrderLinePolish.GiftFromName",
                                     "description": `@line.IncomingOrderLinePolish.Description`,
+                                    "lineID": "@line.ID",
                                 },
                                      </text>
                 }
@@ -762,6 +816,7 @@
                     "data": tableData,
                     "pageLength": 100,
                     "deferRender": true,
+                    "stateSave": true,
                     "responsive": true,
                     "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
                     "initComplete": function (settings, json) {

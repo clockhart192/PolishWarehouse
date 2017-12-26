@@ -63,7 +63,15 @@
                                         <select @disabled id="TrackingProviderID" name="TrackingProviderID" class="form-control">
                                             @foreach (var provider in providers)
                                             {
-                                            <option value="@provider.ID">@provider.Name</option>
+                                                string sel = "";
+                                                if (order.ShippingProviderName != null)
+                                                {
+                                                    if (provider.Name == order.ShippingProviderName)
+                                                    {
+                                                        sel = "selected";
+                                                    }
+                                                }
+                                                <option @sel value="@provider.ID">@provider.Name</option>
                                             }
                                         </select>
                                     </div>
@@ -146,7 +154,7 @@
                                                     <div class="col-md-6">
                                                         <label for="IncomingOrderLine-Name">Name</label>
                                                         <br />
-                                                        <input @disabled type="text" id="IncomingOrderLine-Name" name="Name" placeholder="Name" class="form-control" />
+                                                        <input @disabled type="text" id="IncomingOrderLine-Name" name="Name" placeholder="Name" class="form-control" tabindex="1" />
                                                         <input type="hidden" name="IncomingOrderLineID" id="IncomingOrderLine-ID">
                                                         <input type="hidden" name="LineNumber" class="LineNumber">
                                                     </div>
@@ -191,7 +199,7 @@
                                                     <div class="col-md-12">
                                                         <label for="IncomingOrderLine-Notes">Notes</label>
                                                         <br />
-                                                        <textarea @disabled class="form-control" rows="5" id="IncomingOrderLine-Notes" name="Notes" placeholder="Notes"></textarea>
+                                                        <textarea @disabled class="form-control" rows="5" id="IncomingOrderLine-Notes" name="Notes" placeholder="Notes" tabindex="2"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -219,14 +227,14 @@
                                                     <div class="col-md-6">
                                                         <label for="BrandID">Brand Name</label>
                                                         <br />
-                                                        <input @disabled list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" onblur="GetBrandID(this);">
+                                                        <input @disabled list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" onblur="GetBrandID(this);" tabindex="1">
 
                                                         <input type="hidden" name="BrandID" id="BrandID">
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="PolishName">Polish Name</label>
                                                         <br />
-                                                        <input @disabled type="text" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" />
+                                                        <input @disabled type="text" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" tabindex="2" />
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -294,7 +302,7 @@
                                                     <div class="col-md-12">
                                                         <label for="PolishName">Description</label>
                                                         <br />
-                                                        <textarea @disabled class="form-control" rows="5" id="Description" name="Description" placeholder="Description"></textarea>
+                                                        <textarea @disabled class="form-control" rows="5" id="Description" name="Description" placeholder="Description" tabindex="3"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="row">

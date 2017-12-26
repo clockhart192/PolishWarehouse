@@ -31,7 +31,7 @@
                                     <div class="col-md-6">
                                         <label for="BrandID">Brand Name*</label>
                                         <br />
-                                        <input list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" value="@polish.BrandName">
+                                        <input list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" data-list-filter="^" value="@polish.BrandName">
                                         <datalist id="BrandList">
                                             @foreach (var brand in brands)
                                             {
@@ -311,7 +311,7 @@
                                         container: '#blueimp-gallery-carousel',
                                         carousel: true,
                                         onclosed: function () {
-                                            alert("hi");
+                                            toast("hi");
                                         }
                                     }
                                 );
@@ -326,6 +326,15 @@
     </div>
     <script>
         $(document).ready(function () {
+
+            //implement datalist and override UI in modern browsers
+            if (window.webshims) {
+                webshims.setOptions('forms', {
+                    customDatalist: true
+                });
+                webshims.polyfill('forms');
+            }
+
             $('#ColorName').on("blur", function (e) {
                 var token = $('[name=__RequestVerificationToken]').val();
                 var data = {
@@ -345,7 +354,7 @@
                         }
                         else {
                             toast("Primary Color Not Found", "danger");
-                            toast("TODO: Option to add instead of this alert", "info");
+                            toast("TODO: Option to add instead of this toast", "info");
                         }
                     },
                     failure: function (response) {
@@ -388,10 +397,10 @@
                             }
                         },
                         failure: function (response) {
-                            alert(response);
+                            toast(response);
                         },
                         error: function (response) {
-                            alert(response);
+                            toast(response);
                         }
                     });
                 };
@@ -415,15 +424,15 @@
                             $("#Add-New-Brand-Confirm").modal("hide");
                         }
                         else {
-                            alert("Unknown error adding brand.");
+                            toast("Unknown error adding brand.");
                         }
                         doneLoading();
                     },
                     failure: function (response) {
-                        alert(response);
+                        toast(response);
                     },
                     error: function (response) {
-                        alert(response);
+                        toast(response);
                     }
                 });
             });

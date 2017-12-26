@@ -59,6 +59,17 @@ namespace PolishWarehouse.Controllers
             catch (Exception ex)
             {
                 TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving order info", "There was an error saving your order", ex);
+
+                ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
+                ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
+                ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
+                ViewBag.Brands = PolishModel.getBrands().OrderBy(c => c.Name);
+                ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
+                ViewBag.LineTypes = IncomingOrderLineTypeModel.GetLineTypes().OrderBy(c => c.Name);
+                ViewBag.ShippingProviders = ShippingProviderModel.GetShippingProviders().OrderBy(c => c.ID);
+                ViewBag.IsNew = !order.ID.HasValue;
+
+                return View(order);
             }
             return RedirectToAction(action, new { id = order.ID });
         }
@@ -116,6 +127,37 @@ namespace PolishWarehouse.Controllers
             catch (Exception ex)
             {
                 return Json(new Response(false,Logging.LogEvent(LogTypes.Error, "Error converting orderline to polish", "Error converting orderline to polish", ex)));
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteLine(long id)
+        {
+            try
+            {
+                using (var db = new PolishWarehouseEntities())
+                {
+                    var incomingOrderline = db.IncomingOrderLines.Where(p => p.ID == id).SingleOrDefault();
+                    if (incomingOrderline == null)
+                        throw new Exception("Record not found.");
+
+                    var model = new IncomingOrderLineModel(incomingOrderline);
+                    var resp = model.Delete();
+                    if (resp.WasSuccessful)
+                        TempData["Messages"] = "Deleted!";
+                    else
+                        TempData["Errors"] = resp.Message;
+                    return RedirectToAction("Index");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var resp = new Response(false, Logging.LogEvent(LogTypes.Error, "Error deleting order line", "Error deleting order line", ex));
+                TempData["Errors"] = resp.Message;
+                return RedirectToAction("Index");
             }
 
         }

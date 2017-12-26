@@ -133,7 +133,7 @@ namespace PolishWarehouse.Models
                         Notes = ol.Notes,
                         Tracking = ol.Tracking,
                         ShippingProviderID = ol.ShippingProviderID,
-                        TrackingURL = ol.ShippingProvider.TrackingBaseURL + ol.Tracking,
+                        TrackingURL = ol.ShippingProviderID.HasValue ? (ol.ShippingProvider.TrackingBaseURL + ol.Tracking) : (o.ShippingProvider.TrackingBaseURL + o.Tracking),
                         ShippingProviderName = ol.ShippingProvider.Name,
                         IncomingOrderLinePolish = ol.IncomingOrderLines_Polishes.Select(p => new IncomingOrderLinePolishModel()
                         {
@@ -174,19 +174,20 @@ namespace PolishWarehouse.Models
                             GiftFromName = p.GiftFromName,
                             Description = p.Description,
                         }).FirstOrDefault(),
-                    }).OrderBy(p=> p.IncomingLineTypeID),
+                    }).OrderBy(p => p.IncomingLineTypeID),
 
                 }).ToArray();
 
-                foreach (var order in orders){
-                    foreach(var line in order.Lines)
+                foreach (var order in orders)
+                {
+                    foreach (var line in order.Lines)
                     {
                         if (string.IsNullOrWhiteSpace(line.Tracking))
                         {
                             line.Tracking = order.Tracking;
                             line.TrackingURL = order.TrackingURL;
                         }
-                        if(line.IncomingOrderLinePolish != null)
+                        if (line.IncomingOrderLinePolish != null)
                         {
                             if (string.IsNullOrWhiteSpace(line.IncomingOrderLinePolish.Tracking))
                             {
@@ -277,6 +278,40 @@ namespace PolishWarehouse.Models
             }
             return new Response(true);
         }
+        public Response Delete()
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                //Save the Order
+                var incomingOrderline = db.IncomingOrderLines.Where(p => p.ID == ID).SingleOrDefault();
+                var incomingOrderlinePolish = db.IncomingOrderLines_Polishes.Where(p => p.IncomingOrderLinesID == incomingOrderline.ID).SingleOrDefault();
+
+                var orderID = incomingOrderline.IncomingOrderID;
+
+                //Delete polish line
+                if(incomingOrderlinePolish != null)
+                {
+                    db.IncomingOrderLines_Polishes.Remove(incomingOrderlinePolish);
+                }
+
+                //Delete
+                db.IncomingOrderLines.Remove(incomingOrderline);
+
+                db.SaveChanges();
+
+                //Kill the order if this is the only line.
+                var order = db.IncomingOrders.Where(o => o.ID == orderID).SingleOrDefault();
+
+                if(order.IncomingOrderLines.Count() == 0) {
+                    db.IncomingOrders.Remove(order);
+                }
+
+                db.SaveChanges();
+
+            }
+            return new Response(true);
+        }
+
     }
 
     public class IncomingOrderLinePolishModel
@@ -413,7 +448,7 @@ namespace PolishWarehouse.Models
             using (var db = new PolishWarehouseEntities())
             {
                 var existing = db.Polishes.Where(p => p.Name == PolishName && p.Brand.ID == Brand.ID).ToArray();
-               
+
                 if (existing.Count() > 0)
                 {
                     var inc = db.IncomingOrderLines_Polishes.Where(p => p.ID == ID).SingleOrDefault();
@@ -434,14 +469,14 @@ namespace PolishWarehouse.Models
                 }
 
 
-                var colorNum = Color == null ? 0: PolishModel.getNextColorNumber(Color.ID.Value);
+                var colorNum = Color == null ? 0 : PolishModel.getNextColorNumber(Color.ID.Value);
 
                 var label = Color == null ? "" : $"{Color.Name} {colorNum.ToString()}";
 
                 var polish = new PolishModel()
                 {
                     BrandID = Brand.ID.Value,
-                    ColorID = Color == null ?  0 : Color.ID.Value,
+                    ColorID = Color == null ? 0 : Color.ID.Value,
                     BrandName = Brand.Name,
                     PolishName = PolishName,
                     ColorName = Color == null ? null : Color.Name,

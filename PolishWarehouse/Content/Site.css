@@ -107,6 +107,8 @@ tr.shown td.selectable {
     color: #6A1B9A;
 }
 
+
+
 .lines-container {
     background-color: #1A1A1A;
 }
@@ -365,17 +367,17 @@ input:checked + .slider:before {
 
 /*Data tables overrides*/
 table.dataTable thead .sorting_asc {
-    background: url("http://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
     padding-left: 20px;
 }
 
 table.dataTable thead .sorting_desc {
-    background: url("http://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
     padding-left: 20px;
 }
 
 table.dataTable thead .sorting {
-    background: url("http://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
     padding-left: 20px;
 }
 

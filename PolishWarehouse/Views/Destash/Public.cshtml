@@ -241,6 +241,7 @@
             $('#polishtable').dataTable({
                 "pageLength": 100,
                 "deferLoading": true,
+                "stateSave": true,
                 "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
                 "initComplete": function (settings, json) {
                     $("#polishtable").show();
