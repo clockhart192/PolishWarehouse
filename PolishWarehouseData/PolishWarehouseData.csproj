@@ -72,6 +72,9 @@
     <Compile Include="IncomingOrderLines_Polishes.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
+    <Compile Include="IncomingOrderLines_StampingPlates.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
     <Compile Include="Log.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
@@ -140,6 +143,45 @@
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
     <Compile Include="ShippingProvider.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlate.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlateDesign.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlateShape.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlates_AdditionalInfo.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlates_AdditionalInfo_ARCHIVE.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlates_ARCHIVE.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlates_DestashInfo.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlates_DestashInfo_ARCHIVE.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlates_Images.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlates_Images_ARCHIVE.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlates_StampingPlateDesigns.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlates_StampingPlateThemes.cs">
+      <DependentUpon>PolishWarehouse.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StampingPlateTheme.cs">
       <DependentUpon>PolishWarehouse.tt</DependentUpon>
     </Compile>
   </ItemGroup>

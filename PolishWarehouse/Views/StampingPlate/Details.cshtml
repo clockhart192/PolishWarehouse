@@ -1,0 +1,451 @@
+﻿@model PolishWarehouse.Models.StampingPlateModel
+@if (Request.IsAuthenticated)
+{
+    ViewBag.Title = "Details";
+    var plate = Model;
+    var brands = ViewBag.Brands;
+    var shapes = ViewBag.StampingPlateShapes;
+    var designs = ViewBag.StampingPlateDesigns;
+    var themes = ViewBag.StampingPlateThemes;
+
+
+    var header = "Stamping Plate";
+    //bool isNew = string.IsNullOrWhiteSpace(plate.PolishName);
+
+    @Html.Partial("MessageControl")
+
+    using (Html.BeginForm("Details", "StampingPlate", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="PlateID" id="PlateID" value="@plate.ID">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">@header</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="BrandID">Brand Name*</label>
+                                        <br />
+                                        <input list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" data-list-filter="^" value="@plate.BrandName">
+                                        <datalist id="BrandList">
+                                            @foreach (var brand in brands)
+                                            {
+                                                <option value="@brand.Name"></option>
+                                            }
+                                        </datalist>
+                                        <input type="hidden" name="BrandID" id="BrandID" value="@plate.BrandID">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="Name">Name*</label>
+                                        <br />
+                                        <input type="text" id="Name" name="Name" placeholder="Name" class="form-control" value="@plate.Name" />
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="Shape">Shape</label>
+                                        <br />
+                                        <input list="ShapeList" id="ShapeName" name="ShapeName" class="form-control" placeholder="Shape Name" data-list-filter="^" value="@plate.StampingPlateShapeName">
+                                        <datalist id="ShapeList">
+                                            @foreach (var shape in shapes)
+                                            {
+                                                <option value="@shape.Name"></option>
+                                            }
+                                        </datalist>
+                                        <input type="hidden" name="StampingPlateShapeID" id="StampingPlateShapeID" value="@plate.StampingPlateShapeID">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="WasGift">Gift</label>
+                                        <br />
+                                        <label class="switch">
+                                            <input id="WasGift" name="WasGift" value="true" type="checkbox" @(plate.WasGift ? "checked" : "")>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="GiftFromName">Gifter's Name</label>
+                                        <br />
+                                        <input type="text" id="GiftFromName" name="GiftFromName" placeholder="Name" class="form-control" value="@plate.GiftFromName" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="StampingPlateThemeIDs">Stamp Themes</label>
+                                        <br />
+                                        <select multiple id="StampingPlateThemeIDs" name="StampingPlateThemeIDs" rows="5" class="form-control">
+                                            @foreach (var theme in themes)
+                                            {
+                                                string sel = "";
+                                                if (plate.StampingPlateThemes != null)
+                                                {
+                                                    if (plate.StampingPlateThemes.Any(c => c.ID == theme.ID))
+                                                    {
+                                                        sel = "selected";
+                                                    }
+                                                }
+                                                <option @sel value="@theme.ID">@theme.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="StampingPlateDesignIDs">Stamp Designs</label>
+                                        <br />
+                                        <select multiple id="StampingPlateDesignIDs" name="StampingPlateDesignIDs" rows="5" class="form-control">
+                                            @foreach (var design in designs)
+                                            {
+                                                string sel = "";
+                                                if (plate.StampingPlateDesigns != null)
+                                                {
+                                                    if (plate.StampingPlateDesigns.Any(c => c.ID == design.ID))
+                                                    {
+                                                        sel = "selected";
+                                                    }
+                                                }
+                                                <option @sel value="@design.ID">@design.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="Notes">Notes</label>
+                                        <br />
+                                        <textarea class="form-control" rows="5" id="Notes" name="Notes" placeholder="Notes">@plate.Notes</textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="submit"></label>
+                                        <br />
+                                        <input type="submit" class="btn btn-default" value="Save" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Media</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                @if (plate.Images != null)
+                                {
+                                    if (plate.Images.Count() > 0)
+                                    {
+                                        var DisplayImage = plate.Images.Where(i => i.DisplayImage).SingleOrDefault();
+                                        if (DisplayImage == null)
+                                        {
+                                            DisplayImage = plate.Images[0];
+                                        }
+
+
+                                        <a href="#" onclick="$('#Image-Gallery-Modal').modal('show'); return false;"><img src="@DisplayImage.ImageForHTML" class="img-polish-display" alt="image" /></a>
+                                        <br />
+                                        @Html.ActionLink("Manage Images", "ManageImages", "StampingPlate", new { id = plate.ID }, new { @class = "btn btn-default" })
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
+                                    }
+                                }
+                                else
+                                {
+                                    <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
+                                }
+                                <label for="MakerImage"></label>
+                                <br />
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-primary btn-file">Browse&nbsp;&nbsp;<span class="glyphicon glyphicon-search"></span><input type="file" name="files" id="files" multiple /></span>
+                                    </span>
+                                    <input class="form-control" type="text" readonly="" id="file_display">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="modal fade" id="Add-New-Brand-Confirm" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add New Brand?</h4>
+                </div>
+                <div class="modal-body">
+                    <span id="Add-New-Brand-Text"></span>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-2"><button id="Add-New-Brand-Confirm-Btn" class="btn btn-default">Yes</button></div>
+                        <div class="col-md-8"></div>
+                        <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Add-New-Brand-Confirm').modal('hide'); return false;">No</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="Add-New-Shape-Confirm" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add New Shape?</h4>
+                </div>
+                <div class="modal-body">
+                    <span id="Add-New-Brand-Text"></span>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-2"><button id="Add-New-Shape-Confirm-Btn" class="btn btn-default">Yes</button></div>
+                        <div class="col-md-8"></div>
+                        <div class="col-md-2"><button class="btn btn-danger" onclick="$('#Add-New-Shape-Confirm').modal('hide'); return false;">No</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="Image-Gallery-Modal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
+                    <div id="blueimp-gallery-carousel" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls">
+                        <div class="slides"></div>
+                        <h3 class="title"></h3>
+                        <a class="prev">‹</a>
+                        <a class="next">›</a>
+                        <a class="play-pause"></a>
+                        <ol class="indicator"></ol>
+                    </div>
+                    <div class="links" id="links">
+                        @if (plate.Images != null)
+                        {
+                            if (plate.Images.Count() > 0)
+                            {
+                                foreach (var image in plate.Images)
+                                {
+                        <a href="@image.ImageForHTML"></a>
+                                }
+                            }
+                        }
+                    </div>
+                    <script>
+                        var gallery = null;
+                        $('#Image-Gallery-Modal').on('shown.bs.modal', function (e) {
+                            if (gallery == null) {
+                                gallery = blueimp.Gallery(
+                                    document.getElementById('links').getElementsByTagName('a'),
+                                    {
+                                        container: '#blueimp-gallery-carousel',
+                                        carousel: true,
+                                        onclosed: function () {
+                                            toast("hi");
+                                        }
+                                    }
+                                );
+                            }
+                        });
+                    </script>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $(document).ready(function () {
+                $("#header-main-text").text("Stamping Plate");
+            });
+
+            //implement datalist and override UI in modern browsers
+            if (window.webshims) {
+                webshims.setOptions('forms', {
+                    customDatalist: true
+                });
+                webshims.polyfill('forms');
+            }
+
+            $('#StampingPlateThemeIDs').select2({
+                placeholder: "Select Plate Themes"
+            });
+
+            $('#StampingPlateDesignIDs').select2({
+                placeholder: "Select Stamp Designs"
+            });
+
+            //BrandName Shenanigans//////////////////////////////////////////////////////////////////////////////////////
+            $("#BrandName").on("blur", function () {
+                if ($('#BrandName').val() != "") {
+                    var token = $('[name=__RequestVerificationToken]').val();
+                    var data = {
+                        __RequestVerificationToken: token,
+                        BrandName: $('#BrandName').val()
+                    };
+
+                    $.ajax({
+                        url: "@Url.Action("GetBrandID", "Settings")",
+                        type: 'POST',
+                        data: data,
+                        success: function (response) {
+                            if (response > 0) {
+                                $("#BrandID").val(response);
+                            }
+                            else {
+                                var n = $('#BrandName').val();
+                                $("#Add-New-Brand-Text").text('Are you sure you want to add " ' + n + '" as a brand?');
+                                $("#Add-New-Brand-Confirm").modal("show");
+                            }
+                        },
+                        failure: function (response) {
+                            toast(response);
+                        },
+                        error: function (response) {
+                            toast(response);
+                        }
+                    });
+                };
+            });
+
+            $("#Add-New-Brand-Confirm-Btn").on("click", function () {
+                var token = $('[name=__RequestVerificationToken]').val();
+                var data = {
+                    __RequestVerificationToken: token,
+                    BrandName: $('#BrandName').val()
+                };
+
+                loading();
+                $.ajax({
+                    url: "@Url.Action("AddBrand", "Settings")",
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        if (response > 0) {
+                            $("#BrandID").val(response);
+                            $("#Add-New-Brand-Confirm").modal("hide");
+                        }
+                        else {
+                            toast("Unknown error adding brand.");
+                        }
+                        doneLoading();
+                    },
+                    failure: function (response) {
+                        toast(response);
+                    },
+                    error: function (response) {
+                        toast(response);
+                    }
+                });
+            });
+            //End BrandName Shenanigans//////////////////////////////////////////////////////////////
+
+            //ShapeName Shenanigans//////////////////////////////////////////////////////////////////////////////////////
+            $("#ShapeName").on("blur", function () {
+                if ($('#ShapeName').val() != "") {
+                    var token = $('[name=__RequestVerificationToken]').val();
+                    var data = {
+                        __RequestVerificationToken: token,
+                        ShapeName: $('#ShapeName').val()
+                    };
+            
+                    $.ajax({
+                        url: "@Url.Action("GetStampingPlateShapeID", "Settings")",
+                        type: 'POST',
+                        data: data,
+                        success: function (response) {
+                            if (response > 0) {
+                                $("#StampingPlateShapeID").val(response);
+                            }
+                            else {
+                                //var n = $('#ShapeID').val();
+                                //$("#Add-New-Shape-Text").text('Are you sure you want to add " ' + n + '" as a shape?');
+                                //$("#Add-New-Shape-Confirm").modal("show");
+                            }
+                        },
+                        failure: function (response) {
+                            toast(response);
+                        },
+                        error: function (response) {
+                            toast(response);
+                        }
+                    });
+                };
+            });
+            
+            //$("#Add-New-Shape-Confirm-Btn").on("click", function () {
+            //    var token = $('[name=__RequestVerificationToken]').val();
+            //    var data = {
+            //        __RequestVerificationToken: token,
+            //        BrandName: $('#ShapeName').val()
+            //    };
+            //
+            //    loading();
+            //    $.ajax({
+            //        url: "@Url.Action("AddShape", "Settings")",
+            //        type: 'POST',
+            //        data: data,
+            //        success: function (response) {
+            //            if (response > 0) {
+            //                $("#ShapeID").val(response);
+            //                $("#Add-New-Shape-Confirm").modal("hide");
+            //            }
+            //            else {
+            //                toast("Unknown error adding shape.");
+            //            }
+            //            doneLoading();
+            //        },
+            //        failure: function (response) {
+            //            toast(response);
+            //        },
+            //        error: function (response) {
+            //            toast(response);
+            //        }
+            //    });
+            //});
+            //End ShapeName Shenanigans//////////////////////////////////////////////////////////////
+
+
+            $("#BrandName").focus();
+        });
+
+
+
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            $('#file_display').val(label);
+        });
+    </script>
+}
+else
+{
+    //TempData["Errors"] = "Please Log in.";
+    Response.Redirect("~/Account/Login");
+}

@@ -4,51 +4,76 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ac5ffb2fa49e42ad910a40b23ced7dc7" Name="Diagram1" ZoomLevel="87">
-        <EntityTypeShape EntityType="PolishWarehouseModel.Brand" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Color" Width="1.5" PointX="0.75" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polish" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_PolishTypes" Width="1.5" PointX="5.25" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.PolishType" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="ac5ffb2fa49e42ad910a40b23ced7dc7" Name="Diagram1" ZoomLevel="75">
+        <EntityTypeShape EntityType="PolishWarehouseModel.Brand" Width="1.5" PointX="14.875" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Color" Width="1.5" PointX="7.375" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polish" Width="1.5" PointX="3.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_PolishTypes" Width="1.5" PointX="1.625" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.PolishType" Width="1.5" PointX="1" PointY="0.5" IsExpanded="true" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Brand_ID" ManuallyRouted="false" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Color_ID" ManuallyRouted="false" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_PolishTypes_Polish_ID" ManuallyRouted="false" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_PolishTypes_Polish_Type_ID" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Glitter_Colors" Width="1.5" PointX="8.25" PointY="2.25" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Secondary_Colors" Width="1.5" PointX="8.25" PointY="5.25" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Glitter_Colors" Width="1.5" PointX="5.125" PointY="3.5" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Secondary_Colors" Width="1.5" PointX="5.625" PointY="1.375" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Glitter_Colors_Color_ID" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Color_ID" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Glitter_Colors_Polish_ID" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Secondary_Colors_Polish_ID" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.BrandCategory" Width="1.5" PointX="0.75" PointY="9" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.BrandCategory" Width="1.5" PointX="19.375" PointY="0.5" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Brand_Category_ID" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_DestashInfo" Width="1.5" PointX="5.25" PointY="4.75" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_DestashInfo" Width="1.5" PointX="0.5" PointY="5.875" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_DestashInfo_Polish_ID" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_AdditionalInfo" Width="1.5" PointX="5.25" PointY="9.25" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_AdditionalInfo" Width="1.5" PointX="0.5" PointY="9" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_AdditionalInfo_Polish_ID" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Images" Width="1.5" PointX="5.25" PointY="12" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Images" Width="1.5" PointX="0.625" PointY="11.125" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Polishes_Images_Polish_ID" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Log" Width="1.5" PointX="7.75" PointY="8.75" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Setting" Width="1.5" PointX="9.75" PointY="8.75" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.IncomingLineType" Width="1.5" PointX="10.375" PointY="16" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.IncomingOrderLine" Width="1.5" PointX="12.625" PointY="1.125" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.IncomingOrder" Width="1.5" PointX="10.375" PointY="12.5" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Log" Width="1.5" PointX="13.75" PointY="16.375" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Setting" Width="1.5" PointX="15.5" PointY="16.375" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.IncomingLineType" Width="1.5" PointX="16.625" PointY="11.625" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.IncomingOrderLine" Width="1.5" PointX="14.625" PointY="8.25" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.IncomingOrder" Width="1.5" PointX="14.125" PointY="4.5" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Incoming_Line_Type_ID" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Incoming_Order_ID" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.ShippingProvider" Width="1.5" PointX="0.75" PointY="11.875" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.ShippingProvider" Width="1.5" PointX="12.625" PointY="11.375" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Shipping_Provider_ID" />
         <AssociationConnector Association="PolishWarehouseModel.FK_IncomingOrders_Shipping_Provider_ID" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_AdditionalInfo_ARCHIVE" Width="1.5" PointX="14.75" PointY="18.875" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_ARCHIVE" Width="1.5" PointX="1.125" PointY="17.5" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Glitter_Colors_ARCHIVE" Width="1.5" PointX="7.5" PointY="18.375" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Images_ARCHIVE" Width="1.5" PointX="3.25" PointY="17.5" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_PolishTypes_ARCHIVE" Width="1.5" PointX="12.125" PointY="18.5" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Secondary_Colors_ARCHIVE" Width="1.5" PointX="9.625" PointY="18.25" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_DestashInfo_ARCHIVE" Width="1.5" PointX="5.375" PointY="17.5" />
-        <EntityTypeShape EntityType="PolishWarehouseModel.IncomingOrderLines_Polishes" Width="1.5" PointX="14.875" PointY="2.25" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_AdditionalInfo_ARCHIVE" Width="1.5" PointX="4.875" PointY="17.375" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_ARCHIVE" Width="1.5" PointX="2.625" PointY="13.375" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Glitter_Colors_ARCHIVE" Width="1.5" PointX="2.5" PointY="20.625" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Images_ARCHIVE" Width="1.5" PointX="0.625" PointY="15.625" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_PolishTypes_ARCHIVE" Width="1.5" PointX="0.625" PointY="19.625" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_Secondary_Colors_ARCHIVE" Width="1.5" PointX="4.5" PointY="19.625" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.Polishes_DestashInfo_ARCHIVE" Width="1.5" PointX="2.75" PointY="17.375" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.IncomingOrderLines_Polishes" Width="1.5" PointX="10" PointY="3.625" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Incoming_Order_Lines_Brand_ID" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Incoming_Order_Lines_Color_ID" />
         <AssociationConnector Association="PolishWarehouseModel.FK_Incoming_Order_Lines_ID" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.IncomingOrderLines_StampingPlates" Width="1.5" PointX="16.75" PointY="4.5" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlateDesign" Width="1.5" PointX="21.625" PointY="0.625" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlate" Width="1.5" PointX="23.25" PointY="3.125" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlates_AdditionalInfo" Width="1.5" PointX="20.875" PointY="5.875" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlates_AdditionalInfo_ARCHIVE" Width="1.5" PointX="28.875" PointY="7.125" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlates_ARCHIVE" Width="1.5" PointX="28.625" PointY="12.625" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlates_DestashInfo" Width="1.5" PointX="23.125" PointY="10" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlates_DestashInfo_ARCHIVE" Width="1.5" PointX="28.5" PointY="9.25" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlates_Images" Width="1.5" PointX="25.125" PointY="7.625" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlates_Images_ARCHIVE" Width="1.5" PointX="28.625" PointY="15.75" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlates_StampingPlateDesigns" Width="1.5" PointX="23.75" PointY="0.5" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlates_StampingPlateThemes" Width="1.5" PointX="27.125" PointY="4.375" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlateShape" Width="1.5" PointX="20.75" PointY="3.875" />
+        <EntityTypeShape EntityType="PolishWarehouseModel.StampingPlateTheme" Width="1.5" PointX="27" PointY="6.75" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_StampingPlates_Brands" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateDesigns_DesignID" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_AdditionalInfo" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_DestashInfo" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_Images" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateDesigns_StampingPlateID" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateThemes_StampingPlateID" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_StampingPlates_StampingPlateShapes" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateThemes_ThemeID" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_StampingPlates_Incoming_Order_Lines_Brand_ID" />
+        <AssociationConnector Association="PolishWarehouseModel.FK_StampingPlates_Incoming_Order_Lines_ID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

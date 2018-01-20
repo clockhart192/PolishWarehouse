@@ -8,122 +8,34 @@ using PolishWarehouseData;
 
 namespace PolishWarehouse.Controllers
 {
-    public class PolishController : Controller
+    public class StampingPlateController : Controller
     {
-
         #region Main
-        public ActionResult Index(string cheatCode)
+        public ActionResult Index()
         {
             Server.ScriptTimeout = 600;
             using (var db = new PolishWarehouseEntities())
             {
-                var polishes = db.Polishes.Where(p => p.Polishes_DestashInfo == null).Select(p => new PolishModel
+                var stampingPlates = db.StampingPlates.Where(p => p.StampingPlates_DestashInfo == null).Select(p => new StampingPlateModel
                 {
                     ID = p.ID,
                     BrandID = p.BrandID,
-                    ColorID = p.ColorID,
                     BrandName = p.Brand.Name,
-                    PolishName = p.Name,
-                    ColorName = p.Color.Name,
-                    ColorNumber = p.ColorNumber,
-                    Description = p.Polishes_AdditionalInfo.Description,
-                    Label = p.Label,
-                    Coats = p.Coats,
+                    Name = p.Name,
                     Quantity = p.Quantity,
-                    HasBeenTried = p.HasBeenTried,
                     WasGift = p.WasGift,
-                    GiftFromName = p.Polishes_AdditionalInfo.GiftFromName,
-                    Notes = p.Polishes_AdditionalInfo.Notes,
+                    GiftFromName = p.StampingPlates_AdditionalInfo.GiftFromName,
+                    Notes = p.StampingPlates_AdditionalInfo.Notes,
 
-                }).OrderBy(p => p.BrandName).ThenBy(p=> p.PolishName).ToArray();
+                }).OrderBy(p => p.BrandName).ThenBy(p => p.BrandName).ToArray();
 
-
-
-                if (cheatCode == "upupdowndownleftrightleftrightbastart")
-                {
-                    if (Convert.ToBoolean(Utilities.GetConfigurationValue("Konami Code Active")))
-                    {
-                        Utilities.ReSaveAllImages();
-                        TempData["Messages"] = "Konami Code Activated!";
-                    }
-                }
-
-                string dispConfig = Utilities.GetConfigurationValue("Private List Display Configuration");
+                string dispConfig = Utilities.GetConfigurationValue("Private Stamping List Display Configuration");
                 var dict = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, bool>>(dispConfig);
 
-                //var displayConfig = new List<KeyValuePair<string, bool>>();
-                //foreach(var pair in dict)
-                //{
-                //    displayConfig.Add(new KeyValuePair<string, bool>(pair.Key,pair.Value));
-                //}
                 ViewBag.DisplayConfiguration = dict;
 
-                return View(polishes);
+                return View(stampingPlates);
             }
-        }
-
-        public ActionResult IndexStampingPlates(string cheatCode)
-        {
-            Server.ScriptTimeout = 600;
-            using (var db = new PolishWarehouseEntities())
-            {
-                var polishes = db.Polishes.Where(p => p.Polishes_DestashInfo == null).Select(p => new PolishModel
-                {
-                    ID = p.ID,
-                    BrandID = p.BrandID,
-                    ColorID = p.ColorID,
-                    BrandName = p.Brand.Name,
-                    PolishName = p.Name,
-                    ColorName = p.Color.Name,
-                    ColorNumber = p.ColorNumber,
-                    Description = p.Polishes_AdditionalInfo.Description,
-                    Label = p.Label,
-                    Coats = p.Coats,
-                    Quantity = p.Quantity,
-                    HasBeenTried = p.HasBeenTried,
-                    WasGift = p.WasGift,
-                    GiftFromName = p.Polishes_AdditionalInfo.GiftFromName,
-                    Notes = p.Polishes_AdditionalInfo.Notes,
-
-                }).OrderBy(p => p.BrandName).ThenBy(p => p.PolishName).ToArray();
-
-
-
-                if (cheatCode == "upupdowndownleftrightleftrightbastart")
-                {
-                    if (Convert.ToBoolean(Utilities.GetConfigurationValue("Konami Code Active")))
-                    {
-                        Utilities.ReSaveAllImages();
-                        TempData["Messages"] = "Konami Code Activated!";
-                    }
-                }
-
-                string dispConfig = Utilities.GetConfigurationValue("Private List Display Configuration");
-                var dict = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, bool>>(dispConfig);
-
-                //var displayConfig = new List<KeyValuePair<string, bool>>();
-                //foreach(var pair in dict)
-                //{
-                //    displayConfig.Add(new KeyValuePair<string, bool>(pair.Key,pair.Value));
-                //}
-                ViewBag.DisplayConfiguration = dict;
-
-                return View(polishes);
-            }
-        }
-
-        public ActionResult DetailsStampingPlates(int? id)
-        {
-            ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
-            ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
-            ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
-            ViewBag.Brands = BrandModel.getBrands().OrderBy(c => c.Name);
-            ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
-
-            if (id.HasValue)
-                return View(new PolishModel(id.Value, returnimages: true));
-            else
-                return View(new PolishModel());
         }
 
         public ActionResult Public()
@@ -135,7 +47,7 @@ namespace PolishWarehouse.Controllers
             }
             catch { };
             ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
-            return Index(null);
+            return Index();
         }
 
         public JsonResult DetailsAsync(int id)
@@ -147,46 +59,44 @@ namespace PolishWarehouse.Controllers
         }
         public ActionResult Details(int? id)
         {
-            ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
-            ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
-            ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
-            ViewBag.Brands = BrandModel.getBrands().OrderBy(c => c.Name);
-            ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
+            ViewBag.Brands = BrandModel.getBrands(BrandModel.BrandFor.stampingPlate).OrderBy(c => c.Name);
+            ViewBag.StampingPlateShapes = StampingPlateModel.GetPlateShapes().OrderBy(sps => sps.Name);
+            ViewBag.StampingPlateDesigns = StampingPlateModel.GetPlateDesigns().OrderBy(sps => sps.Name);
+            ViewBag.StampingPlateThemes = StampingPlateModel.GetPlateThemes().OrderBy(sps => sps.Name);
 
             if (id.HasValue)
-                return View(new PolishModel(id.Value, returnimages: true));
+                return View(new StampingPlateModel(id.Value, returnimages: true));
             else
-                return View(new PolishModel());
+                return View(new StampingPlateModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Details(PolishModel polish, IEnumerable<HttpPostedFileBase> files)
+        public ActionResult Details(StampingPlateModel plate, IEnumerable<HttpPostedFileBase> files)
         {
             using (var db = new PolishWarehouseEntities())
             {
                 var action = "Details";
                 try
                 {
-                    if (polish.ID.HasValue)
+                    if (plate.ID.HasValue)
                         action = "Index";
 
-                    polish.Save();
+                    plate.Save();
                     if (files != null)
-                        polish.SaveImages(files);
+                        plate.SaveImages(files);
 
-                    TempData["Messages"] = "Polish Saved!";
+                    TempData["Messages"] = "Plate Saved!";
                 }
                 catch (Exception ex)
                 {
-                    TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving polish info", $"There was an error saving your polish: {ex.Message}", ex);
+                    TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving plate info", $"There was an error saving your plate: {ex.Message}", ex);
 
-                    ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
-                    ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
-                    ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
-                    ViewBag.Brands = BrandModel.getBrands().OrderBy(c => c.Name);
-                    ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
-                    return View(polish);
+                    ViewBag.Brands = BrandModel.getBrands(BrandModel.BrandFor.stampingPlate).OrderBy(c => c.Name);
+                    ViewBag.StampingPlateShapes = StampingPlateModel.GetPlateShapes().OrderBy(sps => sps.Name);
+                    ViewBag.StampingPlateDesigns = StampingPlateModel.GetPlateDesigns().OrderBy(sps => sps.Name);
+                    ViewBag.StampingPlateThemes = StampingPlateModel.GetPlateThemes().OrderBy(sps => sps.Name);
+                    return View(plate);
                 }
                 return RedirectToAction(action);
             }
@@ -208,10 +118,10 @@ namespace PolishWarehouse.Controllers
                     Logging.LogEvent(LogTypes.Error, "Error getting image config settings", "Error getting image config settings", ex);
                 }
 
-                var images = db.Polishes_Images.Where(p => p.PolishID == id).Select(i => new PolishImageModel
+                var images = db.StampingPlates_Images.Where(p => p.StampingPlateID == id).Select(i => new StampingPlateImageModel
                 {
                     ID = i.ID,
-                    PolishID = i.PolishID,
+                    StampingPlateID = i.StampingPlateID,
                     //Image = i.Image,
                     //MimeType = i.MIMEType,
                     ImageForHTML = (useDatabase ? (useOriginal ? "data:" + i.MIMEType + ";base64," + i.Image : "data:" + i.CompressedMIMEType + ";base64," + i.CompressedImage) : (useOriginal ? i.ImagePath : i.CompressedImagePath)),
@@ -232,10 +142,10 @@ namespace PolishWarehouse.Controllers
                     //DisplayImage = p.DisplayImage.HasValue ? p.DisplayImage.Value : false
                 }).ToArray();
 
-                var polish = db.Polishes.Where(p => p.ID == id).SingleOrDefault();
+                var polish = db.StampingPlates.Where(p => p.ID == id).SingleOrDefault();
                 if (polish != null)
                     ViewBag.PolishName = polish.Name;
-                var destash = db.Polishes_DestashInfo.Where(p => p.PolishID == id).SingleOrDefault();
+                var destash = db.StampingPlates_DestashInfo.Where(p => p.StampingPlateID == id).SingleOrDefault();
                 if (destash != null)
                     ViewBag.RedirectController = "Destash";
                 else
@@ -285,7 +195,7 @@ namespace PolishWarehouse.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult GetPolishQuickInfo(string colorName,bool onlyPrimary = true)
+        public JsonResult GetPolishQuickInfo(string colorName, bool onlyPrimary = true)
         {
             try
             {
@@ -335,10 +245,10 @@ namespace PolishWarehouse.Controllers
 
         public ActionResult Random()
         {
-            ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
+            //ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
             //ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
             //ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
-            ViewBag.Brands = BrandModel.getBrands().OrderBy(c => c.Name);
+            ViewBag.Brands = BrandModel.getBrands(BrandModel.BrandFor.stampingPlate).OrderBy(c => c.Name);
             //ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
             return View();
         }
@@ -351,7 +261,7 @@ namespace PolishWarehouse.Controllers
             return RedirectToAction("Details", new { id = p.ID });
         }
 
-        #endregion  
+        #endregion
 
         #region Destash
 
@@ -360,38 +270,31 @@ namespace PolishWarehouse.Controllers
             using (var db = new PolishWarehouseEntities())
             {
 
-                var polishes = db.Polishes.Join(db.Polishes_DestashInfo,
+                var stampingPlates = db.StampingPlates.Join(db.StampingPlates_DestashInfo,
                     p => p.ID,
-                    pdi => pdi.PolishID,
-                    (p, pdi) => new { Polish = p, Polishes_DestashInfo = pdi }).Select(p => new PolishDestashModel()
+                    pdi => pdi.StampingPlateID,
+                    (p, pdi) => new { StampingPlate = p, StampingPlates_DestashInfo = pdi }).Select(p => new StampingPlateDestashModel()
                     {
-                        ID = p.Polish.ID,
-                        BrandID = p.Polish.BrandID,
-                        ColorID = p.Polish.ColorID,
-                        BrandName = p.Polish.Brand.Name,
-                        PolishName = p.Polish.Name,
-                        ColorName = p.Polish.Color.Name,
-                        ColorNumber = p.Polish.ColorNumber,
-                        Description = p.Polish.Polishes_AdditionalInfo.Description,
-                        Label = p.Polish.Label,
-                        Coats = p.Polish.Coats,
-                        Quantity = p.Polish.Quantity,
-                        HasBeenTried = p.Polish.HasBeenTried,
-                        WasGift = p.Polish.WasGift,
-                        GiftFromName = p.Polish.Polishes_AdditionalInfo.GiftFromName,
-                        Notes = p.Polish.Polishes_AdditionalInfo.Notes,
+                        ID = p.StampingPlate.ID,
+                        BrandID = p.StampingPlate.BrandID,
+                        BrandName = p.StampingPlate.Brand.Name,
+                        Name = p.StampingPlate.Name,
+                        Quantity = p.StampingPlate.Quantity,
+                        WasGift = p.StampingPlate.WasGift,
+                        GiftFromName = p.StampingPlate.StampingPlates_AdditionalInfo.GiftFromName,
+                        Notes = p.StampingPlate.StampingPlates_AdditionalInfo.Notes,
 
-                        SellQty = p.Polishes_DestashInfo.Qty,
-                        BuyerName = p.Polishes_DestashInfo.BuyerName,
-                        AskingPrice = p.Polishes_DestashInfo.AskingPrice,
-                        SoldPrice = p.Polishes_DestashInfo.SoldPrice,
-                        TrackingNumber = p.Polishes_DestashInfo.TrackingNumber,
-                        DestashNotes = p.Polishes_DestashInfo.Notes,
-                        InternalDestashNotes = p.Polishes_DestashInfo.InternalNotes,
-                        SaleStatus = p.Polishes_DestashInfo.SaleStatus
+                        SellQty = p.StampingPlates_DestashInfo.Qty,
+                        BuyerName = p.StampingPlates_DestashInfo.BuyerName,
+                        AskingPrice = p.StampingPlates_DestashInfo.AskingPrice,
+                        SoldPrice = p.StampingPlates_DestashInfo.SoldPrice,
+                        TrackingNumber = p.StampingPlates_DestashInfo.TrackingNumber,
+                        DestashNotes = p.StampingPlates_DestashInfo.Notes,
+                        InternalDestashNotes = p.StampingPlates_DestashInfo.InternalNotes,
+                        SaleStatus = p.StampingPlates_DestashInfo.SaleStatus
 
                     }).Where(p => pub ? (p.SaleStatus != "S") : true).OrderBy(p => p.BrandName).ToArray();
-                return View(polishes);
+                return View(stampingPlates);
             }
         }
 
@@ -409,27 +312,26 @@ namespace PolishWarehouse.Controllers
 
         public JsonResult DestashDetailsAsync(int id)
         {
-            var jsonResult = Json(new PolishDestashModel(id, false, true, true), JsonRequestBehavior.AllowGet);
+            var jsonResult = Json(new StampingPlateDestashModel(id, false, true, true), JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
         }
         public ActionResult DestashDetails(int? id)
         {
-            ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
-            ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
-            ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
-            ViewBag.Brands = BrandModel.getBrands().OrderBy(c => c.Name);
-            ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
+            ViewBag.Brands = BrandModel.getBrands(BrandModel.BrandFor.stampingPlate).OrderBy(c => c.Name);
+            ViewBag.StampingPlateShapes = StampingPlateModel.GetPlateShapes().OrderBy(sps => sps.Name);
+            ViewBag.StampingPlateDesigns = StampingPlateModel.GetPlateDesigns().OrderBy(sps => sps.Name);
+            ViewBag.StampingPlateThemes = StampingPlateModel.GetPlateThemes().OrderBy(sps => sps.Name);
 
             if (id.HasValue)
-                return View(new PolishDestashModel(id.Value, returnimages: true));
+                return View(new StampingPlateDestashModel(id.Value, returnimages: true));
             else
-                return View(new PolishDestashModel());
+                return View(new StampingPlateDestashModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DestashDetails(PolishDestashModel polish, IEnumerable<HttpPostedFileBase> files)
+        public ActionResult DestashDetails(StampingPlateDestashModel polish, IEnumerable<HttpPostedFileBase> files)
         {
             var action = "DestashDetails";
             using (var db = new PolishWarehouseEntities())
@@ -440,15 +342,6 @@ namespace PolishWarehouse.Controllers
                         action = "Destash";
 
                     var dcolor = db.Colors.Where(c => c.Name.ToLower() == "destash").SingleOrDefault();
-
-                    if (polish.ColorID == 0)
-                    {
-                        polish.ColorID = dcolor.ID;
-                        polish.ColorName = dcolor.Name;
-                    }
-
-                    if (!polish.Coats.HasValue)
-                        polish.Coats = 1;
 
                     polish.Save();
 
@@ -462,11 +355,10 @@ namespace PolishWarehouse.Controllers
                 {
                     TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving destash info", "There was an error saving your polish", ex);
 
-                    ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
-                    ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
-                    ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
-                    ViewBag.Brands = BrandModel.getBrands().OrderBy(c => c.Name);
-                    ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
+                    ViewBag.Brands = BrandModel.getBrands(BrandModel.BrandFor.stampingPlate).OrderBy(c => c.Name);
+                    ViewBag.StampingPlateShapes = StampingPlateModel.GetPlateShapes().OrderBy(sps => sps.Name);
+                    ViewBag.StampingPlateDesigns = StampingPlateModel.GetPlateDesigns().OrderBy(sps => sps.Name);
+                    ViewBag.StampingPlateThemes = StampingPlateModel.GetPlateThemes().OrderBy(sps => sps.Name);
 
                     return View(polish);
                 }
@@ -476,7 +368,7 @@ namespace PolishWarehouse.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DestashPolish(PolishDestashModel model)
+        public ActionResult DestashPolish(StampingPlateDestashModel model)
         {
             try
             {
@@ -500,7 +392,7 @@ namespace PolishWarehouse.Controllers
         {
             try
             {
-                var resp = PolishDestashModel.MarkAllPendingAsSold();
+                var resp = StampingPlateDestashModel.MarkAllPendingAsSold();
                 if (resp.WasSuccessful)
                     TempData["Messages"] = "All pending marked as sold!";
                 else
@@ -520,7 +412,7 @@ namespace PolishWarehouse.Controllers
         {
             try
             {
-                var resp = PolishDestashModel.ArchiveAllSold();
+                var resp = StampingPlateDestashModel.ArchiveAllSold();
                 if (resp.WasSuccessful)
                     TempData["Messages"] = "Polish Archived!";
                 else
@@ -528,7 +420,7 @@ namespace PolishWarehouse.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error archiving destasah polish", "There was an error archiving your sold destash", ex);
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error archiving destasah plates", "There was an error archiving your sold destash", ex);
             }
 
             return RedirectToAction("Index");

@@ -32,7 +32,7 @@ namespace PolishWarehouse.Controllers
             ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
             ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
             ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
-            ViewBag.Brands = PolishModel.getBrands().OrderBy(c => c.Name);
+            ViewBag.Brands = BrandModel.getBrands().OrderBy(c => c.Name);
             ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
 
             if (id.HasValue)

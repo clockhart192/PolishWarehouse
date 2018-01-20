@@ -21,6 +21,8 @@
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="CategoryID" Type="int" Nullable="false" />
+          <Property Name="PolishBrand" Type="bit" Nullable="false" />
+          <Property Name="PlateBrand" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Colors">
           <Key>
@@ -75,6 +77,25 @@
           <Property Name="GiftFromName" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="PolishID" Type="bigint" />
+          <Property Name="Converted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IncomingOrderLines_StampingPlates">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="IncomingOrderLinesID" Type="bigint" Nullable="false" />
+          <Property Name="BrandID" Type="int" Nullable="false" />
+          <Property Name="ShapeID" Type="int" Nullable="false" />
+          <Property Name="LastEditedOn" Type="datetime" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Label" Type="nvarchar" MaxLength="100" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="WasGift" Type="bit" Nullable="false" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="StampingPlateID" Type="bigint" />
           <Property Name="Converted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="IncomingOrders">
@@ -301,6 +322,157 @@
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="TrackingBaseURL" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="StampingPlateDesigns">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="StampingPlates">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BrandID" Type="int" Nullable="false" />
+          <Property Name="ShapeID" Type="int" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="LastEditedOn" Type="datetime" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Label" Type="nvarchar" MaxLength="100" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="WasGift" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StampingPlates_AdditionalInfo">
+          <Key>
+            <PropertyRef Name="StampingPlateID" />
+          </Key>
+          <Property Name="StampingPlateID" Type="bigint" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="GiftFromName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="StampingPlates_AdditionalInfo_ARCHIVE">
+          <Key>
+            <PropertyRef Name="StampingPlateID" />
+          </Key>
+          <Property Name="StampingPlateID" Type="bigint" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="GiftFromName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="StampingPlates_ARCHIVE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="BrandID" Type="int" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="LastEditedOn" Type="datetime" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Label" Type="nvarchar" MaxLength="100" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="WasGift" Type="bit" />
+        </EntityType>
+        <EntityType Name="StampingPlates_DestashInfo">
+          <Key>
+            <PropertyRef Name="StampingPlateID" />
+          </Key>
+          <Property Name="StampingPlateID" Type="bigint" Nullable="false" />
+          <Property Name="Qty" Type="int" Nullable="false" />
+          <Property Name="BuyerName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AskingPrice" Type="money" />
+          <Property Name="SoldPrice" Type="money" />
+          <Property Name="TrackingNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="InternalNotes" Type="nvarchar(max)" />
+          <Property Name="SaleStatus" Type="nvarchar" MaxLength="5" />
+        </EntityType>
+        <EntityType Name="StampingPlates_DestashInfo_ARCHIVE">
+          <Key>
+            <PropertyRef Name="StampingPlateID" />
+          </Key>
+          <Property Name="StampingPlateID" Type="bigint" Nullable="false" />
+          <Property Name="Qty" Type="int" Nullable="false" />
+          <Property Name="BuyerName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AskingPrice" Type="money" />
+          <Property Name="SoldPrice" Type="money" />
+          <Property Name="TrackingNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="InternalNotes" Type="nvarchar(max)" />
+          <Property Name="SaleStatus" Type="nvarchar" MaxLength="5" />
+        </EntityType>
+        <EntityType Name="StampingPlates_Images">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StampingPlateID" Type="bigint" Nullable="false" />
+          <Property Name="Image" Type="varchar(max)" Nullable="false" />
+          <Property Name="MIMEType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="MakerImage" Type="bit" />
+          <Property Name="PublicImage" Type="bit" Nullable="false" />
+          <Property Name="DisplayImage" Type="bit" />
+          <Property Name="CompressedImage" Type="varchar(max)" />
+          <Property Name="CompressedMIMEType" Type="varchar" MaxLength="50" />
+          <Property Name="ImagePath" Type="varchar(max)" />
+          <Property Name="CompressedImagePath" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="StampingPlates_Images_ARCHIVE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="StampingPlateID" Type="bigint" Nullable="false" />
+          <Property Name="Image" Type="varchar(max)" Nullable="false" />
+          <Property Name="MIMEType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="MakerImage" Type="bit" />
+          <Property Name="PublicImage" Type="bit" Nullable="false" />
+          <Property Name="DisplayImage" Type="bit" />
+          <Property Name="CompressedImage" Type="varchar(max)" />
+          <Property Name="CompressedMIMEType" Type="varchar" MaxLength="50" />
+          <Property Name="ImagePath" Type="varchar(max)" />
+          <Property Name="CompressedImagePath" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="StampingPlates_StampingPlateDesigns">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StampingPlateID" Type="bigint" Nullable="false" />
+          <Property Name="DesignID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StampingPlates_StampingPlateThemes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StampingPlateID" Type="bigint" Nullable="false" />
+          <Property Name="ThemeID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StampingPlateShapes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="StampingPlateThemes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
         </EntityType>
         <Association Name="FK_Brand_Category_ID">
           <End Role="BrandCategory" Type="Self.BrandCategory" Multiplicity="1" />
@@ -530,6 +702,138 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_StampingPlates_Brands">
+          <End Role="Brands" Type="Self.Brands" Multiplicity="1" />
+          <End Role="StampingPlates" Type="Self.StampingPlates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brands">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_Incoming_Order_Lines_Brand_ID">
+          <End Role="Brands" Type="Self.Brands" Multiplicity="1" />
+          <End Role="IncomingOrderLines_StampingPlates" Type="Self.IncomingOrderLines_StampingPlates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brands">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IncomingOrderLines_StampingPlates">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_Incoming_Order_Lines_ID">
+          <End Role="IncomingOrderLines" Type="Self.IncomingOrderLines" Multiplicity="1" />
+          <End Role="IncomingOrderLines_StampingPlates" Type="Self.IncomingOrderLines_StampingPlates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IncomingOrderLines">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IncomingOrderLines_StampingPlates">
+              <PropertyRef Name="IncomingOrderLinesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_AdditionalInfo">
+          <End Role="StampingPlates" Type="Self.StampingPlates" Multiplicity="1" />
+          <End Role="StampingPlates_AdditionalInfo" Type="Self.StampingPlates_AdditionalInfo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlates">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_AdditionalInfo">
+              <PropertyRef Name="StampingPlateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_DestashInfo">
+          <End Role="StampingPlates" Type="Self.StampingPlates" Multiplicity="1" />
+          <End Role="StampingPlates_DestashInfo" Type="Self.StampingPlates_DestashInfo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlates">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_DestashInfo">
+              <PropertyRef Name="StampingPlateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_Images">
+          <End Role="StampingPlates" Type="Self.StampingPlates" Multiplicity="1" />
+          <End Role="StampingPlates_Images" Type="Self.StampingPlates_Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlates">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_Images">
+              <PropertyRef Name="StampingPlateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_StampingPlateDesigns_DesignID">
+          <End Role="StampingPlateDesigns" Type="Self.StampingPlateDesigns" Multiplicity="1" />
+          <End Role="StampingPlates_StampingPlateDesigns" Type="Self.StampingPlates_StampingPlateDesigns" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlateDesigns">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_StampingPlateDesigns">
+              <PropertyRef Name="DesignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_StampingPlateDesigns_StampingPlateID">
+          <End Role="StampingPlates" Type="Self.StampingPlates" Multiplicity="1" />
+          <End Role="StampingPlates_StampingPlateDesigns" Type="Self.StampingPlates_StampingPlateDesigns" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlates">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_StampingPlateDesigns">
+              <PropertyRef Name="StampingPlateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_StampingPlateThemes_StampingPlateID">
+          <End Role="StampingPlates" Type="Self.StampingPlates" Multiplicity="1" />
+          <End Role="StampingPlates_StampingPlateThemes" Type="Self.StampingPlates_StampingPlateThemes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlates">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_StampingPlateThemes">
+              <PropertyRef Name="StampingPlateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_StampingPlateThemes_ThemeID">
+          <End Role="StampingPlateThemes" Type="Self.StampingPlateThemes" Multiplicity="1" />
+          <End Role="StampingPlates_StampingPlateThemes" Type="Self.StampingPlates_StampingPlateThemes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlateThemes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_StampingPlateThemes">
+              <PropertyRef Name="ThemeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlateShapes">
+          <End Role="StampingPlateShapes" Type="Self.StampingPlateShapes" Multiplicity="1" />
+          <End Role="StampingPlates" Type="Self.StampingPlates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlateShapes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates">
+              <PropertyRef Name="ShapeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="PolishWarehouseModelStoreContainer">
           <EntitySet Name="BrandCategory" EntityType="Self.BrandCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
@@ -537,6 +841,7 @@
           <EntitySet Name="IncomingLineTypes" EntityType="Self.IncomingLineTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IncomingOrderLines" EntityType="Self.IncomingOrderLines" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IncomingOrderLines_Polishes" EntityType="Self.IncomingOrderLines_Polishes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IncomingOrderLines_StampingPlates" EntityType="Self.IncomingOrderLines_StampingPlates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IncomingOrders" EntityType="Self.IncomingOrders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Logs" EntityType="Self.Logs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polishes" EntityType="Self.Polishes" Schema="dbo" store:Type="Tables" />
@@ -556,6 +861,19 @@
           <EntitySet Name="PolishTypes" EntityType="Self.PolishTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Settings" EntityType="Self.Settings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShippingProviders" EntityType="Self.ShippingProviders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlateDesigns" EntityType="Self.StampingPlateDesigns" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlates" EntityType="Self.StampingPlates" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlates_AdditionalInfo" EntityType="Self.StampingPlates_AdditionalInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlates_AdditionalInfo_ARCHIVE" EntityType="Self.StampingPlates_AdditionalInfo_ARCHIVE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlates_ARCHIVE" EntityType="Self.StampingPlates_ARCHIVE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlates_DestashInfo" EntityType="Self.StampingPlates_DestashInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlates_DestashInfo_ARCHIVE" EntityType="Self.StampingPlates_DestashInfo_ARCHIVE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlates_Images" EntityType="Self.StampingPlates_Images" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlates_Images_ARCHIVE" EntityType="Self.StampingPlates_Images_ARCHIVE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlates_StampingPlateDesigns" EntityType="Self.StampingPlates_StampingPlateDesigns" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlates_StampingPlateThemes" EntityType="Self.StampingPlates_StampingPlateThemes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlateShapes" EntityType="Self.StampingPlateShapes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StampingPlateThemes" EntityType="Self.StampingPlateThemes" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Brand_Category_ID" Association="Self.FK_Brand_Category_ID">
             <End Role="BrandCategory" EntitySet="BrandCategory" />
             <End Role="Brands" EntitySet="Brands" />
@@ -632,6 +950,50 @@
             <End Role="ShippingProviders" EntitySet="ShippingProviders" />
             <End Role="IncomingOrderLines" EntitySet="IncomingOrderLines" />
           </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_Brands" Association="Self.FK_StampingPlates_Brands">
+            <End Role="Brands" EntitySet="Brands" />
+            <End Role="StampingPlates" EntitySet="StampingPlates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_Incoming_Order_Lines_Brand_ID" Association="Self.FK_StampingPlates_Incoming_Order_Lines_Brand_ID">
+            <End Role="Brands" EntitySet="Brands" />
+            <End Role="IncomingOrderLines_StampingPlates" EntitySet="IncomingOrderLines_StampingPlates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_Incoming_Order_Lines_ID" Association="Self.FK_StampingPlates_Incoming_Order_Lines_ID">
+            <End Role="IncomingOrderLines" EntitySet="IncomingOrderLines" />
+            <End Role="IncomingOrderLines_StampingPlates" EntitySet="IncomingOrderLines_StampingPlates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_AdditionalInfo" Association="Self.FK_StampingPlates_StampingPlates_AdditionalInfo">
+            <End Role="StampingPlates" EntitySet="StampingPlates" />
+            <End Role="StampingPlates_AdditionalInfo" EntitySet="StampingPlates_AdditionalInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_DestashInfo" Association="Self.FK_StampingPlates_StampingPlates_DestashInfo">
+            <End Role="StampingPlates" EntitySet="StampingPlates" />
+            <End Role="StampingPlates_DestashInfo" EntitySet="StampingPlates_DestashInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_Images" Association="Self.FK_StampingPlates_StampingPlates_Images">
+            <End Role="StampingPlates" EntitySet="StampingPlates" />
+            <End Role="StampingPlates_Images" EntitySet="StampingPlates_Images" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_StampingPlateDesigns_DesignID" Association="Self.FK_StampingPlates_StampingPlates_StampingPlateDesigns_DesignID">
+            <End Role="StampingPlateDesigns" EntitySet="StampingPlateDesigns" />
+            <End Role="StampingPlates_StampingPlateDesigns" EntitySet="StampingPlates_StampingPlateDesigns" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_StampingPlateDesigns_StampingPlateID" Association="Self.FK_StampingPlates_StampingPlates_StampingPlateDesigns_StampingPlateID">
+            <End Role="StampingPlates" EntitySet="StampingPlates" />
+            <End Role="StampingPlates_StampingPlateDesigns" EntitySet="StampingPlates_StampingPlateDesigns" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_StampingPlateThemes_StampingPlateID" Association="Self.FK_StampingPlates_StampingPlates_StampingPlateThemes_StampingPlateID">
+            <End Role="StampingPlates" EntitySet="StampingPlates" />
+            <End Role="StampingPlates_StampingPlateThemes" EntitySet="StampingPlates_StampingPlateThemes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_StampingPlateThemes_ThemeID" Association="Self.FK_StampingPlates_StampingPlates_StampingPlateThemes_ThemeID">
+            <End Role="StampingPlateThemes" EntitySet="StampingPlateThemes" />
+            <End Role="StampingPlates_StampingPlateThemes" EntitySet="StampingPlates_StampingPlateThemes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlateShapes" Association="Self.FK_StampingPlates_StampingPlateShapes">
+            <End Role="StampingPlateShapes" EntitySet="StampingPlateShapes" />
+            <End Role="StampingPlates" EntitySet="StampingPlates" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -648,6 +1010,10 @@
           <Property Name="CategoryID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="BrandCategory" Relationship="PolishWarehouseModel.FK_Brand_Category_ID" FromRole="Brand" ToRole="BrandCategory" />
           <NavigationProperty Name="IncomingOrderLines_Polishes" Relationship="PolishWarehouseModel.FK_Incoming_Order_Lines_Brand_ID" FromRole="Brand" ToRole="IncomingOrderLines_Polishes" />
+          <Property Name="PolishBrand" Type="Boolean" Nullable="false" />
+          <Property Name="PlateBrand" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="StampingPlates" Relationship="PolishWarehouseModel.FK_StampingPlates_Brands" FromRole="Brand" ToRole="StampingPlate" />
+          <NavigationProperty Name="IncomingOrderLines_StampingPlates" Relationship="PolishWarehouseModel.FK_StampingPlates_Incoming_Order_Lines_Brand_ID" FromRole="Brand" ToRole="IncomingOrderLines_StampingPlates" />
         </EntityType>
         <EntityType Name="Color">
           <Key>
@@ -858,6 +1224,64 @@
           <AssociationSet Name="FK_Incoming_Order_Lines_ID" Association="PolishWarehouseModel.FK_Incoming_Order_Lines_ID">
             <End Role="IncomingOrderLine" EntitySet="IncomingOrderLines" />
             <End Role="IncomingOrderLines_Polishes" EntitySet="IncomingOrderLines_Polishes" />
+          </AssociationSet>
+          <EntitySet Name="IncomingOrderLines_StampingPlates" EntityType="PolishWarehouseModel.IncomingOrderLines_StampingPlates" />
+          <EntitySet Name="StampingPlateDesigns" EntityType="PolishWarehouseModel.StampingPlateDesign" />
+          <EntitySet Name="StampingPlates" EntityType="PolishWarehouseModel.StampingPlate" />
+          <EntitySet Name="StampingPlates_AdditionalInfo" EntityType="PolishWarehouseModel.StampingPlates_AdditionalInfo" />
+          <EntitySet Name="StampingPlates_AdditionalInfo_ARCHIVE" EntityType="PolishWarehouseModel.StampingPlates_AdditionalInfo_ARCHIVE" />
+          <EntitySet Name="StampingPlates_ARCHIVE" EntityType="PolishWarehouseModel.StampingPlates_ARCHIVE" />
+          <EntitySet Name="StampingPlates_DestashInfo" EntityType="PolishWarehouseModel.StampingPlates_DestashInfo" />
+          <EntitySet Name="StampingPlates_DestashInfo_ARCHIVE" EntityType="PolishWarehouseModel.StampingPlates_DestashInfo_ARCHIVE" />
+          <EntitySet Name="StampingPlates_Images" EntityType="PolishWarehouseModel.StampingPlates_Images" />
+          <EntitySet Name="StampingPlates_Images_ARCHIVE" EntityType="PolishWarehouseModel.StampingPlates_Images_ARCHIVE" />
+          <EntitySet Name="StampingPlates_StampingPlateDesigns" EntityType="PolishWarehouseModel.StampingPlates_StampingPlateDesigns" />
+          <EntitySet Name="StampingPlates_StampingPlateThemes" EntityType="PolishWarehouseModel.StampingPlates_StampingPlateThemes" />
+          <EntitySet Name="StampingPlateShapes" EntityType="PolishWarehouseModel.StampingPlateShape" />
+          <EntitySet Name="StampingPlateThemes" EntityType="PolishWarehouseModel.StampingPlateTheme" />
+          <AssociationSet Name="FK_StampingPlates_Brands" Association="PolishWarehouseModel.FK_StampingPlates_Brands">
+            <End Role="Brand" EntitySet="Brands" />
+            <End Role="StampingPlate" EntitySet="StampingPlates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_StampingPlateDesigns_DesignID" Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateDesigns_DesignID">
+            <End Role="StampingPlateDesign" EntitySet="StampingPlateDesigns" />
+            <End Role="StampingPlates_StampingPlateDesigns" EntitySet="StampingPlates_StampingPlateDesigns" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_AdditionalInfo" Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_AdditionalInfo">
+            <End Role="StampingPlate" EntitySet="StampingPlates" />
+            <End Role="StampingPlates_AdditionalInfo" EntitySet="StampingPlates_AdditionalInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_DestashInfo" Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_DestashInfo">
+            <End Role="StampingPlate" EntitySet="StampingPlates" />
+            <End Role="StampingPlates_DestashInfo" EntitySet="StampingPlates_DestashInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_Images" Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_Images">
+            <End Role="StampingPlate" EntitySet="StampingPlates" />
+            <End Role="StampingPlates_Images" EntitySet="StampingPlates_Images" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_StampingPlateDesigns_StampingPlateID" Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateDesigns_StampingPlateID">
+            <End Role="StampingPlate" EntitySet="StampingPlates" />
+            <End Role="StampingPlates_StampingPlateDesigns" EntitySet="StampingPlates_StampingPlateDesigns" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_StampingPlateThemes_StampingPlateID" Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateThemes_StampingPlateID">
+            <End Role="StampingPlate" EntitySet="StampingPlates" />
+            <End Role="StampingPlates_StampingPlateThemes" EntitySet="StampingPlates_StampingPlateThemes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlateShapes" Association="PolishWarehouseModel.FK_StampingPlates_StampingPlateShapes">
+            <End Role="StampingPlateShape" EntitySet="StampingPlateShapes" />
+            <End Role="StampingPlate" EntitySet="StampingPlates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_StampingPlates_StampingPlateThemes_ThemeID" Association="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateThemes_ThemeID">
+            <End Role="StampingPlateTheme" EntitySet="StampingPlateThemes" />
+            <End Role="StampingPlates_StampingPlateThemes" EntitySet="StampingPlates_StampingPlateThemes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_Incoming_Order_Lines_Brand_ID" Association="PolishWarehouseModel.FK_StampingPlates_Incoming_Order_Lines_Brand_ID">
+            <End Role="Brand" EntitySet="Brands" />
+            <End Role="IncomingOrderLines_StampingPlates" EntitySet="IncomingOrderLines_StampingPlates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StampingPlates_Incoming_Order_Lines_ID" Association="PolishWarehouseModel.FK_StampingPlates_Incoming_Order_Lines_ID">
+            <End Role="IncomingOrderLine" EntitySet="IncomingOrderLines" />
+            <End Role="IncomingOrderLines_StampingPlates" EntitySet="IncomingOrderLines_StampingPlates" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Polishes_Glitter_Colors">
@@ -1084,6 +1508,7 @@
           <NavigationProperty Name="ShippingProvider" Relationship="PolishWarehouseModel.FK_Shipping_Provider_ID" FromRole="IncomingOrderLine" ToRole="ShippingProvider" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="IncomingOrderLines_Polishes" Relationship="PolishWarehouseModel.FK_Incoming_Order_Lines_ID" FromRole="IncomingOrderLine" ToRole="IncomingOrderLines_Polishes" />
+          <NavigationProperty Name="IncomingOrderLines_StampingPlates" Relationship="PolishWarehouseModel.FK_StampingPlates_Incoming_Order_Lines_ID" FromRole="IncomingOrderLine" ToRole="IncomingOrderLines_StampingPlates" />
         </EntityType>
         <EntityType Name="IncomingOrder">
           <Key>
@@ -1303,6 +1728,327 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="IncomingOrderLines_StampingPlates">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Timestamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IncomingOrderLinesID" Type="Int64" Nullable="false" />
+          <Property Name="BrandID" Type="Int32" Nullable="false" />
+          <Property Name="ShapeID" Type="Int32" Nullable="false" />
+          <Property Name="LastEditedOn" Type="DateTime" Precision="3" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Label" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="WasGift" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StampingPlateID" Type="Int64" />
+          <Property Name="Converted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Brand" Relationship="PolishWarehouseModel.FK_StampingPlates_Incoming_Order_Lines_Brand_ID" FromRole="IncomingOrderLines_StampingPlates" ToRole="Brand" />
+          <NavigationProperty Name="IncomingOrderLine" Relationship="PolishWarehouseModel.FK_StampingPlates_Incoming_Order_Lines_ID" FromRole="IncomingOrderLines_StampingPlates" ToRole="IncomingOrderLine" />
+        </EntityType>
+        <EntityType Name="StampingPlateDesign">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="StampingPlates_StampingPlateDesigns" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateDesigns_DesignID" FromRole="StampingPlateDesign" ToRole="StampingPlates_StampingPlateDesigns" />
+        </EntityType>
+        <EntityType Name="StampingPlate">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BrandID" Type="Int32" Nullable="false" />
+          <Property Name="ShapeID" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastEditedOn" Type="DateTime" Precision="3" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Label" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="WasGift" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Brand" Relationship="PolishWarehouseModel.FK_StampingPlates_Brands" FromRole="StampingPlate" ToRole="Brand" />
+          <NavigationProperty Name="StampingPlates_AdditionalInfo" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_AdditionalInfo" FromRole="StampingPlate" ToRole="StampingPlates_AdditionalInfo" />
+          <NavigationProperty Name="StampingPlates_DestashInfo" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_DestashInfo" FromRole="StampingPlate" ToRole="StampingPlates_DestashInfo" />
+          <NavigationProperty Name="StampingPlates_Images" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_Images" FromRole="StampingPlate" ToRole="StampingPlates_Images" />
+          <NavigationProperty Name="StampingPlates_StampingPlateDesigns" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateDesigns_StampingPlateID" FromRole="StampingPlate" ToRole="StampingPlates_StampingPlateDesigns" />
+          <NavigationProperty Name="StampingPlates_StampingPlateThemes" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateThemes_StampingPlateID" FromRole="StampingPlate" ToRole="StampingPlates_StampingPlateThemes" />
+          <NavigationProperty Name="StampingPlateShape" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlateShapes" FromRole="StampingPlate" ToRole="StampingPlateShape" />
+        </EntityType>
+        <EntityType Name="StampingPlates_AdditionalInfo">
+          <Key>
+            <PropertyRef Name="StampingPlateID" />
+          </Key>
+          <Property Name="StampingPlateID" Type="Int64" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GiftFromName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="StampingPlate" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_AdditionalInfo" FromRole="StampingPlates_AdditionalInfo" ToRole="StampingPlate" />
+        </EntityType>
+        <EntityType Name="StampingPlates_AdditionalInfo_ARCHIVE">
+          <Key>
+            <PropertyRef Name="StampingPlateID" />
+          </Key>
+          <Property Name="StampingPlateID" Type="Int64" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GiftFromName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="StampingPlates_ARCHIVE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="BrandID" Type="Int32" />
+          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="LastEditedOn" Type="DateTime" Precision="3" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Label" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="WasGift" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="StampingPlates_DestashInfo">
+          <Key>
+            <PropertyRef Name="StampingPlateID" />
+          </Key>
+          <Property Name="StampingPlateID" Type="Int64" Nullable="false" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <Property Name="BuyerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AskingPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="SoldPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TrackingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InternalNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SaleStatus" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="StampingPlate" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_DestashInfo" FromRole="StampingPlates_DestashInfo" ToRole="StampingPlate" />
+        </EntityType>
+        <EntityType Name="StampingPlates_DestashInfo_ARCHIVE">
+          <Key>
+            <PropertyRef Name="StampingPlateID" />
+          </Key>
+          <Property Name="StampingPlateID" Type="Int64" Nullable="false" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <Property Name="BuyerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AskingPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="SoldPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TrackingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InternalNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SaleStatus" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="StampingPlates_Images">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StampingPlateID" Type="Int64" Nullable="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MIMEType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MakerImage" Type="Boolean" />
+          <Property Name="PublicImage" Type="Boolean" Nullable="false" />
+          <Property Name="DisplayImage" Type="Boolean" />
+          <Property Name="CompressedImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CompressedMIMEType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CompressedImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="StampingPlate" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_Images" FromRole="StampingPlates_Images" ToRole="StampingPlate" />
+        </EntityType>
+        <EntityType Name="StampingPlates_Images_ARCHIVE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="StampingPlateID" Type="Int64" Nullable="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MIMEType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MakerImage" Type="Boolean" />
+          <Property Name="PublicImage" Type="Boolean" Nullable="false" />
+          <Property Name="DisplayImage" Type="Boolean" />
+          <Property Name="CompressedImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CompressedMIMEType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CompressedImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="StampingPlates_StampingPlateDesigns">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StampingPlateID" Type="Int64" Nullable="false" />
+          <Property Name="DesignID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="StampingPlateDesign" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateDesigns_DesignID" FromRole="StampingPlates_StampingPlateDesigns" ToRole="StampingPlateDesign" />
+          <NavigationProperty Name="StampingPlate" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateDesigns_StampingPlateID" FromRole="StampingPlates_StampingPlateDesigns" ToRole="StampingPlate" />
+        </EntityType>
+        <EntityType Name="StampingPlates_StampingPlateThemes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StampingPlateID" Type="Int64" Nullable="false" />
+          <Property Name="ThemeID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="StampingPlate" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateThemes_StampingPlateID" FromRole="StampingPlates_StampingPlateThemes" ToRole="StampingPlate" />
+          <NavigationProperty Name="StampingPlateTheme" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateThemes_ThemeID" FromRole="StampingPlates_StampingPlateThemes" ToRole="StampingPlateTheme" />
+        </EntityType>
+        <EntityType Name="StampingPlateShape">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="StampingPlates" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlateShapes" FromRole="StampingPlateShape" ToRole="StampingPlate" />
+        </EntityType>
+        <EntityType Name="StampingPlateTheme">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="StampingPlates_StampingPlateThemes" Relationship="PolishWarehouseModel.FK_StampingPlates_StampingPlates_StampingPlateThemes_ThemeID" FromRole="StampingPlateTheme" ToRole="StampingPlates_StampingPlateThemes" />
+        </EntityType>
+        <Association Name="FK_StampingPlates_Brands">
+          <End Type="PolishWarehouseModel.Brand" Role="Brand" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.StampingPlate" Role="StampingPlate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlate">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_StampingPlateDesigns_DesignID">
+          <End Type="PolishWarehouseModel.StampingPlateDesign" Role="StampingPlateDesign" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.StampingPlates_StampingPlateDesigns" Role="StampingPlates_StampingPlateDesigns" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlateDesign">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_StampingPlateDesigns">
+              <PropertyRef Name="DesignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_AdditionalInfo">
+          <End Type="PolishWarehouseModel.StampingPlate" Role="StampingPlate" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.StampingPlates_AdditionalInfo" Role="StampingPlates_AdditionalInfo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlate">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_AdditionalInfo">
+              <PropertyRef Name="StampingPlateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_DestashInfo">
+          <End Type="PolishWarehouseModel.StampingPlate" Role="StampingPlate" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.StampingPlates_DestashInfo" Role="StampingPlates_DestashInfo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlate">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_DestashInfo">
+              <PropertyRef Name="StampingPlateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_Images">
+          <End Type="PolishWarehouseModel.StampingPlate" Role="StampingPlate" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.StampingPlates_Images" Role="StampingPlates_Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlate">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_Images">
+              <PropertyRef Name="StampingPlateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_StampingPlateDesigns_StampingPlateID">
+          <End Type="PolishWarehouseModel.StampingPlate" Role="StampingPlate" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.StampingPlates_StampingPlateDesigns" Role="StampingPlates_StampingPlateDesigns" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlate">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_StampingPlateDesigns">
+              <PropertyRef Name="StampingPlateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_StampingPlateThemes_StampingPlateID">
+          <End Type="PolishWarehouseModel.StampingPlate" Role="StampingPlate" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.StampingPlates_StampingPlateThemes" Role="StampingPlates_StampingPlateThemes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlate">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_StampingPlateThemes">
+              <PropertyRef Name="StampingPlateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlateShapes">
+          <End Type="PolishWarehouseModel.StampingPlateShape" Role="StampingPlateShape" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.StampingPlate" Role="StampingPlate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlateShape">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlate">
+              <PropertyRef Name="ShapeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_StampingPlates_StampingPlateThemes_ThemeID">
+          <End Type="PolishWarehouseModel.StampingPlateTheme" Role="StampingPlateTheme" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.StampingPlates_StampingPlateThemes" Role="StampingPlates_StampingPlateThemes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StampingPlateTheme">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StampingPlates_StampingPlateThemes">
+              <PropertyRef Name="ThemeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_Incoming_Order_Lines_Brand_ID">
+          <End Type="PolishWarehouseModel.Brand" Role="Brand" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.IncomingOrderLines_StampingPlates" Role="IncomingOrderLines_StampingPlates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IncomingOrderLines_StampingPlates">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StampingPlates_Incoming_Order_Lines_ID">
+          <End Type="PolishWarehouseModel.IncomingOrderLine" Role="IncomingOrderLine" Multiplicity="1" />
+          <End Type="PolishWarehouseModel.IncomingOrderLines_StampingPlates" Role="IncomingOrderLines_StampingPlates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IncomingOrderLine">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IncomingOrderLines_StampingPlates">
+              <PropertyRef Name="IncomingOrderLinesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1312,6 +2058,8 @@
           <EntitySetMapping Name="Brands">
             <EntityTypeMapping TypeName="PolishWarehouseModel.Brand">
               <MappingFragment StoreEntitySet="Brands">
+                <ScalarProperty Name="PlateBrand" ColumnName="PlateBrand" />
+                <ScalarProperty Name="PolishBrand" ColumnName="PolishBrand" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1627,6 +2375,190 @@
                 <ScalarProperty Name="IncomingOrderLinesID" ColumnName="IncomingOrderLinesID" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IncomingOrderLines_StampingPlates">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.IncomingOrderLines_StampingPlates">
+              <MappingFragment StoreEntitySet="IncomingOrderLines_StampingPlates">
+                <ScalarProperty Name="Converted" ColumnName="Converted" />
+                <ScalarProperty Name="StampingPlateID" ColumnName="StampingPlateID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="WasGift" ColumnName="WasGift" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Label" ColumnName="Label" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LastEditedOn" ColumnName="LastEditedOn" />
+                <ScalarProperty Name="ShapeID" ColumnName="ShapeID" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+                <ScalarProperty Name="IncomingOrderLinesID" ColumnName="IncomingOrderLinesID" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlateDesigns">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlateDesign">
+              <MappingFragment StoreEntitySet="StampingPlateDesigns">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlates">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlate">
+              <MappingFragment StoreEntitySet="StampingPlates">
+                <ScalarProperty Name="WasGift" ColumnName="WasGift" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Label" ColumnName="Label" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LastEditedOn" ColumnName="LastEditedOn" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="ShapeID" ColumnName="ShapeID" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlates_AdditionalInfo">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlates_AdditionalInfo">
+              <MappingFragment StoreEntitySet="StampingPlates_AdditionalInfo">
+                <ScalarProperty Name="GiftFromName" ColumnName="GiftFromName" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="StampingPlateID" ColumnName="StampingPlateID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlates_AdditionalInfo_ARCHIVE">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlates_AdditionalInfo_ARCHIVE">
+              <MappingFragment StoreEntitySet="StampingPlates_AdditionalInfo_ARCHIVE">
+                <ScalarProperty Name="GiftFromName" ColumnName="GiftFromName" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="StampingPlateID" ColumnName="StampingPlateID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlates_ARCHIVE">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlates_ARCHIVE">
+              <MappingFragment StoreEntitySet="StampingPlates_ARCHIVE">
+                <ScalarProperty Name="WasGift" ColumnName="WasGift" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Label" ColumnName="Label" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LastEditedOn" ColumnName="LastEditedOn" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlates_DestashInfo">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlates_DestashInfo">
+              <MappingFragment StoreEntitySet="StampingPlates_DestashInfo">
+                <ScalarProperty Name="SaleStatus" ColumnName="SaleStatus" />
+                <ScalarProperty Name="InternalNotes" ColumnName="InternalNotes" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="TrackingNumber" ColumnName="TrackingNumber" />
+                <ScalarProperty Name="SoldPrice" ColumnName="SoldPrice" />
+                <ScalarProperty Name="AskingPrice" ColumnName="AskingPrice" />
+                <ScalarProperty Name="BuyerName" ColumnName="BuyerName" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="StampingPlateID" ColumnName="StampingPlateID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlates_DestashInfo_ARCHIVE">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlates_DestashInfo_ARCHIVE">
+              <MappingFragment StoreEntitySet="StampingPlates_DestashInfo_ARCHIVE">
+                <ScalarProperty Name="SaleStatus" ColumnName="SaleStatus" />
+                <ScalarProperty Name="InternalNotes" ColumnName="InternalNotes" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="TrackingNumber" ColumnName="TrackingNumber" />
+                <ScalarProperty Name="SoldPrice" ColumnName="SoldPrice" />
+                <ScalarProperty Name="AskingPrice" ColumnName="AskingPrice" />
+                <ScalarProperty Name="BuyerName" ColumnName="BuyerName" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="StampingPlateID" ColumnName="StampingPlateID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlates_Images">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlates_Images">
+              <MappingFragment StoreEntitySet="StampingPlates_Images">
+                <ScalarProperty Name="CompressedImagePath" ColumnName="CompressedImagePath" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CompressedMIMEType" ColumnName="CompressedMIMEType" />
+                <ScalarProperty Name="CompressedImage" ColumnName="CompressedImage" />
+                <ScalarProperty Name="DisplayImage" ColumnName="DisplayImage" />
+                <ScalarProperty Name="PublicImage" ColumnName="PublicImage" />
+                <ScalarProperty Name="MakerImage" ColumnName="MakerImage" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="MIMEType" ColumnName="MIMEType" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="StampingPlateID" ColumnName="StampingPlateID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlates_Images_ARCHIVE">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlates_Images_ARCHIVE">
+              <MappingFragment StoreEntitySet="StampingPlates_Images_ARCHIVE">
+                <ScalarProperty Name="CompressedImagePath" ColumnName="CompressedImagePath" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CompressedMIMEType" ColumnName="CompressedMIMEType" />
+                <ScalarProperty Name="CompressedImage" ColumnName="CompressedImage" />
+                <ScalarProperty Name="DisplayImage" ColumnName="DisplayImage" />
+                <ScalarProperty Name="PublicImage" ColumnName="PublicImage" />
+                <ScalarProperty Name="MakerImage" ColumnName="MakerImage" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="MIMEType" ColumnName="MIMEType" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="StampingPlateID" ColumnName="StampingPlateID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlates_StampingPlateDesigns">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlates_StampingPlateDesigns">
+              <MappingFragment StoreEntitySet="StampingPlates_StampingPlateDesigns">
+                <ScalarProperty Name="DesignID" ColumnName="DesignID" />
+                <ScalarProperty Name="StampingPlateID" ColumnName="StampingPlateID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlates_StampingPlateThemes">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlates_StampingPlateThemes">
+              <MappingFragment StoreEntitySet="StampingPlates_StampingPlateThemes">
+                <ScalarProperty Name="ThemeID" ColumnName="ThemeID" />
+                <ScalarProperty Name="StampingPlateID" ColumnName="StampingPlateID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlateShapes">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlateShape">
+              <MappingFragment StoreEntitySet="StampingPlateShapes">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StampingPlateThemes">
+            <EntityTypeMapping TypeName="PolishWarehouseModel.StampingPlateTheme">
+              <MappingFragment StoreEntitySet="StampingPlateThemes">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -50,5 +50,19 @@ namespace PolishWarehouseData
         public virtual DbSet<Polishes_Secondary_Colors_ARCHIVE> Polishes_Secondary_Colors_ARCHIVE { get; set; }
         public virtual DbSet<Polishes_DestashInfo_ARCHIVE> Polishes_DestashInfo_ARCHIVE { get; set; }
         public virtual DbSet<IncomingOrderLines_Polishes> IncomingOrderLines_Polishes { get; set; }
+        public virtual DbSet<IncomingOrderLines_StampingPlates> IncomingOrderLines_StampingPlates { get; set; }
+        public virtual DbSet<StampingPlateDesign> StampingPlateDesigns { get; set; }
+        public virtual DbSet<StampingPlate> StampingPlates { get; set; }
+        public virtual DbSet<StampingPlates_AdditionalInfo> StampingPlates_AdditionalInfo { get; set; }
+        public virtual DbSet<StampingPlates_AdditionalInfo_ARCHIVE> StampingPlates_AdditionalInfo_ARCHIVE { get; set; }
+        public virtual DbSet<StampingPlates_ARCHIVE> StampingPlates_ARCHIVE { get; set; }
+        public virtual DbSet<StampingPlates_DestashInfo> StampingPlates_DestashInfo { get; set; }
+        public virtual DbSet<StampingPlates_DestashInfo_ARCHIVE> StampingPlates_DestashInfo_ARCHIVE { get; set; }
+        public virtual DbSet<StampingPlates_Images> StampingPlates_Images { get; set; }
+        public virtual DbSet<StampingPlates_Images_ARCHIVE> StampingPlates_Images_ARCHIVE { get; set; }
+        public virtual DbSet<StampingPlates_StampingPlateDesigns> StampingPlates_StampingPlateDesigns { get; set; }
+        public virtual DbSet<StampingPlates_StampingPlateThemes> StampingPlates_StampingPlateThemes { get; set; }
+        public virtual DbSet<StampingPlateShape> StampingPlateShapes { get; set; }
+        public virtual DbSet<StampingPlateTheme> StampingPlateThemes { get; set; }
     }
 }

@@ -19,17 +19,25 @@ namespace PolishWarehouseData
         {
             this.Polishes = new HashSet<Polish>();
             this.IncomingOrderLines_Polishes = new HashSet<IncomingOrderLines_Polishes>();
+            this.StampingPlates = new HashSet<StampingPlate>();
+            this.IncomingOrderLines_StampingPlates = new HashSet<IncomingOrderLines_StampingPlates>();
         }
     
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int CategoryID { get; set; }
+        public bool PolishBrand { get; set; }
+        public bool PlateBrand { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Polish> Polishes { get; set; }
         public virtual BrandCategory BrandCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IncomingOrderLines_Polishes> IncomingOrderLines_Polishes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StampingPlate> StampingPlates { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<IncomingOrderLines_StampingPlates> IncomingOrderLines_StampingPlates { get; set; }
     }
 }

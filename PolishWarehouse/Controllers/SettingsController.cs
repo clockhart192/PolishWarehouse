@@ -522,5 +522,392 @@ namespace PolishWarehouse.Controllers
             }
         }
         #endregion
+
+        #region StampingPlateShapes
+        public ActionResult StampingPlateShapes()
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                var shapes = db.StampingPlateShapes.Select(b => new StampingPlateShapeModel()
+                {
+                    ID = b.ID,
+                    Name = b.Name,
+                    Description = b.Description
+                }).OrderBy(p => p.Name).ToArray();
+                return View(shapes);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetStampingPlateShapeID(string ShapeName)
+        {
+            try
+            {
+                using (var db = new PolishWarehouseEntities())
+                {
+                    int? ID = db.StampingPlateShapes.Where(b => b.Name == ShapeName).Select(b => b.ID).SingleOrDefault();
+                    if (ID.HasValue)
+                        return Json(ID);
+                    else
+                        return Json(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(Logging.LogEvent(LogTypes.Error, "Error getting shape id", "There was an error getting the shape.", ex));
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetStampingPlateShapeDetails(int id)
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                try
+                {
+                    var bm = db.StampingPlateShapes.Where(b => b.ID == id).Select(b => new StampingPlateShapeModel()
+                    {
+                        ID = b.ID,
+                        Name = b.Name,
+                        Description = b.Description
+                    }).SingleOrDefault();
+                    return Json(bm);
+                }
+                catch (Exception ex)
+                {
+                    return Json(Logging.LogEvent(LogTypes.Error, "Error getting shape details", "There was an error getting the shape details.", ex));
+                }
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveStampingPlateShape(StampingPlateShapeModel shape)
+        {
+            try
+            {
+                var resp = shape.Save();
+                if (resp.WasSuccessful)
+                    TempData["Messages"] = "Shape Saved!";
+                else
+                    TempData["Errors"] = resp.Message;
+            }
+            catch (Exception ex)
+            {
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving the shape.", "There was an error saving the shape.", ex);
+            }
+
+            return RedirectToAction("StampingPlateShapes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteStampingPlateShape(StampingPlateShapeModel shape)
+        {
+            try
+            {
+                var resp = shape.Delete();
+                if (resp.WasSuccessful)
+                    TempData["Messages"] = "Shape Deleted!";
+                else
+                    TempData["Errors"] = resp.Message;
+            }
+            catch (Exception ex)
+            {
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error deleting shape.", "There was an error deleting the shape.", ex);
+            }
+
+            return RedirectToAction("StampingPlateShapes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult AddStampingPlateShape(string Name)
+        {
+            try
+            {
+                using (var db = new PolishWarehouseEntities())
+                {
+                    var br = db.StampingPlateShapes.Where(b => b.Name == Name).SingleOrDefault();
+                    if (br != null)
+                        throw new Exception("Name already exists!");
+
+                    var brand = new Brand()
+                    {
+                        Name = Name,
+                    };
+
+                    db.Brands.Add(brand);
+                    db.SaveChanges();
+                    return Json(brand.ID);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(Logging.LogEvent(LogTypes.Error, "Error adding shape.", "There was an error adding your shape", ex));
+            }
+        }
+        #endregion
+
+        #region StampingPlateDesigns
+        public ActionResult StampingPlateDesigns()
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                var designs = db.StampingPlateDesigns.Select(b => new StampingPlateDesignModel()
+                {
+                    ID = b.ID,
+                    Name = b.Name,
+                    Description = b.Description
+                }).OrderBy(p => p.Name).ToArray();
+                return View(designs);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetStampingPlateDesignID(string DesignName)
+        {
+            try
+            {
+                using (var db = new PolishWarehouseEntities())
+                {
+                    int? ID = db.StampingPlateDesigns.Where(b => b.Name == DesignName).Select(b => b.ID).SingleOrDefault();
+                    if (ID.HasValue)
+                        return Json(ID);
+                    else
+                        return Json(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(Logging.LogEvent(LogTypes.Error, "Error getting design id", "There was an error getting the design.", ex));
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetStampingPlateDesignDetails(int id)
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                try
+                {
+                    var bm = db.StampingPlateDesigns.Where(b => b.ID == id).Select(b => new StampingPlateDesignModel()
+                    {
+                        ID = b.ID,
+                        Name = b.Name,
+                        Description = b.Description
+                    }).SingleOrDefault();
+                    return Json(bm);
+                }
+                catch (Exception ex)
+                {
+                    return Json(Logging.LogEvent(LogTypes.Error, "Error getting design details", "There was an error getting the design details.", ex));
+                }
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveStampingPlateDesign(StampingPlateDesignModel design)
+        {
+            try
+            {
+                var resp = design.Save();
+                if (resp.WasSuccessful)
+                    TempData["Messages"] = "Design Saved!";
+                else
+                    TempData["Errors"] = resp.Message;
+            }
+            catch (Exception ex)
+            {
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving the design.", "There was an error saving the design.", ex);
+            }
+
+            return RedirectToAction("StampingPlateDesigns");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteStampingPlateDesign(StampingPlateDesignModel design)
+        {
+            try
+            {
+                var resp = design.Delete();
+                if (resp.WasSuccessful)
+                    TempData["Messages"] = "Design Deleted!";
+                else
+                    TempData["Errors"] = resp.Message;
+            }
+            catch (Exception ex)
+            {
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error deleting design.", "There was an error deleting the design.", ex);
+            }
+
+            return RedirectToAction("StampingPlateDesigns");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult AddPlateDesign(string Name)
+        {
+            try
+            {
+                using (var db = new PolishWarehouseEntities())
+                {
+                    var br = db.StampingPlateDesigns.Where(b => b.Name == Name).SingleOrDefault();
+                    if (br != null)
+                        throw new Exception("Name already exists!");
+
+                    var design = new StampingPlateDesign()
+                    {
+                        Name = Name,
+                    };
+
+                    db.StampingPlateDesigns.Add(design);
+                    db.SaveChanges();
+                    return Json(design.ID);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(Logging.LogEvent(LogTypes.Error, "Error adding design.", "There was an error adding your design", ex));
+            }
+        }
+        #endregion
+
+        #region StampingPlateThemes
+        public ActionResult StampingPlateThemes()
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                var theme = db.StampingPlateThemes.Select(b => new StampingPlateThemeModel()
+                {
+                    ID = b.ID,
+                    Name = b.Name,
+                    Description = b.Description
+                }).OrderBy(p => p.Name).ToArray();
+                return View(theme);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetStampingPlateThemeID(string ThemeName)
+        {
+            try
+            {
+                using (var db = new PolishWarehouseEntities())
+                {
+                    int? ID = db.StampingPlateThemes.Where(b => b.Name == ThemeName).Select(b => b.ID).SingleOrDefault();
+                    if (ID.HasValue)
+                        return Json(ID);
+                    else
+                        return Json(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(Logging.LogEvent(LogTypes.Error, "Error getting theme id", "There was an error getting the theme.", ex));
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetStampingPlateThemeDetails(int id)
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                try
+                {
+                    var bm = db.StampingPlateThemes.Where(b => b.ID == id).Select(b => new StampingPlateThemeModel()
+                    {
+                        ID = b.ID,
+                        Name = b.Name,
+                        Description = b.Description
+                    }).SingleOrDefault();
+                    return Json(bm);
+                }
+                catch (Exception ex)
+                {
+                    return Json(Logging.LogEvent(LogTypes.Error, "Error getting theme details", "There was an error getting the theme details.", ex));
+                }
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveStampingPlateTheme(StampingPlateThemeModel theme)
+        {
+            try
+            {
+                var resp = theme.Save();
+                if (resp.WasSuccessful)
+                    TempData["Messages"] = "Theme Saved!";
+                else
+                    TempData["Errors"] = resp.Message;
+            }
+            catch (Exception ex)
+            {
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error saving the theme.", "There was an error saving the theme.", ex);
+            }
+
+            return RedirectToAction("StampingPlateThemes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteStampingPlateTheme(StampingPlateThemeModel theme)
+        {
+            try
+            {
+                var resp = theme.Delete();
+                if (resp.WasSuccessful)
+                    TempData["Messages"] = "Theme Deleted!";
+                else
+                    TempData["Errors"] = resp.Message;
+            }
+            catch (Exception ex)
+            {
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error deleting theme.", "There was an error theme the shape.", ex);
+            }
+
+            return RedirectToAction("StampingPlateThemes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult AddPlateTheme(string Name)
+        {
+            try
+            {
+                using (var db = new PolishWarehouseEntities())
+                {
+                    var br = db.StampingPlateThemes.Where(b => b.Name == Name).SingleOrDefault();
+                    if (br != null)
+                        throw new Exception("Name already exists!");
+
+                    var theme = new StampingPlateTheme()
+                    {
+                        Name = Name,
+                    };
+
+                    db.StampingPlateThemes.Add(theme);
+                    db.SaveChanges();
+                    return Json(theme.ID);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(Logging.LogEvent(LogTypes.Error, "Error adding theme.", "There was an error adding your theme", ex));
+            }
+        }
+        #endregion
     }
 }

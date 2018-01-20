@@ -10,6 +10,8 @@ namespace PolishWarehouse.Models
         public string Description { get; set; }
         public int? CategoryID { get; set; }
         public BrandCategoryModel Category { get; set; }
+        public bool PolishBrand { get; set; } = true;
+        public bool PlateBrand { get; set; } = true;
 
         public BrandModel() { }
         public BrandModel(int? id)
@@ -24,6 +26,8 @@ namespace PolishWarehouse.Models
                 ID = b.ID;
                 Name = b.Name;
                 Description = b.Description;
+                PolishBrand = b.PolishBrand;
+                PlateBrand = b.PlateBrand;
                 Category = new BrandCategoryModel(b.BrandCategory);
             }
         }
@@ -34,6 +38,8 @@ namespace PolishWarehouse.Models
             Name = brand.Name;
             Description = brand.Description;
             CategoryID = brand.CategoryID;
+            PolishBrand = brand.PolishBrand;
+            PlateBrand = brand.PlateBrand;
             using (var db = new PolishWarehouseEntities())
             {
                 var cat = db.BrandCategories.Where(bc => bc.ID == CategoryID).SingleOrDefault();
@@ -56,6 +62,8 @@ namespace PolishWarehouse.Models
                 }
 
                 brand.Name = Name;
+                brand.PolishBrand = PolishBrand;
+                brand.PlateBrand = PlateBrand;
                 brand.CategoryID = Category.ID.Value;
                 brand.Description = Description;
 
@@ -90,6 +98,41 @@ namespace PolishWarehouse.Models
         public static BrandModel GetModel(Brand brand)
         {
             return new BrandModel(brand);
+        }
+
+        public static BrandModel[] GetModels(Brand[] brands)
+        {
+            return brands.Select(b => GetModel(b)).ToArray();
+        }
+
+        public static BrandModel[] getBrands()
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                return db.Brands.Select(b => new BrandModel(b)).ToArray();
+            }
+        }
+
+        public static BrandModel[] getBrands(BrandFor brand)
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                switch (brand)
+                {
+                    case BrandFor.polish:
+                        return GetModels(db.Brands.Where(b => b.PolishBrand).ToArray());
+                    case BrandFor.stampingPlate:
+                        return GetModels(db.Brands.Where(b => b.PlateBrand).ToArray());
+                    default:
+                        return GetModels(db.Brands.ToArray());
+                }
+            }
+        }
+
+        public enum BrandFor
+        {
+            polish = 0,
+            stampingPlate = 1,
         }
     }
 }

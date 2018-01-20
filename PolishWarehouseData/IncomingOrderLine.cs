@@ -18,6 +18,7 @@ namespace PolishWarehouseData
         public IncomingOrderLine()
         {
             this.IncomingOrderLines_Polishes = new HashSet<IncomingOrderLines_Polishes>();
+            this.IncomingOrderLines_StampingPlates = new HashSet<IncomingOrderLines_StampingPlates>();
         }
     
         public long ID { get; set; }
@@ -37,5 +38,7 @@ namespace PolishWarehouseData
         public virtual ShippingProvider ShippingProvider { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IncomingOrderLines_Polishes> IncomingOrderLines_Polishes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<IncomingOrderLines_StampingPlates> IncomingOrderLines_StampingPlates { get; set; }
     }
 }

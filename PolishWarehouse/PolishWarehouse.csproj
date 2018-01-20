@@ -308,7 +308,9 @@
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\select2.min.js" />
     <Content Include="Scripts\test_meteor.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -323,20 +325,26 @@
     <Compile Include="Controllers\IncomingController.cs" />
     <Compile Include="Controllers\PolishController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\StampingPlateController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\StampingPlateDesignModel.cs" />
+    <Compile Include="Models\StampingPlateShapeModel.cs" />
     <Compile Include="Models\BrandCategoryModel.cs" />
     <Compile Include="Models\ColorModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IncomingOrderModel.cs" />
+    <Compile Include="Models\ItemModel.cs" />
     <Compile Include="Models\Logging.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\PolishTypeModel.cs" />
     <Compile Include="Models\BrandModel.cs" />
     <Compile Include="Models\PolishModel.cs" />
     <Compile Include="Models\SiteModels.cs" />
+    <Compile Include="Models\StampingPlateModel.cs" />
+    <Compile Include="Models\StampingPlateThemeModel.cs" />
     <Compile Include="Models\Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -378,7 +386,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_HeaderPartial.cshtml" />
-    <Content Include="Views\Polish\ManageImages.cshtml" />
+    <Content Include="Views\StampingPlate\ManageImages.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\Unavailable.cshtml" />
@@ -390,6 +398,20 @@
     <Content Include="Views\Polish\Random.cshtml" />
     <Content Include="Views\Archive\Index.cshtml" />
     <Content Include="Views\Archive\Details.cshtml" />
+    <Content Include="Views\StampingPlate\Index.cshtml" />
+    <Content Include="Views\StampingPlate\Details.cshtml" />
+    <Content Include="Views\Polish\ManageImages.cshtml" />
+    <Content Include="Views\StampingPlate\Public.cshtml" />
+    <Content Include="Views\StampingPlate\Random.cshtml" />
+    <Content Include="Views\Polish\Destash.cshtml" />
+    <Content Include="Views\Polish\DestashPublic.cshtml" />
+    <Content Include="Views\Polish\DestashDetails.cshtml" />
+    <Content Include="Views\StampingPlate\Destash.cshtml" />
+    <Content Include="Views\StampingPlate\DestashDetails.cshtml" />
+    <Content Include="Views\StampingPlate\DestashPublic.cshtml" />
+    <Content Include="Views\Settings\StampingPlateThemes.cshtml" />
+    <Content Include="Views\Settings\StampingPlateDesigns.cshtml" />
+    <Content Include="Views\Settings\StampingPlateShapes.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -421,7 +443,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56949</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

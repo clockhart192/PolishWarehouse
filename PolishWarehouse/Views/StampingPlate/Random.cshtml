@@ -1,0 +1,81 @@
+﻿@if (Request.IsAuthenticated)
+{
+    ViewBag.Title = "Random!";
+    var primaryColors = ViewBag.PrimaryColors;
+    //var secondaryColors = ViewBag.SecondaryColors;
+    //var glitterColors = ViewBag.GlitterColors;
+    var brands = ViewBag.Brands;
+    //var polishTypes = ViewBag.PolishTypes;
+
+    @Html.Partial("MessageControl")
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Random!</h3>
+                </div>
+                <div class="panel-body">
+                    @using (Html.BeginForm("Random", "Polish", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Color</label>
+                                    <br />
+                                    <input list="ColorList" id="Color" name="color" class="form-control" />
+                                    <datalist id="ColorList">
+                                        @foreach (var color in primaryColors)
+                                                        {
+                                        <option value="@color.Name"></option>
+                                                        }
+                                    </datalist>
+                                </div>
+                                <div class="col-md-5">
+                                    <label>Brand</label>
+                                    <br />
+                                    <input list="BrandList" id="Brand" name="brand" class="form-control" />
+                                    <datalist id="BrandList">
+                                        @foreach (var brand in brands)
+                                                        {
+                                        <option value="@brand.Name"></option>
+                                                        }
+                                    </datalist>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Include Tried</label>
+                                    <br />
+                                    <label class="switch">
+                                        <input name="includeTried" value="true" type="checkbox" />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="submit" value="GO!" class="btn btn-default" />
+                                </div>
+                            </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#header-main-text").text("Stamping Plate");
+        });
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            //$('#file_display').val(label);
+            $(this).parent().parent().parent().find("input[type=text]").val(label);
+        });
+    </script>
+}
+else
+{
+    //TempData["Errors"] = "Please Log in.";
+    Response.Redirect("~/Account/Login");
+}

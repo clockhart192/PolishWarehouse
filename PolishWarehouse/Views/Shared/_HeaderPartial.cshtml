@@ -9,25 +9,24 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Polish Warehouse", "Index", "Polish", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("List", "Index", ViewContext.RouteData.GetRequiredString("controller"), new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*<li>@Html.ActionLink("Add", "Details", "Polish", new { id = string.Empty }, null)</li>*@
                     <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Polish <b class="caret"></b></a>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span id="header-main-text">Polish</span> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("List", "", "Polish")</li>
-                            <li>@Html.ActionLink(" Public List", "Public", "Polish")</li>
-                            <li>@Html.ActionLink("Add", "Details", "Polish", new { id = string.Empty }, null)</li>
+                            @*<li>@Html.ActionLink("List", "")</li>*@
+                            <li>@Html.ActionLink(" Public List", "Public")</li>
+                            <li>@Html.ActionLink("Add", "Details", new { id = string.Empty }, null)</li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">Destash <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("List", "", "Destash")</li>
-                            <li>@Html.ActionLink(" Public List", "Public", "Destash")</li>
-                            <li>@Html.ActionLink("Add", "Details", "Destash", new { id = string.Empty }, null)</li>
+                            <li>@Html.ActionLink("List", "Destash")</li>
+                            <li>@Html.ActionLink(" Public List", "DestashPublic")</li>
+                            <li>@Html.ActionLink("Add", "DestashDetails", new { id = string.Empty }, null)</li>
                             <li><a href="#" onclick="$('#Mark-All-Pending-As-Sold-Confirm').modal('show'); return false;">Mark Pending As Sold</a></li>
                             <li><a href="#" onclick="$('#Archive-All-Sold-Confirm').modal('show'); return false;">Archive Sold</a></li>
                         </ul>
@@ -40,24 +39,56 @@
                             <li>@Html.ActionLink("Add", "Details", "Incoming", new { id = string.Empty }, null)</li>
                         </ul>
                     </li>
+
                     <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Settings <b class="caret"></b></a>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Other Items <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Colors", "Colors", "Settings")</li>
-                            <li>@Html.ActionLink("Brands", "Brands", "Settings")</li>
-                            <li>@Html.ActionLink("Brand Categories", "BrandCategories", "Settings")</li>
-                            <li>@Html.ActionLink("Polish Types", "PolishTypes", "Settings")</li>
+                            <li class="dropdown dropdown-submenu">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Polish</a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("List", "", "Polish")</li>
+                                    <li>@Html.ActionLink("Public List", "Public", "Polish")</li>
+                                    <li>@Html.ActionLink("Destash", "Destash", "Polish")</li>
+                                    <li>@Html.ActionLink("Public Destash", "DestashPublic", "Polish")</li>
+                                    <li>@Html.ActionLink("Add", "Details", "Polish", new { id = string.Empty }, null)</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown dropdown-submenu">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Stamping Plate</a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("List", "", "StampingPlate")</li>
+                                    <li class="hide">@Html.ActionLink("Public List", "Public", "StampingPlate")</li>
+                                    <li class="hide">@Html.ActionLink("Destash", "Destash", "StampingPlate")</li>
+                                    <li class="hide">@Html.ActionLink("Public Destash", "DestashPublic", "StampingPlate")</li>
+                                    <li>@Html.ActionLink("Add", "Details", "StampingPlate", new { id = string.Empty }, null)</li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
+                    
                     <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Utilities <b class="caret"></b></a>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Misc. <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("Random!", "Random", "Polish")</li>
                             <li>@Html.ActionLink("Import", "Import", "Polish")</li>
                             <li>@Html.ActionLink("New User", "Register", "Account")</li>
                             <li>@Html.ActionLink("Archive", "", "Archive")</li>
+                            <li class="dropdown dropdown-submenu">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Settings</a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Colors", "Colors", "Settings")</li>
+                                    <li>@Html.ActionLink("Brands", "Brands", "Settings")</li>
+                                    <li>@Html.ActionLink("Brand Categories", "BrandCategories", "Settings")</li>
+                                    <li>@Html.ActionLink("Polish Types", "PolishTypes", "Settings")</li>
+                                    <li>@Html.ActionLink("Plate Shapes", "StampingPlateShapes", "Settings")</li>
+                                    <li>@Html.ActionLink("Plate Themes", "StampingPlateThemes", "Settings")</li>
+                                    <li>@Html.ActionLink("Plate Designs", "StampingPlateDesigns", "Settings")</li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
+
+
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
