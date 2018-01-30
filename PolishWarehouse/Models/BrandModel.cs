@@ -109,7 +109,7 @@ namespace PolishWarehouse.Models
         {
             using (var db = new PolishWarehouseEntities())
             {
-                return db.Brands.Select(b => new BrandModel(b)).ToArray();
+                return GetModels(db.Brands.Where(b => b.PolishBrand).ToArray());
             }
         }
 

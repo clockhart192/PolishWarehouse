@@ -449,7 +449,7 @@ namespace PolishWarehouse.Models
                 ColorName = db.Colors.Where(c => c.ID == ColorID).Select(c => c.Name).SingleOrDefault();
 
                 Label = string.Format("{0} {1}", ColorName, colornum.ToString());
-                if (db.Polishes.Any(p => p.Label == Label && !Label.ToLower().Contains("Destash")))
+                if (db.Polishes.Any(p => p.Label == Label && !Label.ToLower().Contains("Destash") && ID == null))
                     throw new Exception("Label already exists");
 
                 Types = TypesIDs == null ? null : db.PolishTypes.Where(pt => TypesIDs.Contains(pt.ID)).ToArray();

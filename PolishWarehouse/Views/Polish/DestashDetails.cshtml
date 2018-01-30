@@ -125,7 +125,7 @@
                                     <div class="col-md-3">
                                         <label for="Coats">Quantity</label>
                                         <br />
-                                        <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" value="@polish.Quantity" />
+                                        <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" value="@(polish.Quantity.HasValue? polish.Quantity : 1)" />
                                     </div>
                                     <div class="col-md-6">
                                         <label for="submit"></label>

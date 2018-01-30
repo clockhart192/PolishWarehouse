@@ -80,7 +80,7 @@
                     <div class="modal-footer">
                         <div class="row">
                             <div class="col-md-2">
-                                @using (Html.BeginForm("MarkAllPendingAsSold", "Destash", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                @using (Html.BeginForm("MarkAllPendingAsSold", "Polish", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                 {
                                     @Html.AntiForgeryToken()
                                     <input type="submit" value="Yes" class="btn btn-default" />
@@ -107,7 +107,7 @@
                     <div class="modal-footer">
                         <div class="row">
                             <div class="col-md-2">
-                                @using (Html.BeginForm("ArchiveAllSold", "Destash", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                @using (Html.BeginForm("ArchiveAllSold", "Polish", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                 {
                                     @Html.AntiForgeryToken()
                                     <input type="submit" value="Yes" class="btn btn-default" />

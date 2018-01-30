@@ -227,7 +227,7 @@
                                                     <div class="col-md-6">
                                                         <label for="BrandID">Brand Name</label>
                                                         <br />
-                                                        <input @disabled list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" onblur="GetBrandID(this);" tabindex="1">
+                                                        <input @disabled list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" data-list-filter="^" onblur="GetBrandID(this);" tabindex="1">
 
                                                         <input type="hidden" name="BrandID" id="BrandID">
                                                     </div>
@@ -391,6 +391,14 @@
         var current = null;
 
         $(document).ready(function () {
+            //implement datalist and override UI in modern browsers
+            if (window.webshims) {
+                webshims.setOptions('forms', {
+                    customDatalist: true
+                });
+                webshims.polyfill('forms');
+            }
+
             $("#Add-New-Brand-Confirm-Btn").on("click", function () {
                 var token = $('[name=__RequestVerificationToken]').val();
                 var data = {
@@ -584,6 +592,13 @@
             $("#order-line-number-" + lines).find("#IncomingOrderLine-Tracking-" + lines).val($("#Tracking").val());
 
             lines++;
+            //implement datalist and override UI in modern browsers
+            if (window.webshims) {
+                webshims.setOptions('forms', {
+                    customDatalist: true
+                });
+                webshims.polyfill('forms');
+            }
         }
 
         function saveOther(e) {

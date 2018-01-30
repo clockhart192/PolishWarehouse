@@ -17,29 +17,30 @@
                     <h4>Polish Info</h4>
                     <div class="row bold">
 
-                        <div class="col-md-2">
+                        <div class="col-md-2 hidden-xs">
                             Brand
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-xs-5">
                             Name
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 hidden-xs">
                             Description
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-1 hidden-xs">
                             Color
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-1 col-xs-4">
                             Price
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 hidden-xs">
                             Tracking
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-1 col-xs-1">
                         </div>
                     </div>
                 </div>
             </div>
+            <hr class="header-hr" />
             <div class="row">
                 <div class="col-md-12">
                     {{polishlines}}
@@ -51,21 +52,24 @@
                 <div class="col-md-12 {{otherClasses}}">
                     <h4>Other Info</h4>
                     <div class="row bold">
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-xs-5">
                             Name
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-5 hidden-xs">
                             Notes
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-xs-4">
                             Price
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 hidden-xs">
                             Tracking
+                        </div>
+                        <div class="col-md-1 col-xs-1">
                         </div>
                     </div>
                 </div>
             </div>
+            <hr class="header-hr" />
             <div class="row">
                 <div class="col-md-12">
                     {{otherlines}}
@@ -77,26 +81,25 @@
     <script type="text/template" id="polish-order-lines-template">
         <div class="polish-order-line">
             <div class="row">
-
-                <div class="col-md-2">
+                <div class="col-md-2 hidden-xs">
                     {{brand}}
                 </div>
-                <div class="col-md-3">
-                    {{polishName}}
+                <div class="col-md-3 col-xs-5">
+                    <a target="_blank" href="{{trackingURL}}">{{polishName}}</a>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 hidden-xs">
                     {{description}}
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-1 hidden-xs">
                     {{color}}
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-1 col-xs-4">
                     {{price}}
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 hidden-xs">
                     <a target="_blank" href="{{trackingURL}}">{{tracking}}</a>
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-1 col-xs-1">
                     <div class="dropdown">
                         <button class="btn btn-default btn-small-arrow dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <b class="caret"></b>
@@ -109,25 +112,26 @@
                     </div>
                 </div>
             </div>
+            <hr class="footer-hr" />
         </div>
     </script>
 
     <script type="text/template" id="other-order-lines-template">
         <div class="other-order-line">
             <div class="row">
-                <div class="col-md-2">
-                    {{name}}
+                <div class="col-md-2 col-xs-5">
+                    <a target="_blank" href="{{trackingURL}}"> {{name}}</a>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5 hidden-xs">
                     {{notes}}
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 col-xs-4">
                     {{price}}
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 hidden-xs">
                     <a target="_blank" href="{{trackingURL}}">{{tracking}}</a>
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-1 col-xs-1">
                     <div class="dropdown">
                         <button class="btn btn-default btn-small-arrow dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <b class="caret"></b>
@@ -138,6 +142,7 @@
                     </div>
                 </div>
             </div>
+            <hr class="footer-hr" />
         </div>
     </script>
 
@@ -158,7 +163,7 @@
                                             <th></th>
                                             <th>Name</th>
                                             <th>Total</th>
-                                            <th>Purchase Date</th>
+                                            <th class="hidden-xs">Purchase Date</th>
                                             <th class="hidden-xs">Notes</th>
                                             <th>Tracking</th>
                                         </tr>
@@ -835,10 +840,15 @@
                             }
                         },
                         {
-                            "data": "total"
+                            "data": "total",
+                            "className": "hidden-xs"
                         },
-                        { "data": "date" },
-                        { "data": "notes" },
+                        { "data": "date",
+                        "className":"hidden-xs"},
+                        {
+                            "data": "notes",
+                            "className": "hidden-xs"
+                        },
                         {
                             "data": "tracking",
                             "render": function (data, type, row, meta) {
