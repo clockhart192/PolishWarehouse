@@ -1,7 +1,7 @@
-﻿@model PolishWarehouse.Models.PolishDestashModel[]
+﻿@model PolishWarehouse.Models.StampingPlateDestashModel[]
 @if (ViewBag.ShowPublicDestash || Request.IsAuthenticated)
 {
-    ViewBag.Title = "Polish List";
+    ViewBag.Title = "Stamping Plate List";
     var polishTypes = ViewBag.PolishTypes;
 
     @Html.Partial("MessageControl")
@@ -10,8 +10,8 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3>Polish Destash</h3>
-                    <p>Click the polish name for more information</p>
+                    <h3>Stamping Plate Destash</h3>
+                    <p>Click the plate name for more information</p>
                 </div>
                 <div class="panel-collapse" id="Polishcollapse">
                     <div class="panel-body">
@@ -28,13 +28,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var polish in Model)
+                                        @foreach (var plate in Model)
                                         {
                                             <tr>
-                                                <td>@polish.BrandName</td>
-                                                <td><a href="#" onclick="getDetailsModal('@polish.ID'); return false;">@polish.PolishName</a></td>
-                                                <td>@polish.Description</td>
-                                                <td>@polish.AskingPrice.Value.ToString("C2")</td>
+                                                <td>@plate.BrandName</td>
+                                                <td><a href="#" onclick="getDetailsModal('@plate.ID'); return false;">@plate.Name</a></td>
+                                                <td>@plate.Notes</td>
+                                                <td>@plate.AskingPrice.Value.ToString("C2")</td>
                                             </tr>
                                         }
                                     </tbody>

@@ -17,7 +17,7 @@ namespace PolishWarehouse.Controllers
             Server.ScriptTimeout = 600;
             using (var db = new PolishWarehouseEntities())
             {
-                var polishes = db.Polishes.Where(p => p.Polishes_DestashInfo == null).Select(p => new PolishModel
+                var polishes = db.Polishes.Where(p => p.Polishes_DestashInfo == null || (p.Polishes_DestashInfo != null && p.Polishes_DestashInfo.Qty != p.Quantity)).Select(p => new PolishModel
                 {
                     ID = p.ID,
                     BrandID = p.BrandID,
@@ -534,6 +534,21 @@ namespace PolishWarehouse.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult UpdateTotalQty(int id, int qty)
+        {
+            try
+            {
+                var resp = PolishDestashModel.UpdateTotalQty(id,qty);
+                return Json(resp);
+            }
+            catch (Exception ex)
+            {
+                return Json(new Response(false, Logging.LogEvent(LogTypes.Error, "Error polish updating total quantity", "Update failed", ex)));
+            }
+
+        }
         #endregion
     }
 }

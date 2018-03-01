@@ -368,7 +368,7 @@ namespace PolishWarehouse.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DestashPolish(StampingPlateDestashModel model)
+        public ActionResult DestashPlate(StampingPlateDestashModel model)
         {
             try
             {
@@ -424,6 +424,22 @@ namespace PolishWarehouse.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult UpdateTotalQty(int id, int qty)
+        {
+            try
+            {
+                var resp = PolishDestashModel.UpdateTotalQty(id, qty);
+                return Json(resp);
+            }
+            catch (Exception ex)
+            {
+                return Json(new Response(false, Logging.LogEvent(LogTypes.Error, "Error polish updating total quantity", "Update failed", ex)));
+            }
+
         }
 
         #endregion

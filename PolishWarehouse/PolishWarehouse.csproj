@@ -300,6 +300,8 @@
     <Content Include="Scripts\jshintrc.json" />
     <Content Include="Scripts\LICENSE" />
     <Content Include="Scripts\package.json" />
+    <Content Include="Scripts\PolishWarehouseScripts\StampingPlateScripts.js" />
+    <Content Include="Scripts\PolishWarehouseScripts\PolishScripts.js" />
     <Content Include="Scripts\README.md" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\package.js" />

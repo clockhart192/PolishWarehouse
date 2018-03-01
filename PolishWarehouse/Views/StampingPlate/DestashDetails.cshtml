@@ -1,23 +1,22 @@
-﻿@model PolishWarehouse.Models.PolishDestashModel
+﻿@model PolishWarehouse.Models.StampingPlateDestashModel
 @if (Request.IsAuthenticated)
 {
     ViewBag.Title = "Destash";
-    var polish = Model;
-    var primaryColors = ViewBag.PrimaryColors;
-    var secondaryColors = ViewBag.SecondaryColors;
-    var glitterColors = ViewBag.GlitterColors;
+    var plate = Model;
     var brands = ViewBag.Brands;
-    var polishTypes = ViewBag.PolishTypes;
+    var shapes = ViewBag.StampingPlateShapes;
+    var designs = ViewBag.StampingPlateDesigns;
+    var themes = ViewBag.StampingPlateThemes;
 
-    var header = string.IsNullOrWhiteSpace(polish.PolishName) ? "New Destash Polish" : polish.PolishName + " Destash";
-    bool isNew = string.IsNullOrWhiteSpace(polish.PolishName);
+    var header = string.IsNullOrWhiteSpace(plate.Name) ? "New Destash Plate" : plate.Name + " Destash";
+    bool isNew = string.IsNullOrWhiteSpace(plate.Name);
 
     @Html.Partial("MessageControl")
 
     using (Html.BeginForm("DestashDetails","StampingPlate", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
-        <input type="hidden" name="PolishID" id="PolishID" value="@polish.ID">
+        <input type="hidden" name="PlateID" id="PlateID" value="@plate.ID">
         <div class="row">
             <div class="col-md-8">
                 <div class="panel panel-default">
@@ -26,107 +25,103 @@
                     </div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="BrandID">Brand Name*</label>
                                         <br />
-                                        <input list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" value="@polish.BrandName">
+                                        <input list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" data-list-filter="^" value="@plate.BrandName">
                                         <datalist id="BrandList">
                                             @foreach (var brand in brands)
-                                        {
-                                        <option value="@brand.Name"></option>
-                                        }
+                                            {
+                                                <option value="@brand.Name"></option>
+                                            }
                                         </datalist>
-                                        <input type="hidden" name="BrandID" id="BrandID" value="@polish.BrandID">
+                                        <input type="hidden" name="BrandID" id="BrandID" value="@plate.BrandID">
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="PolishName">Polish Name*</label>
+                                        <label for="Name">Name*</label>
                                         <br />
-                                        <input type="text" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" value="@polish.PolishName" />
+                                        <input type="text" id="Name" name="Name" placeholder="Name" class="form-control" value="@plate.Name" />
                                     </div>
-
                                 </div>
-                                <div class="row hidden">
+
+
+                                <div class="row">
                                     <div class="col-md-6">
-                                        <label for="ColorID">Color*</label>
+                                        <label for="Shape">Shape</label>
                                         <br />
-                                        <input list="ColorList" id="ColorName" name="ColorName" class="form-control" placeholder="Primary Color" value="@polish.ColorName">
-                                        <datalist id="ColorList">
-                                            @foreach (var color in primaryColors)
-                                        {
-                                        <option value="@color.Name"></option>
-                                        }
+                                        <input list="ShapeList" id="ShapeName" name="ShapeName" class="form-control" placeholder="Shape Name" data-list-filter="^" value="@plate.StampingPlateShapeName">
+                                        <datalist id="ShapeList">
+                                            @foreach (var shape in shapes)
+                                            {
+                                                <option value="@shape.Name"></option>
+                                            }
                                         </datalist>
-                                        <input type="hidden" name="ColorID" id="ColorID" value="0">
+                                        <input type="hidden" name="StampingPlateShapeID" id="StampingPlateShapeID" value="@plate.StampingPlateShapeID">
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="PolishName">Color Number*</label>
+                                    <div class="col-md-2">
+                                        <label for="WasGift">Gift</label>
                                         <br />
-                                        <input type="text" id="ColorNumber" name="ColorNumber" placeholder="Color Number" class="form-control" value="@(polish.ColorNumber == 0 ?  "" : polish.ColorNumber.ToString())" />
+                                        <label class="switch">
+                                            <input id="WasGift" name="WasGift" value="true" type="checkbox" @(plate.WasGift ? "checked" : "")>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="GiftFromName">Gifter's Name</label>
+                                        <br />
+                                        <input type="text" id="GiftFromName" name="GiftFromName" placeholder="Name" class="form-control" value="@plate.GiftFromName" />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <label for="PolishName">Description</label>
+                                        <label for="StampingPlateThemeIDs">Stamp Themes</label>
                                         <br />
-                                        <textarea class="form-control" rows="5" id="Description" name="Description" placeholder="Description">@polish.Description</textarea>
-                                    </div>
-                                </div>
-                                <div class="row hidden">
-                                    <div class="col-md-6">
-                                        <label for="SecondaryColorsIDs">Secondary Colors</label>
-                                        <br />
-                                        <select multiple id="SecondaryColorsIDs" name="SecondaryColorsIDs" class="form-control">
-                                            <option></option>
-                                            @foreach (var color in secondaryColors)
-                                        {
-                                            string sel = "";
-                                            if (polish.SecondaryColors != null)
+                                        <select multiple id="StampingPlateThemeIDs" name="StampingPlateThemeIDs" rows="5" class="form-control">
+                                            @foreach (var theme in themes)
                                             {
-                                                if (polish.SecondaryColors.Any(c => c.ID == color.ID))
+                                                string sel = "";
+                                                if (plate.StampingPlateThemes != null)
                                                 {
-                                                    sel = "selected";
+                                                    if (plate.StampingPlateThemes.Any(c => c.ID == theme.ID))
+                                                    {
+                                                        sel = "selected";
+                                                    }
                                                 }
+                                                <option @sel value="@theme.ID">@theme.Name</option>
                                             }
-
-                                        <option @sel value="@color.ID">@color.Name</option>
-                                        }
                                         </select>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="GlitterColorsIDs">Glitter Colors</label>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="StampingPlateDesignIDs">Stamp Designs</label>
                                         <br />
-                                        <select multiple id="GlitterColorsIDs" name="GlitterColorsIDs" class="form-control">
-                                            <option></option>
-                                            @foreach (var color in glitterColors)
-                                        {
-                                            string sel = "";
-                                            if (polish.GlitterColors != null)
+                                        <select multiple id="StampingPlateDesignIDs" name="StampingPlateDesignIDs" rows="5" class="form-control">
+                                            @foreach (var design in designs)
                                             {
-                                                if (polish.GlitterColors.Any(c => c.ID == color.ID))
+                                                string sel = "";
+                                                if (plate.StampingPlateDesigns != null)
                                                 {
-                                                    sel = "selected";
+                                                    if (plate.StampingPlateDesigns.Any(c => c.ID == design.ID))
+                                                    {
+                                                        sel = "selected";
+                                                    }
                                                 }
+                                                <option @sel value="@design.ID">@design.Name</option>
                                             }
-
-                                        <option @sel value="@color.ID">@color.Name</option>
-                                        }
                                         </select>
                                     </div>
-
                                 </div>
-                                <div class="row hidden">
-                                    <div class="col-md-3">
-                                        <label for="Coats">Coats</label>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="Notes">Notes</label>
                                         <br />
-                                        <input type="number" id="Coats" name="Coats" placeholder="Coats" class="form-control" value="@polish.Coats" />
+                                        <textarea class="form-control" rows="5" id="Notes" name="Notes" placeholder="Notes">@plate.Notes</textarea>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label for="Coats">Quantity</label>
-                                        <br />
-                                        <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" value="@polish.Quantity" />
-                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-6">
                                         <label for="submit"></label>
                                         <br />
@@ -134,31 +129,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 text-center">
-                                @if (polish.Images != null)
-                                {
-                                    if (polish.Images.Count() > 0)
-                                    {
-                                        var DisplayImage = @polish.Images.Where(i => i.DisplayImage).SingleOrDefault();
-                                        if (DisplayImage == null)
-                                            DisplayImage = polish.Images[0];
-
-                                        <a href="#" onclick="$('#Image-Gallery-Modal').modal('show'); return false;"><img src="@DisplayImage.ImageForHTML" class="img-polish-display" alt="image" /></a>
-                                        <br />
-                                        @Html.ActionLink("Manage Images", "ManageImages", "Polish", new { id = polish.ID }, new { @class = "btn btn-default" })
-                                    }
-                                    else
-                                    {
-                                        <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
-                                    }
-                                }
-                                else
-                                {
-                                    <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
-                                }
-                            </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -170,9 +141,9 @@
                             <div class="col-md-6">
                                 <label for="destash-sellQty">Asking Price*</label>
                                 <br />
-                                @if (polish.AskingPrice.HasValue)
+                                @if (plate.AskingPrice.HasValue)
                                 {
-                                    <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" value="@polish.AskingPrice.Value.ToString("N2")" class="form-control" />
+                                    <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" value="@plate.AskingPrice.Value.ToString("N2")" class="form-control" />
                                 }
                                 else
                                 {
@@ -180,35 +151,45 @@
                                 }
                             </div>
                             <div class="col-md-6">
-                                <label for="PolishName">Sell Qty*</label>
+                                <label for="Name">Sell Qty*</label>
                                 <br />
-                                <input type="number" id="destash-sellQty" name="SellQty" value="@polish.SellQty" class="form-control" />
+                                <input type="number" id="destash-sellQty" name="SellQty" value="@plate.SellQty" class="form-control" />
+                            </div>
+                            <div class="col-md-2 hide">
+                                <label for="PolishName">Total Qty</label>
+                                <br />
+                                <input type="number" id="plate-totalQty" name="Qty" value="@plate.Quantity" class="form-control" />
+                            </div>
+                            <div class="col-md-2 hide">
+                                <label for="btn-update-total-qty"></label>
+                                <br />
+                                <input type="button" id="btn-update-total-qty" class="btn btn-default" value="Update" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="destash-buyerName">Buyer Name</label>
                                 <br />
-                                <input type="text" id="destash-buyerName" name="BuyerName" placeholder="Name" value="@polish.BuyerName" class="form-control" />
+                                <input type="text" id="destash-buyerName" name="BuyerName" placeholder="Name" value="@plate.BuyerName" class="form-control" />
                             </div>
                             <div class="col-md-6">
                                 <label for="destash-soldPrice">Sold Price</label>
                                 <br />
-                                <input type="number" id="destash-soldPrice" step="0.01" name="SoldPrice" value="@polish.SoldPrice" class="form-control" />
+                                <input type="number" id="destash-soldPrice" step="0.01" name="SoldPrice" value="@plate.SoldPrice" class="form-control" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="destash-trackingNumber">Tracking</label>
                                 <br />
-                                <input type="text" id="destash-trackingNumber" name="TrackingNumber" placeholder="Tracking" value="@polish.TrackingNumber" class="form-control" />
+                                <input type="text" id="destash-trackingNumber" name="TrackingNumber" placeholder="Tracking" value="@plate.TrackingNumber" class="form-control" />
                             </div>
                             <div class="col-md-6">
                                 <label for="destash-Status">Status</label>
                                 <br />
                                 <select id="destash-status" name="SaleStatus">
                                     <option></option>
-                                    @switch (polish.SaleStatus)
+                                    @switch (plate.SaleStatus)
                                     {
                                         case "P":
                                             <option value="P" selected>Pending</option>
@@ -231,12 +212,12 @@
                             <div class="col-md-6">
                                 <label for="Notes">Notes</label>
                                 <br />
-                                <textarea class="form-control" rows="5" id="destash-Notes" name="DestashNotes" placeholder="Notes">@polish.DestashNotes</textarea>
+                                <textarea class="form-control" rows="5" id="destash-Notes" name="DestashNotes" placeholder="Notes">@plate.DestashNotes</textarea>
                             </div>
                             <div class="col-md-6">
                                 <label for="Notes">Internal Notes</label>
                                 <br />
-                                <textarea class="form-control" rows="5" id="destash-internalNotes" name="InternalNotes" placeholder="Internal Notes">@polish.InternalDestashNotes</textarea>
+                                <textarea class="form-control" rows="5" id="destash-internalNotes" name="InternalNotes" placeholder="Internal Notes">@plate.InternalDestashNotes</textarea>
                             </div>
                         </div>
                         <div class="row">
@@ -258,20 +239,20 @@
                                 <label for="WasGift">Gift</label>
                                 <br />
                                 <label class="switch">
-                                    <input id="WasGift" name="WasGift" type="checkbox" @(polish.WasGift ? "checked" : "")>
+                                    <input id="WasGift" name="WasGift" type="checkbox" @(plate.WasGift ? "checked" : "")>
                                     <span class="slider round"></span>
                                 </label>
                             </div>
                             <div class="col-md-4">
                                 <label for="GiftFromName">Gifter's Name</label>
                                 <br />
-                                <input type="text" 2" id="GiftFromName" name="GiftFromName" placeholder="Name" class="form-control" value="@polish.GiftFromName" />
+                                <input type="text" 2" id="GiftFromName" name="GiftFromName" placeholder="Name" class="form-control" value="@plate.GiftFromName" />
                             </div>
                             <div class="col-md-4">
                                 <label for="HasBeenTried">Has been tried?</label>
                                 <br />
                                 <label class="switch">
-                                    <input id="HasBeenTried" name="HasBeenTried" type="checkbox" @(polish.HasBeenTried ? "checked" : "")>
+                                    <input id="HasBeenTried" name="HasBeenTried" type="checkbox" @(plate.HasBeenTried ? "checked" : "")>
                                     <span class="slider round"></span>
                                 </label>
                             </div>
@@ -280,49 +261,48 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <label for="PolishName">Notes</label>
+                                <label for="Name">Notes</label>
                                 <br />
-                                <textarea class="form-control" rows="5" id="Notes" name="Notes" placeholder="Notes">@polish.Notes</textarea>
+                                <textarea class="form-control" rows="5" id="Notes" name="Notes" placeholder="Notes">@plate.Notes</textarea>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="col-md-4">
-                <div class="panel panel-default hidden">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Polish Types</h3>
-                    </div>
-                    <div class="panel-body">
-                        <br />
-                        <div class="row">
-                            @foreach (var type in polishTypes)
-                        {
-                            string check = "";
-                            if (polish.Types != null)
-                            {
-                                check = polish.Types.Any(pt => pt.ID == type.ID) ? "checked" : "";
-                            }
-                        <div class="col-sm-3">
-                            <span>@type.Name</span>
-                            <br />
-                            <label class="switch">
-                                <input value="@type.ID" name="TypesIDs" type="checkbox" @check>
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
-                        }
-                        </div>
-                    </div>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Media</h3>
                     </div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-12">
-                                <label for="MakerImage">Images</label>
+                            <div class="col-md-12 text-center">
+                                @if (plate.Images != null)
+                                {
+                                    if (plate.Images.Count() > 0)
+                                    {
+                                        var DisplayImage = plate.Images.Where(i => i.DisplayImage).SingleOrDefault();
+                                        if (DisplayImage == null)
+                                        {
+                                            DisplayImage = plate.Images[0];
+                                        }
+
+
+                                        <a href="#" onclick="$('#Image-Gallery-Modal').modal('show'); return false;"><img src="@DisplayImage.ImageForHTML" class="img-polish-display" alt="image" /></a>
+                                        <br />
+                                        @Html.ActionLink("Manage Images", "ManageImages", "StampingPlate", new { id = plate.ID }, new { @class = "btn btn-default" })
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
+                                    }
+                                }
+                                else
+                                {
+                                    <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
+                                }
+                                <label for="MakerImage"></label>
                                 <br />
                                 <div class="input-group">
                                     <span class="input-group-btn">
@@ -335,6 +315,7 @@
                     </div>
                 </div>
             </div>
+          
         </div>
     }
 
@@ -377,11 +358,11 @@
                         <ol class="indicator"></ol>
                     </div>
                     <div class="links" id="links">
-                        @if (polish.Images != null)
+                        @if (plate.Images != null)
                         {
-                            if (polish.Images.Count() > 0)
+                            if (plate.Images.Count() > 0)
                             {
-                                foreach (var image in polish.Images)
+                                foreach (var image in plate.Images)
                                 {
                                     <a href="@image.ImageForHTML"></a>
                                 }
@@ -411,36 +392,20 @@
                 $("#header-main-text").text("Stamping Plate");
             });
 
-            $('#ColorName').on("blur", function (e) {
-                var token = $('[name=__RequestVerificationToken]').val();
-                var data = {
-                    __RequestVerificationToken: token,
-                    colorName: $('#ColorName').val()
-                };
-
-                $.ajax({
-                    url: "@Url.Action("GetPolishQuickInfo", "Polish")",
-                    type: 'POST',
-                    data: data,
-                    success: function (response) {
-                        $("#ColorNumber").val(response.number);
-                        $("#ColorID").val(response.id);
-                    },
-                    failure: function (response) {
-                        alert(response);
-                    },
-                    error: function (response) {
-                        alert(response);
-                    }
+            //implement datalist and override UI in modern browsers
+            if (window.webshims) {
+                webshims.setOptions('forms', {
+                    customDatalist: true
                 });
+                webshims.polyfill('forms');
+            }
+
+            $('#StampingPlateThemeIDs').select2({
+                placeholder: "Select Plate Themes"
             });
 
-            $('#SecondaryColorsIDs').select2({
-                placeholder: "Select Secondary Colors"
-            });
-
-            $('#GlitterColorsIDs').select2({
-                placeholder: "Select Glitter Colors"
+            $('#StampingPlateDesignIDs').select2({
+                placeholder: "Select Stamp Designs"
             });
 
             $("#BrandName").on("blur", function () {
@@ -515,6 +480,10 @@
             $('#file_display').val(label);
         });
     </script>
+
+    @section scripts{
+        <script src="~/Scripts/PolishScripts.js"></script>
+    }
 }
 else
 {

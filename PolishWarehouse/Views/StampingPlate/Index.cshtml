@@ -80,7 +80,7 @@
                                                     }
                                                 }
                                                 <td>
-                                                    <div class="dropdown hide">
+                                                    <div class="dropdown">
                                                         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             Actions <b class="caret"></b>
                                                         </button>
@@ -101,7 +101,7 @@
                 </div>
             </div>
 
-            @using (Html.BeginForm("DestashPolish", "Destash", FormMethod.Post))
+            @using (Html.BeginForm("DestashPlate", "StampingPlate", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
                 <div class="modal fade" id="Destash" role="dialog">

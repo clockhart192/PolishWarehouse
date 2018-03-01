@@ -1,4 +1,7 @@
-﻿
+﻿@{
+    var controllers = new string[] { "Polish", "StampingPlate" };
+    var controller = controllers.Contains(@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString()) ? @HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString() : "Polish";
+}
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         @if (Request.IsAuthenticated)
@@ -9,23 +12,23 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("List", "Index", "Polish", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Warehouse", "Index", "Polish", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span id="header-main-text">Polish</span> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            @*<li>@Html.ActionLink("List", "")</li>*@
-                            <li>@Html.ActionLink(" Public List", "Public", "Polish")</li>
+                            <li>@Html.ActionLink("List", "", controller)</li>
+                            <li>@Html.ActionLink(" Public List", "Public", controller)</li>
                             <li>@Html.ActionLink("Add", "Details", new { id = string.Empty }, null)</li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">Destash <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("List", "Destash", "Polish")</li>
-                            <li>@Html.ActionLink(" Public List", "DestashPublic", "Polish")</li>
+                            <li>@Html.ActionLink("List", "Destash", controller)</li>
+                            <li>@Html.ActionLink(" Public List", "DestashPublic", controller)</li>
                             <li>@Html.ActionLink("Add", "DestashDetails", new { id = string.Empty }, null)</li>
                             <li><a href="#" onclick="$('#Mark-All-Pending-As-Sold-Confirm').modal('show'); return false;">Mark Pending As Sold</a></li>
                             <li><a href="#" onclick="$('#Archive-All-Sold-Confirm').modal('show'); return false;">Archive Sold</a></li>
@@ -57,9 +60,9 @@
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">Stamping Plate</a>
                                 <ul class="dropdown-menu">
                                     <li>@Html.ActionLink("List", "", "StampingPlate")</li>
-                                    <li class="hide">@Html.ActionLink("Public List", "Public", "StampingPlate")</li>
-                                    <li class="hide">@Html.ActionLink("Destash", "Destash", "StampingPlate")</li>
-                                    <li class="hide">@Html.ActionLink("Public Destash", "DestashPublic", "StampingPlate")</li>
+                                    <li class="">@Html.ActionLink("Public List", "Public", "StampingPlate")</li>
+                                    <li class="">@Html.ActionLink("Destash", "Destash", "StampingPlate")</li>
+                                    <li class="">@Html.ActionLink("Public Destash", "DestashPublic", "StampingPlate")</li>
                                     <li>@Html.ActionLink("Add", "Details", "StampingPlate", new { id = string.Empty }, null)</li>
                                 </ul>
                             </li>

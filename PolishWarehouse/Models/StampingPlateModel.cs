@@ -59,6 +59,7 @@ namespace PolishWarehouse.Models
                 WasGift = p.WasGift;
                 GiftFromName = p.StampingPlates_AdditionalInfo.GiftFromName;
                 Notes = p.StampingPlates_AdditionalInfo.Notes;
+                StampingPlateShapeID = p.ShapeID;
                 StampingPlateShapeName = p.StampingPlateShape.Name;
                 StampingPlateDesigns = colors ? p.StampingPlates_StampingPlateDesigns.Select(ppt => ppt.StampingPlateDesign).ToArray() : null;
                 StampingPlateThemes = colors ? p.StampingPlates_StampingPlateThemes.Select(ppt => ppt.StampingPlateTheme).ToArray() : null;

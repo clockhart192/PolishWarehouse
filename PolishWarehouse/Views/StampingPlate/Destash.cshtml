@@ -1,7 +1,7 @@
-﻿@model PolishWarehouse.Models.PolishDestashModel[]
+﻿@model PolishWarehouse.Models.StampingPlateDestashModel[]
 @if (Request.IsAuthenticated)
 {
-    ViewBag.Title = "Polish List";
+    ViewBag.Title = "Stamping Plate List";
 
     @Html.Partial("MessageControl")
 
@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading panel-heading-private">
-                    <h3>Polish Destash</h3>
+                    <h3>Stamping Plate Destash</h3>
                 </div>
                 <div class="panel-collapse" id="Polishcollapse">
                     <div class="panel-body">
@@ -33,15 +33,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var polish in Model)
+                                        @foreach (var plate in Model)
                                         {
                                             <tr>
-                                                <td>@polish.BrandName</td>
-                                                <td>@Html.ActionLink(polish.PolishName, "DestashDetails", new { id = polish.ID })</td>
-                                                <td>@polish.Description</td>
-                                                <td>@polish.AskingPrice.Value.ToString("C2")</td>
-                                                <td>@polish.SaleStatus</td>
-                                                <td class="hidden-xs">@polish.DestashNotes</td>
+                                                <td>@plate.BrandName</td>
+                                                <td>@Html.ActionLink(plate.Name, "DestashDetails", new { id = plate.ID })</td>
+                                                <td>@plate.Notes</td>
+                                                <td>@plate.AskingPrice.Value.ToString("C2")</td>
+                                                <td>@plate.SaleStatus</td>
+                                                <td class="hidden-xs">@plate.DestashNotes</td>
                                             </tr>
                                         }
                                     </tbody>

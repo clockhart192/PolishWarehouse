@@ -179,10 +179,20 @@
                                     <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" class="form-control" />
                                 }
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-2">
                                 <label for="PolishName">Sell Qty*</label>
                                 <br />
                                 <input type="number" id="destash-sellQty" name="SellQty" value="@polish.SellQty" class="form-control" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="polish-totalQty">Total Qty</label>
+                                <br />
+                                <input type="number" id="polish-totalQty" name="Qty" value="@polish.Quantity" class="form-control" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="btn-update-total-qty"></label>
+                                <br />
+                                <input type="button" id="btn-update-total-qty" class="btn btn-default" value="Update" />
                             </div>
                         </div>
                         <div class="row">
@@ -512,6 +522,10 @@
             $('#file_display').val(label);
         });
     </script>
+
+    @section scripts{
+             <script src="~/Scripts/PolishScripts.js"></script>
+        }
 }
 else
 {

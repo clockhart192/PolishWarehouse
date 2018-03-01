@@ -232,7 +232,7 @@ namespace PolishWarehouse.Models
             }
 
         }
-        
+
         //TODO:MOVE TO POLISHTYPEMODEL
         public static PolishType[] getPolishTypes()
         {
@@ -241,7 +241,7 @@ namespace PolishWarehouse.Models
                 return db.PolishTypes.ToArray();
             }
         }
-        
+
         public Response ArchivePolish()
         {
             using (var db = new PolishWarehouseEntities())
@@ -656,7 +656,7 @@ namespace PolishWarehouse.Models
             }
         }
 
-        
+
     }
 
     public class PolishDestashModel : PolishModel
@@ -853,6 +853,17 @@ namespace PolishWarehouse.Models
                     return new Response(false, string.Join("\r\n", errors.ToArray()));
                 else
                     return new Response(true);
+            }
+        }
+
+        public static Response UpdateTotalQty(int id,int qty)
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                var polish = db.Polishes.Where(p => p.ID == id).SingleOrDefault();
+                polish.Quantity = qty;
+                db.SaveChanges();
+                return new Response();
             }
         }
     }
