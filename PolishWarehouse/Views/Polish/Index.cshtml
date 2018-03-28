@@ -209,6 +209,22 @@
             }
             <script>
                 $(document).ready(function () {
+                    /* Custom filtering function to force search to find within the text */
+                    $.fn.dataTable.ext.search.push(
+                        function (settings, data, dataIndex) {
+                            var search = $("#polishtable_filter input").val().toLowerCase();
+                            var brand = data[0].toLowerCase();
+                            var name = data[1].toLowerCase();
+                            var desc = data[2].toLowerCase();
+                            var label = data[3].toLowerCase();
+
+                            return  (brand.indexOf(search) >= 0) ||
+                                    (name.indexOf(search) >= 0) ||
+                                    //(desc.indexOf(search) >= 0) ||
+                                    (label.indexOf(search) >= 0);
+                        }
+                    );
+
                     $('#polishtable').dataTable({
                         "pageLength": 100,
                         "deferRender": true,

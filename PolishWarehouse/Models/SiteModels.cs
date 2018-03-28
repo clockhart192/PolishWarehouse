@@ -11,7 +11,7 @@
         {
             WasSuccessful = wasSuccessful;
             Message = message;
-            returnObject = returnObject;
+            returnObject = returnobj;
             Polish = p;
         }
     }

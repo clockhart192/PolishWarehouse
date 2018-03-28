@@ -275,8 +275,8 @@ namespace PolishWarehouse.Models
                 incomingOrderline.ShippingProviderID = ShippingProviderID;
 
                 db.SaveChanges();
+                return new Response(true, null, new { lineID = incomingOrderline.ID });
             }
-            return new Response(true);
         }
         public Response Delete()
         {
@@ -429,8 +429,9 @@ namespace PolishWarehouse.Models
                 incomingPolish.Converted = Converted;
 
                 db.SaveChanges();
+                return new Response(true,null,new { lineID = incomingOrderline.ID, polishLineID = incomingPolish.ID });
             }
-            return new Response(true);
+            
         }
 
         public Response ConvertToPolish(DupeAction dupeAction = DupeAction.DoNotImport)

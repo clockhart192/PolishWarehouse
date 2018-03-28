@@ -601,9 +601,10 @@
             }
         }
 
+        var lineNum = 0;
         function saveOther(e) {
             //console.log(e);
-            var lineNum = $(e).closest('.other-order-line').find(".LineNumber").val();
+            lineNum = $(e).closest('.other-order-line').find(".LineNumber").val();
             var token = $('[name=__RequestVerificationToken]').val();
             var model = {
                 ID : $("#IncomingOrderLine-ID-" + lineNum).val(),
@@ -628,6 +629,7 @@
                 data: data,
                 success: function (response) {
                     if (response.WasSuccessful) {
+                        $("#IncomingOrderLine-ID-" + lineNum).val(response.returnObject.lineID);
                         toast("Line Saved!", "info");
                     }
                     else {
@@ -646,7 +648,7 @@
 
         function savePolish(e) {
             //console.log(e);
-            var lineNum = $(e).closest('.polish-order-line').find(".LineNumber").val();
+            lineNum = $(e).closest('.polish-order-line').find(".LineNumber").val();
             var token = $('[name=__RequestVerificationToken]').val();
             var model = {
                 ID : $("#IncomingOrderLine-Polish-ID-" + lineNum).val(),
@@ -682,6 +684,8 @@
                 data: data,
                 success: function (response) {
                     if (response.WasSuccessful) {
+                        $("#IncomingOrderLine-Polish-ID-" + lineNum).val(response.returnObject.polishLineID);
+                        $("#IncomingOrderLine-ID-" + lineNum).val(response.returnObject.lineID);
                         toast("Line Updated!", "info");
                     }
                     else {

@@ -771,7 +771,7 @@ namespace PolishWarehouse.Controllers
 
                     db.StampingPlateDesigns.Add(design);
                     db.SaveChanges();
-                    return Json(design.ID);
+                    return Json(design);
                 }
             }
             catch (Exception ex)
@@ -900,7 +900,7 @@ namespace PolishWarehouse.Controllers
 
                     db.StampingPlateThemes.Add(theme);
                     db.SaveChanges();
-                    return Json(theme.ID);
+                    return Json(theme);
                 }
             }
             catch (Exception ex)
