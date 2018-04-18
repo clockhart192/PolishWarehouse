@@ -766,6 +766,13 @@ namespace PolishWarehouse.Models
                 destash.InternalNotes = InternalDestashNotes;
                 destash.SaleStatus = SaleStatus;
 
+                var color = db.Colors.Where(c => c.Name.ToLower() == "destash").SingleOrDefault();
+                if (color != null)
+                {
+                    polish.ColorID = color.ID;
+                    polish.ColorNumber = 0;
+                }
+
                 db.SaveChanges();
 
                 return new Response(true);
