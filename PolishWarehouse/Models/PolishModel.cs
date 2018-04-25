@@ -773,6 +773,8 @@ namespace PolishWarehouse.Models
                     polish.ColorNumber = 0;
                 }
 
+                polish.Label = "Destash 0";
+
                 db.SaveChanges();
 
                 return new Response(true);
