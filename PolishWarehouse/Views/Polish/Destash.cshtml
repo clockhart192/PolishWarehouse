@@ -39,7 +39,7 @@
                                                 <td>@polish.BrandName</td>
                                                 <td>@Html.ActionLink(polish.PolishName, "DestashDetails", new { id = polish.ID })</td>
                                                 <td>@polish.Description</td>
-                                                <td>@polish.AskingPrice.Value.ToString("C2")</td>
+                                                <td>@(polish.AskingPrice.HasValue ? polish.AskingPrice.Value.ToString("C2") : "$0.00")</td>
                                                 <td>@polish.SaleStatus</td>
                                                 <td class="hidden-xs">@polish.DestashNotes</td>
                                             </tr>

@@ -102,6 +102,10 @@ tr.shown td.selectable {
     cursor: pointer;
 }
 
+.selectable_header{
+    width:20px;
+}
+
 
 .line-info-header .bold {
     color: #6A1B9A;

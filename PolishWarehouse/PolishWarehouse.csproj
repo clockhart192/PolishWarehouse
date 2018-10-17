@@ -414,6 +414,9 @@
     <Content Include="Views\Settings\StampingPlateThemes.cshtml" />
     <Content Include="Views\Settings\StampingPlateDesigns.cshtml" />
     <Content Include="Views\Settings\StampingPlateShapes.cshtml" />
+    <Content Include="Views\Incoming\_Lines.cshtml" />
+    <Content Include="Views\Incoming\_PolishLine.cshtml" />
+    <Content Include="Views\Incoming\_OtherLine.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

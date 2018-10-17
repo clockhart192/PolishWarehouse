@@ -1,0 +1,82 @@
+﻿@model Tuple<PolishWarehouse.Models.IncomingOrderLineModel, string, int>
+@{
+    var line = Model.Item1;
+    string disabled = Model.Item2;
+    var lineNumber = Model.Item3;
+    var providers = ViewBag.ShippingProviders;
+}
+<form id="line-form-@lineNumber.ToString()">
+    <div class="other-order-line">
+        <div class="row">
+            <h4>Line Info</h4>
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="IncomingOrderLineID" id="IncomingOrderLine-ID">
+            <input type="hidden" name="LineNumber" class="LineNumber">
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="IncomingOrderLine-Name">Name</label>
+                                <br />
+                                <input @disabled type="text" id="IncomingOrderLine-Name" value="@line.Name" name="Name" placeholder="Name" class="form-control" tabindex="1" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="IncomingOrderLine-Qty">Quantity</label>
+                                <br />
+                                <input @disabled type="number" id="IncomingOrderLine-Qty" value="@line.Qty" min="1" name="Qty" placeholder="Quantity" class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="IncomingOrderLine-Price">Price</label>
+                                <br />
+                                <input @disabled type="number" value="@line.Price.ToString("N2")" id="IncomingOrderLine-Price" min="1" step="0.01" name="Price" class="form-control" onblur="$(this).val(parseFloat($(this).val()).toFixed(2));" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="IncomingOrderLine-TrackingProviderID">Shipping Provider</label>
+                                <br />
+                                <select @disabled id="IncomingOrderLine-TrackingProviderID" name="TrackingProviderID" class="form-control">
+                                    @foreach (var provider in providers)
+                                    {
+                                        string chk = "";
+                                        if (line.ShippingProviderID.HasValue)
+                                        {
+                                            chk = line.ShippingProviderID.Value == provider.ID ? "checked='checked'" : "";
+                                        }
+
+                                        <option @chk value="@provider.ID">@provider.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="IncomingOrderLine-Tracking">Tracking</label>
+                                <br />
+                                <input @disabled type="text" value="@line.Tracking" id="IncomingOrderLine-Tracking" name="Tracking" placeholder="Tracking #" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row margin-top-5">
+                            <div class="col-md-12">
+                                <a href="#" @disabled class="btn btn-default" onclick="saveOther(this); return false;">Save</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="IncomingOrderLine-Notes">Notes</label>
+                                <br />
+                                <textarea @disabled class="form-control" value="@line.Notes" rows="5" id="IncomingOrderLine-Notes" name="Notes" placeholder="Notes" tabindex="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+</form>

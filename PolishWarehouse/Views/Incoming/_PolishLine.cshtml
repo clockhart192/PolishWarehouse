@@ -1,0 +1,128 @@
+﻿@model Tuple<PolishWarehouse.Models.IncomingOrderLineModel, string, int>
+@{
+    var line = Model.Item1== null? new PolishWarehouse.Models.IncomingOrderLineModel() : Model.Item1;
+    string disabled = Model.Item2;
+    ViewBag.Disabled = Model.Item2;
+    var lineNumber = Model.Item3;
+    var providers = ViewBag.ShippingProviders;
+    var isNew = ViewBag.IsNew != null ? ViewBag.IsNew : false;
+}
+
+<form id="line-form-@lineNumber.ToString()">
+    <div class="polish-order-line">
+        <div class="row">
+            <h4>Polish Info</h4>
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="Name" name="Name" value="@line.Name" />
+            <input type="hidden" name="IncomingLineTypeID" id="IncomingLineTypeID" value="1">
+            <input type="hidden" name="IncomingOrderID" id="IncomingOrderID" value="@line.IncomingOrderID">
+            <input type="hidden" name="IncomingOrderLinesID" id="IncomingOrderLinesID" value="@line.ID">
+            <input type="hidden" name="ID" id="ID" value="@line.IncomingOrderLinePolish.ID">
+            <input type="hidden" name="LineNumber" class="LineNumber" value="@lineNumber.ToString()">
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="BrandID">Brand Name</label>
+                                <br />
+                                <input @disabled list="BrandList" value="@(isNew ? "" : line.IncomingOrderLinePolish.Brand.Name)" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" data-list-filter="^" onblur="GetBrandID(this);" tabindex="1">
+
+                                <input type="hidden" name="BrandID" id="BrandID" value="@(isNew ? "" : line.IncomingOrderLinePolish.Brand.ID.ToString())">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="PolishName">Polish Name</label>
+                                <br />
+                                <input @disabled type="text" value="@line.IncomingOrderLinePolish.PolishName" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" tabindex="2" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="ColorID">Color</label>
+                                <br />
+                                <input @disabled list="ColorList" value="@(isNew ? "" :line.IncomingOrderLinePolish.Color.Name)" id="ColorName" name="ColorName" class="form-control" placeholder="Primary Color" onblur="GetPolishQuickInfo(this);">
+
+                                <input type="hidden" name="ColorID" id="ColorID" value="@(isNew ? "" : line.IncomingOrderLinePolish.Color.ID.ToString())">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="WasGift">Gift</label>
+                                <br />
+                                <label class="switch">
+                                    <input @disabled @(line.IncomingOrderLinePolish.WasGift ? "checked" : "") id="WasGift" name="WasGift" value="true" type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="GiftFromName">Gifter's Name</label>
+                                <br />
+                                <input @disabled type="text" value="@line.IncomingOrderLinePolish.GiftFromName" id="GiftFromName" name="GiftFromName" placeholder="Name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="IncomingOrderLine-Qty">Quantity</label>
+                                <br />
+                                <input @disabled type="number" id="Qty" name="Qty" min="1" value="@line.Qty" placeholder="Quantity" class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="IncomingOrderLine-Price">Price</label>
+                                <br />
+                                <input @disabled type="number" value="@line.Price.ToString("N2")" id="Price" name="Price" min="0" step="0.01" class="form-control" onblur="$(this).val(parseFloat($(this).val()).toFixed(2));" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="IncomingOrderLine-TrackingProviderID">Shipping Provider</label>
+                                <br />
+                                <select @disabled id="ShippingProviderID" name="ShippingProviderID" class="form-control">
+                                    @foreach (var provider in providers)
+                                    {
+                                        string chk = "";
+                                        if (line.ShippingProviderID.HasValue)
+                                        {
+                                            chk = line.ShippingProviderID.Value == provider.ID ? "checked='checked'" : "";
+                                        }
+
+                                        <option @chk value="@provider.ID">@provider.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="IncomingOrderLine-Tracking">Tracking</label>
+                                <br />
+                                <input @disabled type="text" value="@line.Tracking" id="IncomingOrderLine-Tracking" name="Tracking" placeholder="Tracking #" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row margin-top-5">
+                            <div class="col-md-6">
+                                <a @disabled href="#" class="btn btn-default" onclick="savePolish(this); return false;">Save</a>
+                            </div>
+                            <div class="col-md-6">
+                                @*<a href="#" class="btn btn-default" onclick="convertToPolish(this,0); return false;">Convert</a>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="PolishName">Description</label>
+                                <br />
+                                <textarea @disabled value="@line.IncomingOrderLinePolish.Description" class="form-control" rows="5" id="Description" name="Description" placeholder="Description" tabindex="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="IncomingOrderLine-Notes">Notes</label>
+                                <br />
+                                <textarea @disabled value="@line.IncomingOrderLinePolish.Notes" class="form-control" rows="5" id="IncomingOrderLine-Notes" name="Notes" placeholder="Notes"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+</form>

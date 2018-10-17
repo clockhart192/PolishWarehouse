@@ -1,0 +1,14 @@
+﻿@model Tuple<IEnumerable<PolishWarehouse.Models.IncomingOrderLineModel>, string>
+@{int i = 0;}
+@foreach (var line in Model.Item1)
+{
+    if (line.IncomingOrderLinePolish != null)
+    {
+        @Html.Partial("_PolishLine", new Tuple<PolishWarehouse.Models.IncomingOrderLineModel, string, int>(line, Model.Item2, i))
+    }
+    else
+    {
+        @Html.Partial("_OtherLine", new Tuple<PolishWarehouse.Models.IncomingOrderLineModel, string, int>(line, Model.Item2, i))
+    }
+    i++;
+}

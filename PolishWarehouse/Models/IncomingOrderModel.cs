@@ -25,7 +25,7 @@ namespace PolishWarehouse.Models
 
         public IncomingOrderModel() { }
 
-        public IncomingOrderModel(int id)
+        public IncomingOrderModel(long id)
         {
             using (var db = new PolishWarehouseEntities())
             {
@@ -218,18 +218,43 @@ namespace PolishWarehouse.Models
         public long IncomingLineTypeID { get; set; }
         public string Name { get; set; } = "";
         public decimal Price { get; set; }
-        public int Qty { get; set; }
+        public int Qty { get; set; } = 1;
         public string Notes { get; set; }
         public string Tracking { get; set; }
         public string TrackingURL { get; set; }
         public string ShippingProviderName { get; set; }
         public Nullable<int> ShippingProviderID { get; set; }
+        public int LineNumber { get; set; }
 
         public IncomingOrderLineTypeModel IncomingLineType { get; set; }
         public ShippingProviderModel ShippingProvider { get; set; }
         public IncomingOrderLinePolishModel IncomingOrderLinePolish { get; set; }
 
         public IncomingOrderLineModel() { }
+        public IncomingOrderLineModel(long id)
+        {
+            using (var db = new PolishWarehouseEntities())
+            {
+                var o = db.IncomingOrderLines.Where(oi => oi.ID == id).SingleOrDefault();
+                ID = o.ID;
+                CreatedOn = o.CreatedOn;
+                IncomingOrderID = o.IncomingOrderID;
+                IncomingLineTypeID = o.IncomingLineTypeID;
+                Name = o.Name;
+                Price = o.Price;
+                Qty = o.Qty;
+                Notes = o.Notes;
+                Tracking = o.Tracking;
+                ShippingProviderID = o.ShippingProviderID;
+                TrackingURL = o.ShippingProvider != null ? o.ShippingProvider.TrackingBaseURL + o.Tracking : null;
+                ShippingProviderName = o.ShippingProvider != null ? o.ShippingProvider.Name : null;
+
+                IncomingLineType = new IncomingOrderLineTypeModel(o.IncomingLineType);
+                ShippingProvider = o.ShippingProvider != null ? new ShippingProviderModel(o.ShippingProvider) : null;
+                if (o.IncomingOrderLines_Polishes.Count > 0)
+                    IncomingOrderLinePolish = new IncomingOrderLinePolishModel(o.IncomingOrderLines_Polishes.SingleOrDefault());
+            }
+        }
         public IncomingOrderLineModel(IncomingOrderLine o)
         {
             ID = o.ID;
@@ -242,11 +267,11 @@ namespace PolishWarehouse.Models
             Notes = o.Notes;
             Tracking = o.Tracking;
             ShippingProviderID = o.ShippingProviderID;
-            TrackingURL = o.ShippingProvider.TrackingBaseURL + o.Tracking;
-            ShippingProviderName = o.ShippingProvider.Name;
+            TrackingURL = o.ShippingProvider != null ? o.ShippingProvider.TrackingBaseURL + o.Tracking : null;
+            ShippingProviderName = o.ShippingProvider != null ? o.ShippingProvider.Name : null;
 
             IncomingLineType = new IncomingOrderLineTypeModel(o.IncomingLineType);
-            ShippingProvider = new ShippingProviderModel(o.ShippingProvider);
+            ShippingProvider = o.ShippingProvider != null ? new ShippingProviderModel(o.ShippingProvider) : null;
             if (o.IncomingOrderLines_Polishes.Count > 0)
                 IncomingOrderLinePolish = new IncomingOrderLinePolishModel(o.IncomingOrderLines_Polishes.SingleOrDefault());
 
@@ -324,7 +349,7 @@ namespace PolishWarehouse.Models
         public long IncomingLineTypeID { get; set; }
         public long IncomingOrderLinesID { get; set; }
         public decimal Price { get; set; }
-        public int Qty { get; set; }
+        public int Qty { get; set; } = 1;
         public string Notes { get; set; }
         public string Tracking { get; set; }
         public string TrackingURL { get; set; }
@@ -348,6 +373,8 @@ namespace PolishWarehouse.Models
 
         public BrandModel Brand { get; set; }
         public ColorModel Color { get; set; }
+
+        public int LineNumber { get; set; }
 
         public IncomingOrderLinePolishModel() { }
         public IncomingOrderLinePolishModel(IncomingOrderLines_Polishes o)
@@ -414,6 +441,7 @@ namespace PolishWarehouse.Models
                 {
                     incomingPolish = new IncomingOrderLines_Polishes();
                     incomingPolish.CreatedOn = DateTime.UtcNow;
+                    IncomingOrderLinesID = incomingOrderline.ID;
                     db.IncomingOrderLines_Polishes.Add(incomingPolish);
                 }
 

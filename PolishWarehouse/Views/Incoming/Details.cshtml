@@ -39,11 +39,11 @@
                                         <br />
                                         @if (order.Price.HasValue)
                                         {
-                                        <input @disabled type="number" id="Price" min="0" step="0.01" name="Price" value="@order.Price.Value.ToString("N2")" class="form-control" onblur="$(this).val(parseFloat($(this).val()).toFixed(2));" />
+                                            <input @disabled type="number" id="Price" min="0" step="0.01" name="Price" value="@order.Price.Value.ToString("N2")" class="form-control" onblur="$(this).val(parseFloat($(this).val()).toFixed(2));" />
                                         }
                                         else
                                         {
-                                        <input @disabled type="number" id="Price" min="0" step="0.01" name="Price" class="form-control" onblur="$(this).val(parseFloat($(this).val()).toFixed(2));" />
+                                            <input @disabled type="number" id="Price" min="0" step="0.01" name="Price" class="form-control" onblur="$(this).val(parseFloat($(this).val()).toFixed(2));" />
                                         }
                                     </div>
                                 </div>
@@ -91,24 +91,24 @@
                                 <div class="row margin-top-5">
                                     @if (!isNew)
                                     {
-                                    <div class="col-md-6">
-                                        <label for="OrderComplete">Order Complete</label>
-                                        <br />
-                                        <label class="switch">
-                                            <input @disabled id="OrderComplete" name="OrderComplete" value="true" type="checkbox" @(order.OrderComplete ? "checked" : "")>
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <br />
-                                        <button @disabled type="submit" class="btn btn-default">Save</button>
-                                    </div>
+                                        <div class="col-md-6">
+                                            <label for="OrderComplete">Order Complete</label>
+                                            <br />
+                                            <label class="switch">
+                                                <input @disabled id="OrderComplete" name="OrderComplete" value="true" type="checkbox" @(order.OrderComplete ? "checked" : "")>
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <br />
+                                            <button @disabled type="submit" class="btn btn-default">Save</button>
+                                        </div>
                                     }
                                     else
                                     {
-                                    <div class="col-md-12">
-                                        <button type="submit" class="btn btn-default">Save</button>
-                                    </div>
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-default">Save</button>
+                                        </div>
                                     }
                                 </div>
                             </div>
@@ -125,13 +125,13 @@
         <datalist id="BrandList">
             @foreach (var brand in brands)
             {
-            <option value="@brand.Name"></option>
+                <option value="@brand.Name"></option>
             }
         </datalist>
         <datalist id="ColorList">
             @foreach (var color in primaryColors)
             {
-            <option value="@color.Name"></option>
+                <option value="@color.Name"></option>
             }
         </datalist>
         <div class="row">
@@ -278,7 +278,7 @@
                                                         <select @disabled id="IncomingOrderLine-TrackingProviderID" name="TrackingProviderID" class="form-control">
                                                             @foreach (var provider in providers)
                                                             {
-                                                                <option value="@provider.ID">@provider.Name</option>
+                                                            <option value="@provider.ID">@provider.Name</option>
                                                             }
                                                         </select>
                                                     </div>
@@ -316,7 +316,7 @@
                                         </div>
                                     </div>
                                 </div>
-                              <hr />
+                                <hr />
                             </div>
                         </script>
 
@@ -327,8 +327,11 @@
                                         <span class="glyphicon glyphicon-plus"></span> New Line
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-newline">
-                                        <li><a class="dropdown-item" href="#" onclick="newOrderLine('#polish-order-lines-template'); return false;">New Polish</a></li>
-                                        <li><a class="dropdown-item" href="#" onclick="newOrderLine('#other-order-lines-template'); return false;">New Other</a></li>
+                                        @*<li><a class="dropdown-item" href="#" onclick="newOrderLine('#polish-order-lines-template'); return false;">New Polish</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="newOrderLine('#other-order-lines-template'); return false;">New Other</a></li>*@
+
+                                        <li><a class="dropdown-item" href="#" onclick="newPolishLine(); return false;">New Polish</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="newOtherLine(); return false;">New Other</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -337,7 +340,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12" id="orderlines-holder">
-
+                                @Html.Partial("_Lines", new Tuple<IEnumerable<PolishWarehouse.Models.IncomingOrderLineModel>, string>(Model.Lines, disabled))
                             </div>
                         </div>
                         <div class="row">
@@ -347,8 +350,11 @@
                                         <span class="glyphicon glyphicon-plus"></span> New Line
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-newline">
-                                        <li><a class="dropdown-item" href="#" onclick="newOrderLine('#polish-order-lines-template'); return false;">New Polish</a></li>
-                                        <li><a class="dropdown-item" href="#" onclick="newOrderLine('#other-order-lines-template'); return false;">New Other</a></li>
+                                        @*<li><a class="dropdown-item" href="#" onclick="newOrderLine('#polish-order-lines-template'); return false;">New Polish</a></li>
+                                          <li><a class="dropdown-item" href="#" onclick="newOrderLine('#other-order-lines-template'); return false;">New Other</a></li>*@
+
+                                        <li><a class="dropdown-item" href="#" onclick="newPolishLine(); return false;">New Polish</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="newOtherLine(); return false;">New Other</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -383,7 +389,7 @@
             </div>
         </div>
     </div>
-  
+
     <script>
         var brand = null;
         var color = null;
@@ -431,7 +437,7 @@
             });
 
             $("#Name").focus();
-            @if (!isNew)
+            @*@if (!isNew)
             {
                 int i = 0;
                 foreach(var line in order.Lines)
@@ -475,7 +481,7 @@
                     }
                     i++;
                 }
-            }
+            }*@
         });
 
         function GetPolishQuickInfo(e) {
@@ -492,11 +498,11 @@
                 data: data,
                 success: function (response) {
                     //$("#ColorNumber").val(response.number);
-                    if(response.id > 0)
+                    if (response.id > 0)
                         $(color).parent().find("input[type=hidden]").val(response.id);
-                    else{
+                    else {
                         toast("Primary Color Not Found", "danger");
-                        toast("TODO: Option to add instead of this alert","info");
+                        //toast("TODO: Option to add instead of this alert","info");
                     }
 
                 },
@@ -547,7 +553,7 @@
             var token = $('[name=__RequestVerificationToken]').val();
             var data = {
                 __RequestVerificationToken: token,
-                ID : $("#IncomingOrderLine-Polish-ID-" + lineNum).val(),
+                ID: $("#IncomingOrderLine-Polish-ID-" + lineNum).val(),
                 dupeAction: action
             };
             brand = e;
@@ -562,10 +568,10 @@
                     else {
                         var msg = response.Message ? response.Message : "Success!";
                         $("#Resolve-Duplicate-Polish-Modal").modal("hide");
-                        if(response.WasSuccessful)
-                            toast(msg,"info")
+                        if (response.WasSuccessful)
+                            toast(msg, "info")
                         else
-                            toast(msg,"danger")
+                            toast(msg, "danger")
                     }
                 },
                 failure: function (response) {
@@ -577,8 +583,8 @@
             });
         }
 
-        function resolvePrompt(){
-            convertToPolish(current,$("#Resolve-Duplicate-Select").val());
+        function resolvePrompt() {
+            convertToPolish(current, $("#Resolve-Duplicate-Select").val());
         }
 
         function newOrderLine(template) {
@@ -601,13 +607,61 @@
             }
         }
 
+        function newOtherLine() {
+            loading();
+            $.ajax({
+                url: "@Url.Action("_OtherLine", "Incoming")",
+                type: 'GET',
+            data: { orderid: $("#ID").val() },
+            success: function (response) {
+                if (response) {
+                    $("#orderlines-holder").append(response);
+                    //toast("Line Updated!", "info");
+                } else {
+                    toast("Error", "danger");
+                }
+                doneLoading();
+            },
+            failure: function (response) {
+                toast(response, "danger");
+            },
+            error: function (response) {
+                toast(response, "danger");
+            }
+        });
+        }
+
+        function newPolishLine() {
+            loading();
+            $.ajax({
+                url: "@Url.Action("_PolishLine", "Incoming")",
+                type: 'GET',
+                data: { orderid: $("#ID").val() },
+            success: function (response) {
+                if (response) {
+                    $("#orderlines-holder").append(response);
+                    //toast("Line Updated!", "info");
+                } else {
+                    toast("Error", "danger");
+                }
+                doneLoading();
+            },
+            failure: function (response) {
+                toast(response, "danger");
+            },
+            error: function (response) {
+                toast(response, "danger");
+            }
+        });
+        }
+
         var lineNum = 0;
         function saveOther(e) {
             //console.log(e);
             lineNum = $(e).closest('.other-order-line').find(".LineNumber").val();
             var token = $('[name=__RequestVerificationToken]').val();
             var model = {
-                ID : $("#IncomingOrderLine-ID-" + lineNum).val(),
+                ID: $("#IncomingOrderLine-ID-" + lineNum).val(),
                 IncomingOrderID: $("#ID").val(),
                 IncomingLineTypeID: 2,
                 Name: $("#IncomingOrderLine-Name-" + lineNum).val(),
@@ -626,14 +680,20 @@
             $.ajax({
                 url: "@Url.Action("SaveLine", "Incoming")",
                 type: 'POST',
-                data: data,
+                data: $("#line-form-" + lineNum).serialize(),
                 success: function (response) {
-                    if (response.WasSuccessful) {
-                        $("#IncomingOrderLine-ID-" + lineNum).val(response.returnObject.lineID);
-                        toast("Line Saved!", "info");
-                    }
-                    else {
-                        toast("Error saving", "danger");
+                    //if (response.WasSuccessful) {
+                    //    $("#IncomingOrderLine-ID-" + lineNum).val(response.returnObject.lineID);
+                    //    toast("Line Saved!", "info");
+                    //}
+                    //else {
+                    //    toast("Error saving", "danger");
+                    //}
+                    if (response) {
+                        $("#line-form-" + lineNum).html(response);
+                        toast("Line Updated!", "info");
+                    } else {
+                        toast("Error Saving", "danger");
                     }
                     doneLoading();
                 },
@@ -651,8 +711,8 @@
             lineNum = $(e).closest('.polish-order-line').find(".LineNumber").val();
             var token = $('[name=__RequestVerificationToken]').val();
             var model = {
-                ID : $("#IncomingOrderLine-Polish-ID-" + lineNum).val(),
-                IncomingOrderLinesID : $("#IncomingOrderLine-ID-" + lineNum).val(),
+                ID: $("#IncomingOrderLine-Polish-ID-" + lineNum).val(),
+                IncomingOrderLinesID: $("#IncomingOrderLine-ID-" + lineNum).val(),
                 IncomingOrderID: $("#ID").val(),
                 IncomingLineTypeID: 1,
                 Name: $("#IncomingOrderLine-Name-" + lineNum).val(),
@@ -681,14 +741,20 @@
             $.ajax({
                 url: "@Url.Action("SavePolishLine", "Incoming")",
                 type: 'POST',
-                data: data,
+                data: $("#line-form-" + lineNum).serialize(),
                 success: function (response) {
-                    if (response.WasSuccessful) {
-                        $("#IncomingOrderLine-Polish-ID-" + lineNum).val(response.returnObject.polishLineID);
-                        $("#IncomingOrderLine-ID-" + lineNum).val(response.returnObject.lineID);
+                    //if (response.WasSuccessful) {
+                    //    $("#IncomingOrderLine-Polish-ID-" + lineNum).val(response.returnObject.polishLineID);
+                    //    $("#IncomingOrderLine-ID-" + lineNum).val(response.returnObject.lineID);
+                    //    toast("Line Updated!", "info");
+                    //}
+                    //else {
+                    //    toast("Error Saving", "danger");
+                    //}
+                    if (response) {
+                        $("#line-form-" + lineNum).html(response);
                         toast("Line Updated!", "info");
-                    }
-                    else {
+                    } else {
                         toast("Error Saving", "danger");
                     }
                     doneLoading();

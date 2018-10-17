@@ -7,145 +7,9 @@
     var glitterColors = ViewBag.GlitterColors;
     var brands = ViewBag.Brands;
     var polishTypes = ViewBag.PolishTypes;
-    //int i = 0;
+    int i = 0;
+
     @Html.Partial("MessageControl")
-
-    <script type="text/template" id="order-lines-container-template">
-        <div class="lines-container">
-            <div class="row">
-                <div class="col-md-12 {{polishClasses}}">
-                    <h4>Polish Info</h4>
-                    <div class="row bold">
-
-                        <div class="col-md-2 hidden-xs">
-                            Brand
-                        </div>
-                        <div class="col-md-3 col-xs-5">
-                            Name
-                        </div>
-                        <div class="col-md-2 hidden-xs">
-                            Description
-                        </div>
-                        <div class="col-md-1 hidden-xs">
-                            Color
-                        </div>
-                        <div class="col-md-1 col-xs-4">
-                            Price
-                        </div>
-                        <div class="col-md-2 hidden-xs">
-                            Tracking
-                        </div>
-                        <div class="col-md-1 col-xs-1">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr class="header-hr" />
-            <div class="row">
-                <div class="col-md-12">
-                    {{polishlines}}
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-md-12 {{otherClasses}}">
-                    <h4>Other Info</h4>
-                    <div class="row bold">
-                        <div class="col-md-2 col-xs-5">
-                            Name
-                        </div>
-                        <div class="col-md-5 hidden-xs">
-                            Notes
-                        </div>
-                        <div class="col-md-2 col-xs-4">
-                            Price
-                        </div>
-                        <div class="col-md-2 hidden-xs">
-                            Tracking
-                        </div>
-                        <div class="col-md-1 col-xs-1">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr class="header-hr" />
-            <div class="row">
-                <div class="col-md-12">
-                    {{otherlines}}
-                </div>
-            </div>
-        </div>
-
-    </script>
-    <script type="text/template" id="polish-order-lines-template">
-        <div class="polish-order-line">
-            <div class="row">
-                <div class="col-md-2 hidden-xs">
-                    {{brand}}
-                </div>
-                <div class="col-md-3 col-xs-5">
-                    <a target="_blank" href="{{trackingURL}}">{{polishName}}</a>
-                </div>
-                <div class="col-md-2 hidden-xs">
-                    {{description}}
-                </div>
-                <div class="col-md-1 hidden-xs">
-                    {{color}}
-                </div>
-                <div class="col-md-1 col-xs-4">
-                    {{price}}
-                </div>
-                <div class="col-md-2 hidden-xs">
-                    <a target="_blank" href="{{trackingURL}}">{{tracking}}</a>
-                </div>
-                <div class="col-md-1 col-xs-1">
-                    <div class="dropdown">
-                        <button class="btn btn-default btn-small-arrow dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <b class="caret"></b>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="convertToPolish({{plinenum}},0); return false;">Convert</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="deleteLine({{linenum}}); return false;">Delete</a></li>
-                            <li class="disabled"><a class="dropdown-item" href="#" onclick="return false;">Destash</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <hr class="footer-hr" />
-        </div>
-    </script>
-
-    <script type="text/template" id="other-order-lines-template">
-        <div class="other-order-line">
-            <div class="row">
-                <div class="col-md-2 col-xs-5">
-                    <a target="_blank" href="{{trackingURL}}"> {{name}}</a>
-                </div>
-                <div class="col-md-5 hidden-xs">
-                    {{notes}}
-                </div>
-                <div class="col-md-2 col-xs-4">
-                    {{price}}
-                </div>
-                <div class="col-md-2 hidden-xs">
-                    <a target="_blank" href="{{trackingURL}}">{{tracking}}</a>
-                </div>
-                <div class="col-md-1 col-xs-1">
-                    <div class="dropdown">
-                        <button class="btn btn-default btn-small-arrow dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <b class="caret"></b>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="deleteLine({{linenum}}); return false;">Delete</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <hr class="footer-hr" />
-        </div>
-    </script>
-
 
     <div class="row">
         <div class="col-md-12">
@@ -160,7 +24,7 @@
                                 <table class="table table-hover table-condensed datatable order-table" id="table">
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            <th class="selectable_header"></th>
                                             <th>Name</th>
                                             <th>Total</th>
                                             <th class="hidden-xs">Purchase Date</th>
@@ -168,7 +32,187 @@
                                             <th>Tracking</th>
                                         </tr>
                                     </thead>
-                                    <tbody></tbody>
+                                    <tbody>
+                                        @foreach (var order in Model)
+                                        {
+
+                                            var showPolishHeader = false;
+                                            var showOtherHeader = false;
+
+                                            foreach (var line in order.Lines)
+                                            {
+                                                if (line.IncomingOrderLinePolish != null)
+                                                {
+                                                    showPolishHeader = true;
+                                                }
+
+                                                if (line.IncomingOrderLinePolish == null)
+                                                {
+                                                    showOtherHeader = true;
+                                                }
+                                            }
+
+                                            <tr role="row">
+                                                <td class="selectable sorting_1 accordion-toggle" data-toggle="collapse" data-target='.@i'></td>
+                                                <td>@order.Name</td>
+                                                <td>@order.Price.Value.ToString("C2")</td>
+                                                <td class="hidden-xs">@order.PurchaseDate.ToShortDateString()</td>
+                                                <td class="hidden-xs">@order.Notes</td>
+                                                <td>@order.Tracking</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="hidden"></td>
+                                                <td class="hidden"></td>
+                                                <td class="hidden"></td>
+                                                <td class="hidden"></td>
+                                                <td class="hidden"></td>
+                                                <td colspan="6" class="hiddenRow">
+                                                    <div class="lines-container accordian-body collapse @i" id="">
+                                                        @if (showPolishHeader)
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-md-12 ">
+                                                                    <h4>Polish Info</h4>
+                                                                    <div class="row bold">
+                                                                        <div class="col-md-2 hidden-xs">
+                                                                            Brand
+                                                                        </div>
+                                                                        <div class="col-md-3 col-xs-5">
+                                                                            Name
+                                                                        </div>
+                                                                        <div class="col-md-2 hidden-xs">
+                                                                            Description
+                                                                        </div>
+                                                                        <div class="col-md-1 hidden-xs">
+                                                                            Color
+                                                                        </div>
+                                                                        <div class="col-md-1 col-xs-4">
+                                                                            Price
+                                                                        </div>
+                                                                        <div class="col-md-2 hidden-xs">
+                                                                            Tracking
+                                                                        </div>
+                                                                        <div class="col-md-1 col-xs-1">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <hr class="header-hr" />
+                                                        }
+                                                        @foreach (var line in order.Lines)
+                                                        {
+                                                            if (line.IncomingOrderLinePolish != null)
+                                                            {
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="polish-order-line">
+                                                                            <div class="row">
+                                                                                <div class="col-md-2 hidden-xs">
+                                                                                    @line.IncomingOrderLinePolish.Brand.Name
+                                                                                </div>
+                                                                                <div class="col-md-3 col-xs-5">
+                                                                                    <a target="_blank" href="@line.TrackingURL">@line.IncomingOrderLinePolish.PolishName</a>
+                                                                                </div>
+                                                                                <div class="col-md-2 hidden-xs">
+                                                                                    @line.IncomingOrderLinePolish.Description
+                                                                                </div>
+                                                                                <div class="col-md-1 hidden-xs">
+                                                                                    @line.IncomingOrderLinePolish.Color.Name
+                                                                                </div>
+                                                                                <div class="col-md-1 col-xs-4">
+                                                                                    @line.Price.ToString("C2")
+                                                                                </div>
+                                                                                <div class="col-md-2 hidden-xs">
+                                                                                    <a target="_blank" href="@line.TrackingURL">@line.Tracking</a>
+                                                                                </div>
+                                                                                <div class="col-md-1 col-xs-1">
+                                                                                    <div class="dropdown">
+                                                                                        <button class="btn btn-default btn-small-arrow dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                                            <b class="caret"></b>
+                                                                                        </button>
+                                                                                        <ul class="dropdown-menu">
+                                                                                            <li><a class="dropdown-item" href="#" onclick="convertToPolish(@line.IncomingOrderLinePolish.ID,0); return false;">Convert</a></li>
+                                                                                            <li><a class="dropdown-item" href="#" onclick="deleteLine(@line.ID); return false;">Delete</a></li>
+                                                                                            <li class="disabled"><a class="dropdown-item" href="#">Destash</a></li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <hr class="footer-hr" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+
+                                                        @if (showOtherHeader)
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-md-12 ">
+                                                                    <h4>Other Info</h4>
+                                                                    <div class="row bold">
+                                                                        <div class="col-md-2 col-xs-5">
+                                                                            Name
+                                                                        </div>
+                                                                        <div class="col-md-5 hidden-xs">
+                                                                            Notes
+                                                                        </div>
+                                                                        <div class="col-md-2 col-xs-4">
+                                                                            Price
+                                                                        </div>
+                                                                        <div class="col-md-2 hidden-xs">
+                                                                            Tracking
+                                                                        </div>
+                                                                        <div class="col-md-1 col-xs-1">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <hr class="header-hr" />
+                                                        }
+                                                        @foreach (var line in order.Lines)
+                                                        {
+                                                            if (line.IncomingOrderLinePolish == null)
+                                                            {
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="other-order-line">
+                                                                            <div class="row">
+                                                                                <div class="col-md-2 col-xs-5">
+                                                                                    <a target="_blank" href="@line.TrackingURL">@line.Name</a>
+                                                                                </div>
+                                                                                <div class="col-md-5 hidden-xs">
+                                                                                    @line.Notes
+                                                                                </div>
+                                                                                <div class="col-md-2 col-xs-4">
+                                                                                    @line.Price.ToString("C2")
+                                                                                </div>
+                                                                                <div class="col-md-2 hidden-xs">
+                                                                                    <a target="_blank" href="@line.TrackingURL">@line.Tracking</a>
+                                                                                </div>
+                                                                                <div class="col-md-1 col-xs-1">
+                                                                                    <div class="dropdown">
+                                                                                        <button class="btn btn-default btn-small-arrow dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                                            <b class="caret"></b>
+                                                                                        </button>
+                                                                                        <ul class="dropdown-menu">
+                                                                                            <li><a class="dropdown-item" href="#" onclick="deleteLine(@line.ID); return false;">Delete</a></li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <hr class="footer-hr" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -206,7 +250,7 @@
                                                         <datalist id="BrandList">
                                                             @foreach (var brand in brands)
                                                             {
-                                                                <option value="@brand.Name"></option>
+                                                            <option value="@brand.Name"></option>
                                                             }
                                                         </datalist>
                                                         <input type="hidden" name="BrandID" id="BrandID">
@@ -226,7 +270,7 @@
                                                         <datalist id="ColorList">
                                                             @foreach (var color in primaryColors)
                                                             {
-                                                                <option value="@color.Name"></option>
+                                                            <option value="@color.Name"></option>
                                                             }
                                                         </datalist>
                                                         <input type="hidden" name="ColorID" id="ColorID">
@@ -252,7 +296,7 @@
                                                             <option></option>
                                                             @foreach (var color in secondaryColors)
                                                             {
-                                                                <option value="@color.ID">@color.Name</option>
+                                                            <option value="@color.ID">@color.Name</option>
                                                             }
                                                         </select>
                                                     </div>
@@ -263,7 +307,7 @@
                                                             <option></option>
                                                             @foreach (var color in glitterColors)
                                                             {
-                                                                <option value="@color.ID">@color.Name</option>
+                                                            <option value="@color.ID">@color.Name</option>
                                                             }
                                                         </select>
                                                     </div>
@@ -342,14 +386,14 @@
                                             @foreach (var type in polishTypes)
                                             {
                                                 string check = "";
-                                                <div class="col-sm-3">
-                                                    <span>@type.Name</span>
-                                                    <br />
-                                                    <label class="switch">
-                                                        <input value="@type.ID" name="TypesIDs" type="checkbox" @check>
-                                                        <span class="slider round"></span>
-                                                    </label>
-                                                </div>
+                                            <div class="col-sm-3">
+                                                <span>@type.Name</span>
+                                                <br />
+                                                <label class="switch">
+                                                    <input value="@type.ID" name="TypesIDs" type="checkbox" @check>
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
                                             }
                                         </div>
                                     </div>
@@ -466,93 +510,62 @@
             </div>
         </div>
     </div>
-        <script>
-            //Event Handlers
-            $(document).ready(function () {
-                $('#ColorName').on("blur", function (e) {
-                    var token = $('[name=__RequestVerificationToken]').val();
-                    var data = {
-                        __RequestVerificationToken: token,
-                        colorName: $('#ColorName').val()
-                    };
 
-                    $.ajax({
-                        url: "@Url.Action("GetPolishQuickInfo", "Polish")",
-                        type: 'POST',
-                        data: data,
-                        success: function (response) {
-                            if (response.id > 0) {
-                                $("#ColorNumber").val(response.number);
-                                $("#ColorID").val(response.id);
-                            }
-                            else {
-                                toast("Primary Color Not Found", "danger");
-                                toast("TODO: Option to add instead of this alert", "info");
-                            }
-                        },
-                        failure: function (response) {
-                            toast(response, "danger");
-                        },
-                        error: function (response) {
-                            toast(response.statusText, "danger");
+    <script>
+        //Event Handlers
+        $(document).ready(function () {
+            $('#ColorName').on("blur", function (e) {
+                var token = $('[name=__RequestVerificationToken]').val();
+                var data = {
+                    __RequestVerificationToken: token,
+                    colorName: $('#ColorName').val()
+                };
+
+                $.ajax({
+                    url: "@Url.Action("GetPolishQuickInfo", "Polish")",
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        if (response.id > 0) {
+                            $("#ColorNumber").val(response.number);
+                            $("#ColorID").val(response.id);
                         }
-                    });
+                        else {
+                            toast("Primary Color Not Found", "danger");
+                            toast("TODO: Option to add instead of this alert", "info");
+                        }
+                    },
+                    failure: function (response) {
+                        toast(response, "danger");
+                    },
+                    error: function (response) {
+                        toast(response.statusText, "danger");
+                    }
                 });
+            });
 
 
-                $("#BrandName").on("blur", function () {
-                    if ($('#BrandName').val() != "") {
-                        var token = $('[name=__RequestVerificationToken]').val();
-                        var data = {
-                            __RequestVerificationToken: token,
-                            BrandName: $('#BrandName').val()
-                        };
-
-                        $.ajax({
-                            url: "@Url.Action("GetBrandID", "Settings")",
-                            type: 'POST',
-                            data: data,
-                            success: function (response) {
-                                if (response > 0) {
-                                    $("#BrandID").val(response);
-                                }
-                                else {
-                                    var n = $('#BrandName').val();
-                                    $("#Add-New-Brand-Text").text('Are you sure you want to add " ' + n + '" as a brand?');
-                                    $("#Add-New-Brand-Confirm").modal("show");
-                                }
-                            },
-                            failure: function (response) {
-                                alert(response);
-                            },
-                            error: function (response) {
-                                alert(response);
-                            }
-                        });
-                    };
-                });
-
-                $("#Add-New-Brand-Confirm-Btn").on("click", function () {
+            $("#BrandName").on("blur", function () {
+                if ($('#BrandName').val() != "") {
                     var token = $('[name=__RequestVerificationToken]').val();
                     var data = {
                         __RequestVerificationToken: token,
                         BrandName: $('#BrandName').val()
                     };
 
-                    loading();
                     $.ajax({
-                        url: "@Url.Action("AddBrand", "Settings")",
+                        url: "@Url.Action("GetBrandID", "Settings")",
                         type: 'POST',
                         data: data,
                         success: function (response) {
                             if (response > 0) {
                                 $("#BrandID").val(response);
-                                $("#Add-New-Brand-Confirm").modal("hide");
                             }
                             else {
-                                alert("Unknown error adding brand.");
+                                var n = $('#BrandName').val();
+                                $("#Add-New-Brand-Text").text('Are you sure you want to add " ' + n + '" as a brand?');
+                                $("#Add-New-Brand-Confirm").modal("show");
                             }
-                            doneLoading();
                         },
                         failure: function (response) {
                             alert(response);
@@ -561,165 +574,72 @@
                             alert(response);
                         }
                     });
-                });
-
-               
-
-                $(document).on('change', '.btn-file :file', function () {
-                    var input = $(this),
-                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
-                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-                    $('#file_display').val(label);
-                });
-
-                $("#FinalizeForm").on('submit', function (e) {
-
-                    e.preventDefault() // prevent the form's normal submission
-
-                    var dataToPost = $(this).serialize();
-                    var formdata = new FormData($(this).get(0));
-
-                    loading();
-                    $.ajax({
-                        url: "@Url.Action("FinalizeConvert", "Incoming")",
-                        type: 'POST',
-                        data: formdata,
-                        processData: false,
-                        contentType: false,
-                        success: function (response) {
-                            if (response.WasSuccessful) {
-                                $("#Convert-Polish-Confirm").modal('hide');
-                                toast("Line Updated!", "info");
-                            }
-                            else {
-                                toast("Error Saving", "danger");
-                            }
-                            doneLoading();
-                        },
-                        failure: function (response) {
-                            toast(response, "danger");
-                        },
-                        error: function (response) {
-                            toast(response, "danger");
-                        }
-                    });
-                });
+                };
             });
 
-            
-        </script>
-        <script>
-            //functions
-            /* Formatting function for row details - modify as you need */
-            function format(d) {
-                // `d` is the original data object for the row
-                var children = document.getElementById("order-lines-container-template").innerHTML;
-                var polishLines = "";
-                var otherLines = "";
-
-                var showPolish = false;
-                var showOther = false;
-
-                
-
-                d.lines.forEach(function (e) {
-                    switch (e.type) {
-                        case "polish":
-                            var checked = e.wasGift ? "checked='checked'" : "";
-                            polishLines += document.getElementById("polish-order-lines-template").innerHTML.replaceAll("{{price}}", e.price)
-                                                                                                        .replaceAll("{{name}}", e.name)
-                                                                                                        .replaceAll("{{quantity}}", e.qty)
-                                                                                                        .replaceAll("{{tracking}}", e.tracking)
-                                                                                                        .replaceAll("{{trackingUrl}}", e.trackingUrl)
-                                                                                                        .replaceAll("{{notes}}", e.notes)
-                                                                                                        .replaceAll("{{shippingProvider}}", e.shippingProvider)
-                                                                                                        .replaceAll("{{plinenum}}", e.id)
-                                                                                                        .replaceAll("{{linenum}}", e.lineID)
-                                                                                                        .replaceAll("{{polishName}}", e.polishName)
-                                                                                                        .replaceAll("{{color}}", e.color)
-                                                                                                        .replaceAll("{{brand}}", e.brand)
-                                                                                                        .replaceAll("{{wasGift}}", checked)
-                                                                                                        .replaceAll("{{giftFromName}}", e.giftFromName)
-                                                                                                        .replaceAll("{{description}}", e.description);
-
-                            showPolish = true;
-                            break;
-                        default:
-                            otherLines += document.getElementById("other-order-lines-template").innerHTML.replaceAll("{{price}}", e.price)
-                                                                                                       .replaceAll("{{name}}", e.name)
-                                                                                                       .replaceAll("{{quantity}}", e.qty)
-                                                                                                       .replaceAll("{{tracking}}", e.tracking)
-                                                                                                       .replaceAll("{{trackingUrl}}", e.trackingUrl)
-                                                                                                       .replaceAll("{{notes}}", e.notes)
-                                                                                                       .replaceAll("{{shippingProvider}}", e.shippingProvider)
-                                                                                                       .replaceAll("{{linenum}}", e.id);
-                            showOther = true;
-                            break;
-                    }
-                });
-
-                children = children.replaceAll("{{polishClasses}}", "line-info-header" + (showPolish ? "" : " hide"));
-                children = children.replaceAll("{{otherClasses}}", "line-info-header" + (showOther ? "" : " hide"));
-                children = children.replaceAll("{{polishlines}}", polishLines);
-                children = children.replaceAll("{{otherlines}}", otherLines);
-                return children;
-            }
-
-            function convertToPolish(e, action) {
-                var lineNum = e;//$(e).closest('.polish-order-line').find(".LineNumber").val();
-                current = e;
-                $("#PolishLineID").val(current);
+            $("#Add-New-Brand-Confirm-Btn").on("click", function () {
                 var token = $('[name=__RequestVerificationToken]').val();
                 var data = {
                     __RequestVerificationToken: token,
-                    ID: lineNum,
-                    dupeAction: action
+                    BrandName: $('#BrandName').val()
                 };
-                brand = e;
+
+                loading();
                 $.ajax({
-                    url: "@Url.Action("ConvertToPolish", "Incoming")",
+                    url: "@Url.Action("AddBrand", "Settings")",
                     type: 'POST',
                     data: data,
                     success: function (response) {
-                        if (response.Polish) {
-                            $("#BrandID").val(response.Polish.BrandID);
-                            $("#ColorID").val(response.Polish.ColorID);
-                            $("#BrandName").val(response.Polish.BrandName);
-                            $("#PolishName").val(response.Polish.PolishName);
-                            $("#ColorName").val(response.Polish.ColorName);
-                            $("#ColorNumber").val(response.Polish.ColorNumber);
-                            $("#Description").val(response.Polish.Description);
-                            $("#Label").val(response.Polish.Label);
-                            $("#Coats").val(response.Polish.Coats);
-                            $("#Quantity").val(response.Polish.Quantity);
-                            $("#HasBeenTried").prop("checked", response.Polish.HasBeenTried);
-                            $("#WasGift").prop("checked", response.Polish.WasGift);
-                            $("#GiftFromName").val(response.Polish.GiftFromName);
-                            $("#Notes").val(response.Polish.Notes);
-
-                            $("#SecondaryColorsIDs").select2("val", "");
-                            $("#GlitterColorsIDs").select2("val", "");
-
-                            $("input[name=TypesIDs]").each(function () {
-                                $(this).prop("checked", false);
-                            });
-
-                            $("#Convert-Polish-Confirm").modal('show');
+                        if (response > 0) {
+                            $("#BrandID").val(response);
+                            $("#Add-New-Brand-Confirm").modal("hide");
                         }
                         else {
-                            if (response.Message == "Prompt") {
-                                $("#Resolve-Duplicate-Polish-Modal").modal("show");
-                            }
-                            else {
-                                var msg = response.Message ? response.Message : "Success!";
-                                $("#Resolve-Duplicate-Polish-Modal").modal("hide");
-                                if (response.WasSuccessful)
-                                    toast(msg, "info")
-                                else
-                                    toast(msg, "danger")
-                            }
+                            alert("Unknown error adding brand.");
                         }
+                        doneLoading();
+                    },
+                    failure: function (response) {
+                        alert(response);
+                    },
+                    error: function (response) {
+                        alert(response);
+                    }
+                });
+            });
 
+
+
+            $(document).on('change', '.btn-file :file', function () {
+                var input = $(this),
+                numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                $('#file_display').val(label);
+            });
+
+            $("#FinalizeForm").on('submit', function (e) {
+
+                e.preventDefault() // prevent the form's normal submission
+
+                var dataToPost = $(this).serialize();
+                var formdata = new FormData($(this).get(0));
+
+                loading();
+                $.ajax({
+                    url: "@Url.Action("FinalizeConvert", "Incoming")",
+                    type: 'POST',
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.WasSuccessful) {
+                            $("#Convert-Polish-Confirm").modal('hide');
+                            toast("Line Updated!", "info");
+                        }
+                        else {
+                            toast("Error Saving", "danger");
+                        }
+                        doneLoading();
                     },
                     failure: function (response) {
                         toast(response, "danger");
@@ -728,152 +648,109 @@
                         toast(response, "danger");
                     }
                 });
-            }
-
-            function resolvePrompt() {
-                convertToPolish(current, $("#Resolve-Duplicate-Select").val());
-            }
-
-            function deleteLine(id) {
-                $("#deleteLineID").val(id);
-                $("#Delete-Line-Confirm").modal('show');
-            }
-        </script>
-        <script>
-            //Initilizations
-            $('#SecondaryColorsIDs').select2({
-                placeholder: "Select Secondary Colors"
             });
+        });
 
-            $('#GlitterColorsIDs').select2({
-                placeholder: "Select Glitter Colors"
-            });
 
-            //disgustingly initilizing this datatable
-            $(document).ready(function () {
-                var tableData =
-                         [
-                            @foreach(var order in Model)
-                {
-                    <text>
-                        {
-                            "id": "@order.ID",
-                            "name": "@order.Name",
-                            "total": "@order.Price.Value.ToString("C2")",
-                            "date": "@order.PurchaseDate.ToShortDateString()",
-                            "tracking": "@order.Tracking",
-                            "notes": `@Html.Raw(order.Notes)`,
-                            "trackingUrl": "@order.TrackingURL",
-                            "shippingProvider": "@order.ShippingProviderName",
-                            "lines": [
-                                @foreach(var line in order.Lines)
-                            {
-                                      if(line.IncomingOrderLinePolish != null)
-                    {
-                        <text>
-                                {
-                                    "type": "polish",
-                                    "id": "@line.IncomingOrderLinePolish.ID.ToString()",
-                                    "name": "@line.Name",
-                                    "price": "@line.Price.ToString("C2")",
-                                    "qty": "@line.Qty",
-                                    "tracking": "@line.Tracking",
-                                    "trackingUrl": "@line.TrackingURL",
-                                    "notes": `@Html.Raw(line.Notes)`,
-                                    "shippingProvider": "@line.ShippingProviderName",
+    </script>
+    <script>
+        //functions
+        function convertToPolish(e, action) {
+            var lineNum = e;
+            current = e;
+            $("#PolishLineID").val(current);
+            var token = $('[name=__RequestVerificationToken]').val();
+            var data = {
+                __RequestVerificationToken: token,
+                ID: lineNum,
+                dupeAction: action
+            };
+            brand = e;
+            $.ajax({
+                url: "@Url.Action("ConvertToPolish", "Incoming")",
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                    if (response.Polish) {
+                        $("#BrandID").val(response.Polish.BrandID);
+                        $("#ColorID").val(response.Polish.ColorID);
+                        $("#BrandName").val(response.Polish.BrandName);
+                        $("#PolishName").val(response.Polish.PolishName);
+                        $("#ColorName").val(response.Polish.ColorName);
+                        $("#ColorNumber").val(response.Polish.ColorNumber);
+                        $("#Description").val(response.Polish.Description);
+                        $("#Label").val(response.Polish.Label);
+                        $("#Coats").val(response.Polish.Coats);
+                        $("#Quantity").val(response.Polish.Quantity);
+                        $("#HasBeenTried").prop("checked", response.Polish.HasBeenTried);
+                        $("#WasGift").prop("checked", response.Polish.WasGift);
+                        $("#GiftFromName").val(response.Polish.GiftFromName);
+                        $("#Notes").val(response.Polish.Notes);
 
-                                    "polishName": "@line.IncomingOrderLinePolish.PolishName",
-                                    "color": "@(line.IncomingOrderLinePolish.Color != null ? line.IncomingOrderLinePolish.Color.Name : "")",
-                                    "brand": "@line.IncomingOrderLinePolish.Brand.Name",
-                                    "wasGift": "@line.IncomingOrderLinePolish.WasGift.ToString()",
-                                    "giftFromName": "@line.IncomingOrderLinePolish.GiftFromName",
-                                    "description": `@line.IncomingOrderLinePolish.Description`,
-                                    "lineID": "@line.ID",
-                                },
-                                     </text>
-                }
-            else
-            {
-                <text>
-                        {
-                            "type": "other",
-                            "id": "@line.ID.ToString()",
-                            "name": "@line.Name",
-                            "price": "@line.Price.ToString("C2")",
-                            "qty": "@line.Qty",
-                            "tracking": "@line.Tracking",
-                            "trackingUrl": "@line.TrackingURL",
-                            "notes": `@line.Notes`,
-                            "shippingProvider": "@line.ShippingProviderName",
-                        },
-                                                        </text>
-            }
-            }
-                            ]
-                        },
-                            </text>
-            }
-                         ];
+                        $("#SecondaryColorsIDs").select2("val", "");
+                        $("#GlitterColorsIDs").select2("val", "");
 
-                //console.log(tableData);
-                //console.log(JSON.stringify(tableData));
-                var table = $('#table').DataTable({
-                    "data": tableData,
-                    "pageLength": 100,
-                    "deferRender": true,
-                    "stateSave": true,
-                    "responsive": true,
-                    "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
-                    "initComplete": function (settings, json) {
-                        $("#table").show();
-                    },
-                    "columns": [
-                        {
-                            "defaultContent": "",
-                            "className": "selectable",
-                            "orderable": "false"
-                        },
-                        {
-                            "data": "name",
-                            "render": function (data, type, row, meta) {
-                                return '<a href="/Incoming/Details/' + row.id + '">' + data + '</a>';
-                            }
-                        },
-                        {
-                            "data": "total",
-                            "className": "hidden-xs"
-                        },
-                        { "data": "date",
-                        "className":"hidden-xs"},
-                        {
-                            "data": "notes",
-                            "className": "hidden-xs"
-                        },
-                        {
-                            "data": "tracking",
-                            "render": function (data, type, row, meta) {
-                                return '<a href="' + row.trackingUrl + '" target="_blank" >' + data + '</a>';
-                            }
-                        },
-                    ]
-                });
+                        $("input[name=TypesIDs]").each(function () {
+                            $(this).prop("checked", false);
+                        });
 
-                // Add event listener for opening and closing details
-                $('#table tbody').on('click', 'td.selectable', function () {
-                    var tr = $(this).closest('tr');
-                    var row = table.row(tr);
-
-                    if (row.child.isShown()) {
-                        // This row is already open - close it
-                        row.child.hide();
-                        tr.removeClass('shown');
+                        $("#Convert-Polish-Confirm").modal('show');
                     }
                     else {
-                        // Open this row
-                        row.child(format(row.data())).show();
-                        tr.addClass('shown');
+                        if (response.Message == "Prompt") {
+                            $("#Resolve-Duplicate-Polish-Modal").modal("show");
+                        }
+                        else {
+                            var msg = response.Message ? response.Message : "Success!";
+                            $("#Resolve-Duplicate-Polish-Modal").modal("hide");
+                            if (response.WasSuccessful)
+                                toast(msg, "info")
+                            else
+                                toast(msg, "danger")
+                        }
                     }
-                });
+                },
+                failure: function (response) {
+                    toast(response, "danger");
+                },
+                error: function (response) {
+                    toast(response, "danger");
+                }
             });
-        </script>
+        }
+
+        function resolvePrompt() {
+            convertToPolish(current, $("#Resolve-Duplicate-Select").val());
+        }
+
+        function deleteLine(id) {
+            $("#deleteLineID").val(id);
+            $("#Delete-Line-Confirm").modal('show');
+        }
+    </script>
+    <script>
+        //Initilizations
+        $('#SecondaryColorsIDs').select2({
+            placeholder: "Select Secondary Colors"
+        });
+
+        $('#GlitterColorsIDs').select2({
+            placeholder: "Select Glitter Colors"
+        });
+
+        //disgustingly initilizing this datatable
+        $(document).ready(function () {
+            var table = $('#table').DataTable({
+                "pageLength": 100,
+                "deferRender": true,
+                //"stateSave": true,
+                "responsive": true,
+                "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
+                "initComplete": function (settings, json) {
+                    $("#table").show();
+                },
+            });
+        });
+    </script>
+
 }

@@ -22,7 +22,7 @@ namespace PolishWarehouse.Controllers
             if (viewComplete)
                 return View(IncomingOrderModel.GetIncomingOrderModelList().Where(o => o.OrderComplete).ToArray());
             else
-                return View(IncomingOrderModel.GetIncomingOrderModelList().Where(o=> !o.OrderComplete).ToArray());
+                return View(IncomingOrderModel.GetIncomingOrderModelList().Where(o => !o.OrderComplete).ToArray());
         }
 
         public ActionResult Details(int? id)
@@ -42,6 +42,31 @@ namespace PolishWarehouse.Controllers
                 return View(new IncomingOrderModel());
         }
 
+        public ActionResult _OtherLine(long orderid)
+        {
+            ViewBag.ShippingProviders = ShippingProviderModel.GetShippingProviders().OrderBy(c => c.ID);
+            var m = new IncomingOrderLineModel();
+            m.IncomingOrderLinePolish = new IncomingOrderLinePolishModel();
+            m.IncomingOrderID = orderid;
+            m.IncomingLineTypeID = 2;
+            var o = new IncomingOrderModel(orderid);
+            ViewBag.IsNew = true;
+            return PartialView("_OtherLine", new Tuple<PolishWarehouse.Models.IncomingOrderLineModel, string, int>(m, "", o.Lines.Count() + 1));
+
+        }
+
+        public ActionResult _PolishLine(long orderid)
+        {
+            ViewBag.ShippingProviders = ShippingProviderModel.GetShippingProviders().OrderBy(c => c.ID);
+            var m = new IncomingOrderLineModel();
+            m.IncomingOrderLinePolish = new IncomingOrderLinePolishModel();
+            m.IncomingOrderID = orderid;
+            m.IncomingLineTypeID = 1;
+            var o = new IncomingOrderModel(orderid);
+            ViewBag.IsNew = true;
+            return PartialView("_PolishLine", new Tuple<PolishWarehouse.Models.IncomingOrderLineModel, string, int>(m, "", o.Lines.Count() + 1));
+
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Details(IncomingOrderModel order)
@@ -76,42 +101,89 @@ namespace PolishWarehouse.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult SaveLine(IncomingOrderLineModel model)
+        public ActionResult SaveLine(IncomingOrderLineModel model)
         {
             try
             {
-                return Json(model.Save());
+                var resp = model.Save();
+                if (resp.WasSuccessful)
+                {
+                    ViewBag.ShippingProviders = ShippingProviderModel.GetShippingProviders().OrderBy(c => c.ID);
+                    var o = new IncomingOrderModel(model.IncomingOrderID);
+                    return PartialView("_PolishLine", new Tuple<PolishWarehouse.Models.IncomingOrderLineModel, string, int>(model, o.OrderComplete ? "disabled" : "", model.LineNumber));
+                }
+                else
+                    return null;
             }
             catch (Exception ex)
             {
-                return Json(Logging.LogEvent(LogTypes.Error, "Error saving orderline", "Error saving the order line", ex));
+                Logging.LogEvent(LogTypes.Error, "Error saving orderline", "Error saving the order line", ex);
+                return null;
+            }
+
+        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public JsonResult SaveLine(IncomingOrderLineModel model)
+        //{
+        //    try
+        //    {
+        //        return Json(model.Save());
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(Logging.LogEvent(LogTypes.Error, "Error saving orderline", "Error saving the order line", ex));
+        //    }
+
+        //}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SavePolishLine(IncomingOrderLinePolishModel model)
+        {
+            try
+            {
+                var resp = model.Save();
+                if (resp.WasSuccessful)
+                {
+                    ViewBag.ShippingProviders = ShippingProviderModel.GetShippingProviders().OrderBy(c => c.ID);
+                    var m = new IncomingOrderLineModel(model.IncomingOrderLinesID);
+                    var o = new IncomingOrderModel(model.IncomingOrderID);
+                    return PartialView("_PolishLine", new Tuple<PolishWarehouse.Models.IncomingOrderLineModel, string, int>(m, o.OrderComplete? "disabled" : "", model.LineNumber));
+                }
+                else
+                    return null;
+            }
+            catch (Exception ex)
+            {
+                Logging.LogEvent(LogTypes.Error, "Error saving orderline polish", "Error saving the polish to the order.", ex);
+                return null;
             }
 
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public JsonResult SavePolishLine(IncomingOrderLinePolishModel model)
+        //{
+        //    try
+        //    {
+        //            return Json(model.Save());
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(Logging.LogEvent(LogTypes.Error, "Error saving orderline polish", "Error saving the polish to the order.", ex));
+        //    }
+        //}
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult SavePolishLine(IncomingOrderLinePolishModel model)
-        {
-            try
-            {
-                return Json(model.Save());
-            }
-            catch (Exception ex)
-            {
-                return Json(Logging.LogEvent(LogTypes.Error, "Error saving orderline polish", "Error saving the polish to the order.", ex));
-            }
-
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public JsonResult ConvertToPolish(long id, int dupeAction = 0 )
+        public JsonResult ConvertToPolish(long id, int dupeAction = 0)
         {
             try
             {
                 IncomingOrderLinePolishModel.DupeAction action = (IncomingOrderLinePolishModel.DupeAction)dupeAction;
-                
+
                 using (var db = new PolishWarehouseEntities())
                 {
                     var incomingPolish = db.IncomingOrderLines_Polishes.Where(p => p.ID == id).SingleOrDefault();
@@ -122,11 +194,11 @@ namespace PolishWarehouse.Controllers
                     var resp = model.ConvertToPolish(action);
                     return Json(resp);
                 }
-               
+
             }
             catch (Exception ex)
             {
-                return Json(new Response(false,Logging.LogEvent(LogTypes.Error, "Error converting orderline to polish", "Error converting orderline to polish", ex)));
+                return Json(new Response(false, Logging.LogEvent(LogTypes.Error, "Error converting orderline to polish", "Error converting orderline to polish", ex)));
             }
 
         }
