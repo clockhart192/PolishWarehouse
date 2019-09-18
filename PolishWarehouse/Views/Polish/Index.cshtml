@@ -14,14 +14,8 @@
                 </div>
                 <div class="panel-collapse" id="Polishcollapse">
                     <div class="panel-body">
-                        @*<div class="row">
-                                <div class="col-md-12">
-                                    @Html.ActionLink("Public List", "Public", "Polish", null, new { @class= "btn btn-default"})
-                                </div>
-                            </div>*@
                         <div class="row margin-top-5">
                             <div class="col-md-12 table-responsive">
-                                @*<input type="text" onkeyup="SortTable('salestable',this)" />*@
                                 <table class="table table-hover table-condensed datatable" id="polishtable" style="display:none;">
                                     <thead>
                                         <tr>
@@ -207,6 +201,84 @@
                     </div>
                 </div>
             }
+
+            @using (Html.BeginForm("BulkDestashPolish", "Polish", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal fade" id="Destash" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Destash</h4>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="ID" id="destash-ID">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="destash-sellQty">Asking Price*</label>
+                                        <br />
+                                        <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" value="0" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="PolishName">Sell Qty*</label>
+                                        <br />
+                                        <input type="number" id="destash-sellQty" name="SellQty" value="1" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="destash-buyerName">Buyer Name</label>
+                                        <br />
+                                        <input type="text" id="destash-buyerName" name="BuyerName" placeholder="Name" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="destash-soldPrice">Sold Price</label>
+                                        <br />
+                                        <input type="number" id="destash-soldPrice" step="0.01" name="AskingPrice" value="0" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="destash-trackingNumber">Tracking</label>
+                                        <br />
+                                        <input type="text" id="destash-trackingNumber" name="TrackingNumber" placeholder="Tracking" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="destash-Status">Status</label>
+                                        <br />
+                                        <select id="destash-status" name="SaleStatus">
+                                            <option></option>
+                                            <option value="P">Pending</option>
+                                            <option value="S">Sold</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="Notes">Notes</label>
+                                        <br />
+                                        <textarea class="form-control" rows="5" id="destash-Notes" name="DestashNotes" placeholder="Notes"></textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="Notes">Internal Notes</label>
+                                        <br />
+                                        <textarea class="form-control" rows="5" id="destash-internalNotes" name="InternalNotes" placeholder="Internal Notes"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-md-2"><button type="submit" id="Update-Btn" class="btn btn-default margin-top-5">Save</button></div>
+                                    <div class="col-md-8"></div>
+                                    <div class="col-md-2"><button class="btn btn-danger margin-top-5" onclick="$('#Details').modal('hide'); return false;">Close</button></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
             <script>
                 $(document).ready(function () {
                     /* Custom filtering function to force search to find within the text */
@@ -218,10 +290,10 @@
                             var desc = data[2].toLowerCase();
                             var label = data[3].toLowerCase();
 
-                            return  (brand.indexOf(search) >= 0) ||
-                                    (name.indexOf(search) >= 0) ||
-                                    //(desc.indexOf(search) >= 0) ||
-                                    (label.indexOf(search) >= 0);
+                            return (brand.indexOf(search) >= 0) ||
+                                (name.indexOf(search) >= 0) ||
+                                //(desc.indexOf(search) >= 0) ||
+                                (label.indexOf(search) >= 0);
                         }
                     );
 

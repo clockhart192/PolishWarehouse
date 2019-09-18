@@ -58,7 +58,7 @@
                                                 <td>@order.Price.Value.ToString("C2")</td>
                                                 <td class="hidden-xs">@order.PurchaseDate.ToShortDateString()</td>
                                                 <td class="hidden-xs">@order.Notes</td>
-                                                <td>@order.Tracking</td>
+                                                <td><a target="_blank" href="@order.TrackingURL">@order.Tracking</a></td>
                                             </tr>
                                             <tr>
                                                 <td class="hidden"></td>
@@ -117,7 +117,7 @@
                                                                                     @line.IncomingOrderLinePolish.Description
                                                                                 </div>
                                                                                 <div class="col-md-1 hidden-xs">
-                                                                                    @line.IncomingOrderLinePolish.Color.Name
+                                                                                    @line.IncomingOrderLinePolish.Color?.Name
                                                                                 </div>
                                                                                 <div class="col-md-1 col-xs-4">
                                                                                     @line.Price.ToString("C2")

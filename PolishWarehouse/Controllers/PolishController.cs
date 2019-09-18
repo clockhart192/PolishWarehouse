@@ -35,7 +35,7 @@ namespace PolishWarehouse.Controllers
                     GiftFromName = p.Polishes_AdditionalInfo.GiftFromName,
                     Notes = p.Polishes_AdditionalInfo.Notes,
 
-                }).OrderBy(p => p.BrandName).ThenBy(p=> p.PolishName).ToArray();
+                }).OrderBy(p => p.BrandName).ThenBy(p => p.PolishName).ToArray();
 
 
 
@@ -146,6 +146,20 @@ namespace PolishWarehouse.Controllers
             return jsonResult;
         }
         public ActionResult Details(int? id)
+        {
+            ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
+            ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
+            ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
+            ViewBag.Brands = BrandModel.getBrands().OrderBy(c => c.Name);
+            ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
+
+            if (id.HasValue)
+                return View(new PolishModel(id.Value, returnimages: true));
+            else
+                return View(new PolishModel());
+        }
+
+        public ActionResult PrintDetails(int? id)
         {
             ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
             ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
@@ -285,7 +299,7 @@ namespace PolishWarehouse.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult GetPolishQuickInfo(string colorName,bool onlyPrimary = true)
+        public JsonResult GetPolishQuickInfo(string colorName, bool onlyPrimary = true)
         {
             try
             {
@@ -496,6 +510,42 @@ namespace PolishWarehouse.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult BulkDestashPolish(string ID, Decimal AskingPrice, int SellQty, string BuyerName, string SaleStatus )
+        {
+            try
+            {
+                var ids = ID.Split(',');
+                bool wasSuccessful = true;
+                foreach (var id in ids)
+                {
+                    using (var db = new PolishWarehouseEntities())
+                    {
+                        var dbID = Convert.ToInt32(id);
+                        var polish = db.Polishes.Where(p=>p.ID == dbID).Select(p => new PolishDestashModel() {
+                             ID = p.ID,
+                             AskingPrice = AskingPrice,
+                             SoldPrice = AskingPrice,
+                             SellQty = SellQty,
+                             BuyerName = BuyerName,
+                             SaleStatus = SaleStatus
+                        }).SingleOrDefault();
+                        wasSuccessful = polish.DestashPolish().WasSuccessful;
+                    }
+                }
+                if (wasSuccessful)
+                    TempData["Messages"] = "Polish destashed!";
+                else
+                    TempData["Errors"] = "This is an error message that isn't going to tell you enough data about your mass destash and you need to yell at the site creator to log better errors.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Errors"] = Logging.LogEvent(LogTypes.Error, "Error bulk destash polish", "There was an error bulk saving your polish's destash", ex);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult MarkAllPendingAsSold()
         {
             try
@@ -540,7 +590,7 @@ namespace PolishWarehouse.Controllers
         {
             try
             {
-                var resp = PolishDestashModel.UpdateTotalQty(id,qty);
+                var resp = PolishDestashModel.UpdateTotalQty(id, qty);
                 return Json(resp);
             }
             catch (Exception ex)

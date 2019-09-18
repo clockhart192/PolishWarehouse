@@ -187,6 +187,7 @@
     <Content Include="Content\Images\galaxy-wallpaper.jpg" />
     <Content Include="Content\Images\loading.gif" />
     <Content Include="Content\Images\NotAvailable.jpg" />
+    <Content Include="Content\Print-Friendly.css" />
     <Content Include="Content\select2-bootstrap.css" />
     <Content Include="Content\select2-bootstrap.min.css" />
     <Content Include="Content\select2-spinner.gif" />
@@ -220,6 +221,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\blueimp-gallery.min.css.map" />
+    <None Include="Properties\PublishProfiles\A2-Kat.pubxml" />
     <None Include="Properties\PublishProfiles\A2.pubxml" />
     <None Include="Properties\PublishProfiles\Godaddy.pubxml" />
     <None Include="Properties\PublishProfiles\Local Deploy.pubxml" />
@@ -417,6 +419,7 @@
     <Content Include="Views\Incoming\_Lines.cshtml" />
     <Content Include="Views\Incoming\_PolishLine.cshtml" />
     <Content Include="Views\Incoming\_OtherLine.cshtml" />
+    <Content Include="Views\Polish\PrintDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

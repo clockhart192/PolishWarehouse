@@ -1,0 +1,251 @@
+﻿@model PolishWarehouse.Models.PolishModel
+@if (Request.IsAuthenticated)
+{
+    Layout = null;
+    ViewBag.Title = "Details";
+    var polish = Model;
+    var primaryColors = ViewBag.PrimaryColors;
+    var secondaryColors = ViewBag.SecondaryColors;
+    var glitterColors = ViewBag.GlitterColors;
+    var brands = ViewBag.Brands;
+    var polishTypes = ViewBag.PolishTypes;
+
+    var header = string.IsNullOrWhiteSpace(polish.PolishName) ? "New Polish" : polish.PolishName;
+    bool isNew = string.IsNullOrWhiteSpace(polish.PolishName);
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>@ViewBag.Title</title>
+
+        <link rel="shortcut icon" href="~/Content/Images/favicon.ico" type="image/x-icon">
+
+        <link rel="icon" href="~/Content/Images/favicon.ico" type="image/x-icon">
+        <script src="~/Scripts/bootstrap.min.js"></script>
+
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/Content/Print-Friendly.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div class="container body-content">
+            <input type="hidden" name="PolishID" id="PolishID" value="@polish.ID">
+            <div class="row print-mode">
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">@header</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="BrandID">Brand Name*</label>
+                                            <br />
+                                            <input list="BrandList" id="BrandName" name="BrandName" class="form-control" placeholder="Brand Name" data-list-filter="^" value="@polish.BrandName">
+                                            <datalist id="BrandList">
+                                                @foreach (var brand in brands)
+                                                {
+                                                    <option value="@brand.Name"></option>
+                                                }
+                                            </datalist>
+                                            <input type="hidden" name="BrandID" id="BrandID" value="@polish.BrandID">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="PolishName">Polish Name*</label>
+                                            <br />
+                                            <input type="text" id="PolishName" name="PolishName" placeholder="Polish Name" class="form-control" value="@polish.PolishName" />
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="ColorID">Color*</label>
+                                            <br />
+                                            <input list="ColorList" id="ColorName" name="ColorName" class="form-control" placeholder="Primary Color" value="@polish.ColorName">
+                                            <datalist id="ColorList">
+                                                @foreach (var color in primaryColors)
+                                                {
+                                                    <option value="@color.Name"></option>
+                                                }
+                                            </datalist>
+                                            <input type="hidden" name="ColorID" id="ColorID" value="@polish.ColorID">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="PolishName">Color Number*</label>
+                                            <br />
+                                            <input type="text" id="ColorNumber" name="ColorNumber" placeholder="Color Number" class="form-control" value="@(polish.ColorNumber == 0 ?  "" : polish.ColorNumber.ToString())" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label for="PolishName">Description</label>
+                                            <br />
+                                            <textarea class="form-control" rows="5" id="Description" name="Description" placeholder="Description">@polish.Description</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="SecondaryColorsIDs">Secondary Colors</label>
+                                            <br />
+                                            <select multiple id="SecondaryColorsIDs" name="SecondaryColorsIDs" class="form-control">
+                                                <option></option>
+                                                @foreach (var color in secondaryColors)
+                                                {
+                                                    string sel = "";
+                                                    if (polish.SecondaryColors != null)
+                                                    {
+                                                        if (polish.SecondaryColors.Any(c => c.ID == color.ID))
+                                                        {
+                                                            sel = "selected";
+                                                        }
+                                                    }
+
+                                                    <option @sel value="@color.ID">@color.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="GlitterColorsIDs">Glitter Colors</label>
+                                            <br />
+                                            <select multiple id="GlitterColorsIDs" name="GlitterColorsIDs" class="form-control">
+                                                <option></option>
+                                                @foreach (var color in glitterColors)
+                                                {
+                                                    string sel = "";
+                                                    if (polish.GlitterColors != null)
+                                                    {
+                                                        if (polish.GlitterColors.Any(c => c.ID == color.ID))
+                                                        {
+                                                            sel = "selected";
+                                                        }
+                                                    }
+
+                                                    <option @sel value="@color.ID">@color.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="Coats">Coats</label>
+                                            <br />
+                                            <input type="number" id="Coats" name="Coats" placeholder="Coats" class="form-control" value="@polish.Coats" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="Coats">Quantity</label>
+                                            <br />
+                                            <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" value="@(polish.Quantity.HasValue ? polish.Quantity.Value : 1)" />
+                                        </div>
+                                        <div class="col-md-6">
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-center hidden">
+                                    @if (polish.Images != null)
+                                    {
+                                        if (polish.Images.Count() > 0)
+                                        {
+                                            var DisplayImage = @polish.Images.Where(i => i.DisplayImage).SingleOrDefault();
+                                            if (DisplayImage == null)
+                                                DisplayImage = polish.Images[0];
+
+                                            <a href="#" onclick="$('#Image-Gallery-Modal').modal('show'); return false;"><img src="@DisplayImage.ImageForHTML" class="img-polish-display" alt="image" /></a>
+                                            <br />
+                                            @Html.ActionLink("Manage Images", "ManageImages", "Polish", new { id = polish.ID }, new { @class = "btn btn-default" })
+                                        }
+                                        else
+                                        {
+                                            <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Content/Images/default.png" class="img-polish-display" alt="default image" />
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Additional Info</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="WasGift">Gift</label>
+                                    <br />
+                                    <label class="switch">
+                                        <input id="WasGift" name="WasGift" value="true" type="checkbox" @(polish.WasGift ? "checked" : "")>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="GiftFromName">Gifter's Name</label>
+                                    <br />
+                                    <input type="text" id="GiftFromName" name="GiftFromName" placeholder="Name" class="form-control" value="@polish.GiftFromName" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="HasBeenTried">Has been tried?</label>
+                                    <br />
+                                    <label class="switch">
+                                        <input id="HasBeenTried" name="HasBeenTried" value="true" type="checkbox" @(polish.HasBeenTried ? "checked" : "")>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="PolishName">Notes</label>
+                                    <br />
+                                    <textarea class="form-control" rows="5" id="Notes" name="Notes" placeholder="Notes">@polish.Notes</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Polish Types</h3>
+                        </div>
+                        <div class="panel-body">
+                            <br />
+                            <div class="row">
+                                @foreach (var type in polishTypes)
+                                {
+                                    string check = "";
+                                    if (polish.Types != null)
+                                    {
+                                        check = polish.Types.Any(pt => pt.ID == type.ID) ? "checked" : "";
+                                    }
+                                    <div class="col-sm-3">
+                                        <span>@type.Name</span>
+                                        <br />
+                                        <label class="switch">
+                                            <input value="@type.ID" name="TypesIDs" type="checkbox" @check>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
+}
+else
+{
+    //TempData["Errors"] = "Please Log in.";
+    Response.Redirect("~/Account/Login");
+}
+
