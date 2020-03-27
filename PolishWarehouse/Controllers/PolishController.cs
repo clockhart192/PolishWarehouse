@@ -12,8 +12,14 @@ namespace PolishWarehouse.Controllers
     {
 
         #region Main
-        public ActionResult Index(string cheatCode)
+        public ActionResult Index(PolishFilterModel model)
         {
+            ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
+            ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
+            ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
+            ViewBag.Brands = BrandModel.getBrands().OrderBy(c => c.Name);
+            ViewBag.PolishTypes = PolishModel.getPolishTypes().OrderBy(c => c.Name);
+
             Server.ScriptTimeout = 600;
             using (var db = new PolishWarehouseEntities())
             {
@@ -34,28 +40,89 @@ namespace PolishWarehouse.Controllers
                     WasGift = p.WasGift,
                     GiftFromName = p.Polishes_AdditionalInfo.GiftFromName,
                     Notes = p.Polishes_AdditionalInfo.Notes,
+                    Location = p.Location,
 
-                }).OrderBy(p => p.BrandName).ThenBy(p => p.PolishName).ToArray();
+                }).ToArray();
 
-
-
-                if (cheatCode == "upupdowndownleftrightleftrightbastart")
+                ///////////////ADVANED SEARCH SHENANIGANS////////////////////////////
+                if (!string.IsNullOrWhiteSpace(model.PolishName))
                 {
-                    if (Convert.ToBoolean(Utilities.GetConfigurationValue("Konami Code Active")))
-                    {
-                        Utilities.ReSaveAllImages();
-                        TempData["Messages"] = "Konami Code Activated!";
-                    }
+                    polishes = polishes.Where(polish => polish.PolishName.Contains(model.PolishName)).ToArray();
                 }
+                if (!string.IsNullOrWhiteSpace(model.Description))
+                {
+                    polishes = polishes.Where(polish => polish.Description.Contains(model.Description)).ToArray();
+                }
+                if (model.BrandNames != null && model.BrandNames.Length > 0)
+                {
+                    polishes = polishes.Where(polish => model.BrandNames.Contains(polish.BrandName)).ToArray();
+                }
+                if (model.ColorNames != null && model.ColorNames.Length > 0)
+                {
+                    polishes = polishes.Where(polish => model.ColorNames.Contains(polish.ColorName)).ToArray();
+                }
+                if (!string.IsNullOrWhiteSpace(model.Types))
+                {
+                    var type = PolishModel.getPolishTypes().SingleOrDefault(p => p.Name.Contains(model.Types));
+                    polishes = polishes.Where(polish => polish.Types.Contains(type)).ToArray();
+                }
+                if (!string.IsNullOrWhiteSpace(model.SecondaryColors))
+                {
+                    var color = PolishModel.getSecondaryColors().SingleOrDefault(p => p.Name.Contains(model.SecondaryColors));
+                    polishes = polishes.Where(polish => polish.SecondaryColors.Contains(color)).ToArray();
+                }
+                if (!string.IsNullOrWhiteSpace(model.GlitterColors))
+                {
+                    var color = PolishModel.getGlitterColors().SingleOrDefault(p => p.Name.Contains(model.GlitterColors));
+                    polishes = polishes.Where(polish => polish.GlitterColors.Contains(color)).ToArray();
+                }
+                if (model.ColorNumbers.HasValue)
+                {
+                    polishes = polishes.Where(polish => polish.ColorNumber == model.ColorNumbers.Value).ToArray();
+                }
+                //if (model.Types != null && model.Types.Length > 0)
+                //{
+                //    polishes = polishes.Where(polish => model.Types.Intersect(polish.Types).Any()).ToArray();
+                //}
+                //if (model.SecondaryColors != null && model.SecondaryColors.Length > 0)
+                //{
+                //    polishes = polishes.Where(polish => model.SecondaryColors.Intersect(polish.SecondaryColors).Any()).ToArray();
+                //}
+                //if (model.GlitterColors != null && model.GlitterColors.Length > 0)
+                //{
+                //    polishes = polishes.Where(polish => model.GlitterColors.Intersect(polish.GlitterColors).Any()).ToArray();
+                //}
+                //if (model.ColorNumbers != null && model.ColorNumbers.Length > 0)
+                //{
+                //    polishes = polishes.Where(polish => model.ColorNumbers.Contains(polish.ColorNumber)).ToArray();
+                //}
+                if (model.HasBeenTried.HasValue)
+                {
+                    polishes = polishes.Where(polish => polish.HasBeenTried == model.HasBeenTried.Value).ToArray();
+                }
+                if (model.WasGift.HasValue)
+                {
+                    polishes = polishes.Where(polish => polish.WasGift == model.WasGift.Value).ToArray();
+                }
+                if (model.Coats.HasValue)
+                {
+                    polishes = polishes.Where(polish => polish.Coats == model.Coats.Value).ToArray();
+                }
+
+                polishes = polishes.OrderBy(p => p.BrandName).ThenBy(p => p.PolishName).ToArray();
+                ///////////////END ADVANED SEARCH SHENANIGANS////////////////////////////
+
+                //if (cheatCode == "upupdowndownleftrightleftrightbastart")
+                //{
+                //    if (Convert.ToBoolean(Utilities.GetConfigurationValue("Konami Code Active")))
+                //    {
+                //        Utilities.ReSaveAllImages();
+                //        TempData["Messages"] = "Konami Code Activated!";
+                //    }
+                //}
 
                 string dispConfig = Utilities.GetConfigurationValue("Private List Display Configuration");
                 var dict = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, bool>>(dispConfig);
-
-                //var displayConfig = new List<KeyValuePair<string, bool>>();
-                //foreach(var pair in dict)
-                //{
-                //    displayConfig.Add(new KeyValuePair<string, bool>(pair.Key,pair.Value));
-                //}
                 ViewBag.DisplayConfiguration = dict;
 
                 return View(polishes);
@@ -510,7 +577,7 @@ namespace PolishWarehouse.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult BulkDestashPolish(string ID, Decimal AskingPrice, int SellQty, string BuyerName, string SaleStatus )
+        public ActionResult BulkDestashPolish(string ID, Decimal AskingPrice, int SellQty, string BuyerName, string SaleStatus)
         {
             try
             {
@@ -521,13 +588,14 @@ namespace PolishWarehouse.Controllers
                     using (var db = new PolishWarehouseEntities())
                     {
                         var dbID = Convert.ToInt32(id);
-                        var polish = db.Polishes.Where(p=>p.ID == dbID).Select(p => new PolishDestashModel() {
-                             ID = p.ID,
-                             AskingPrice = AskingPrice,
-                             SoldPrice = AskingPrice,
-                             SellQty = SellQty,
-                             BuyerName = BuyerName,
-                             SaleStatus = SaleStatus
+                        var polish = db.Polishes.Where(p => p.ID == dbID).Select(p => new PolishDestashModel()
+                        {
+                            ID = p.ID,
+                            AskingPrice = AskingPrice,
+                            SoldPrice = AskingPrice,
+                            SellQty = SellQty,
+                            BuyerName = BuyerName,
+                            SaleStatus = SaleStatus
                         }).SingleOrDefault();
                         wasSuccessful = polish.DestashPolish().WasSuccessful;
                     }

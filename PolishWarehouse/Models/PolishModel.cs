@@ -33,6 +33,9 @@ namespace PolishWarehouse.Models
         public int[] GlitterColorsIDs { get; set; }
         public int[] TypesIDs { get; set; }
         public PolishImageModel[] Images { get; set; }
+        public string Location { get; set; }
+        public string LocationPosOne { get; set; }
+        public string LocationPosTwo { get; set; }
 
         public PolishModel() { }
         public PolishModel(int? id, bool colors = true, bool returnimages = false, bool forPublicView = true)
@@ -71,6 +74,24 @@ namespace PolishWarehouse.Models
                 WasGift = p.WasGift;
                 GiftFromName = p.Polishes_AdditionalInfo.GiftFromName;
                 Notes = p.Polishes_AdditionalInfo.Notes;
+                Location = p.Location;
+
+                if (!string.IsNullOrWhiteSpace(Location))
+                {
+                    try
+                    {
+                        var delimiter = Utilities.GetConfigurationValue("Polish Location Delimiter").ToCharArray()[0];
+                        var Loc = Location.Split(delimiter);
+                        LocationPosOne = Loc[0];
+                        LocationPosTwo = Loc[1];
+                    }
+                    catch
+                    {
+                        LocationPosOne = Location;
+                    }
+                }
+
+
                 SecondaryColors = colors ? p.Polishes_Secondary_Colors.Select(pec => pec.Color).ToArray() : null;
                 GlitterColors = colors ? p.Polishes_Glitter_Colors.Select(pec => pec.Color).ToArray() : null;
                 Types = colors ? p.Polishes_PolishTypes.Select(ppt => ppt.PolishType).ToArray() : null;
@@ -123,6 +144,7 @@ namespace PolishWarehouse.Models
                 WasGift = p.WasGift;
                 GiftFromName = p.Polishes_AdditionalInfo.GiftFromName;
                 Notes = p.Polishes_AdditionalInfo.Notes;
+                Location = p.Location;
                 SecondaryColors = colors ? p.Polishes_Secondary_Colors.Select(pec => pec.Color).ToArray() : null;
                 GlitterColors = colors ? p.Polishes_Glitter_Colors.Select(pec => pec.Color).ToArray() : null;
                 Types = colors ? p.Polishes_PolishTypes.Select(ppt => ppt.PolishType).ToArray() : null;
@@ -467,6 +489,28 @@ namespace PolishWarehouse.Models
                 polish.Label = Label;
                 polish.HasBeenTried = HasBeenTried;
                 polish.WasGift = WasGift;
+
+
+
+                if (!string.IsNullOrWhiteSpace(LocationPosOne) && string.IsNullOrWhiteSpace(LocationPosTwo))
+                {
+                    if (LocationPosOne.Length > 100)
+                    {
+                        throw new Exception("Elan you're typing too much.");
+                    }
+                    polish.Location = LocationPosOne.ToUpper();
+                }
+                else if (!string.IsNullOrWhiteSpace(LocationPosOne) && !string.IsNullOrWhiteSpace(LocationPosTwo))
+                {
+                    var delimiter = Utilities.GetConfigurationValue("Polish Location Delimiter");
+                    var text = $"{LocationPosOne.ToUpper()}{delimiter}{LocationPosTwo.ToUpper()}";
+                    if (text.Length > 100)
+                    {
+                        throw new Exception("Elan you're typing too much.");
+                    }
+                    polish.Location = text;
+                }
+                else { polish.Location = null; }
 
                 db.SaveChanges();
                 ID = polish.ID;
@@ -865,7 +909,7 @@ namespace PolishWarehouse.Models
             }
         }
 
-        public static Response UpdateTotalQty(int id,int qty)
+        public static Response UpdateTotalQty(int id, int qty)
         {
             using (var db = new PolishWarehouseEntities())
             {
@@ -1292,5 +1336,30 @@ namespace PolishWarehouse.Models
                 return new Response(true);
             }
         }
+    }
+
+    public class PolishFilterModel
+    {
+        public string PolishName { get; set; }
+        public string BrandNames { get; set; }
+        public string ColorNames { get; set; }
+        public int? ColorNumbers { get; set; }
+        public string Description { get; set; }
+        //public string Label { get; set; }
+        public int? Coats { get; set; }
+        //public int? Quantity { get; set; }
+        public bool? HasBeenTried { get; set; }
+        public bool? WasGift { get; set; }
+        //public string GiftFromName { get; set; }
+        //public string Notes { get; set; }
+        public string SecondaryColors { get; set; }
+        public string GlitterColors { get; set; }
+        public string Types { get; set; }
+        //public int[] SecondaryColorsIDs { get; set; }
+        //public int[] GlitterColorsIDs { get; set; }
+        //public int[] TypesIDs { get; set; }
+        public string Location { get; set; }
+        //public string LocationPosOne { get; set; }
+        //public string LocationPosTwo { get; set; }
     }
 }

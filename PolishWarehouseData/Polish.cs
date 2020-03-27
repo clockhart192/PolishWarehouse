@@ -36,6 +36,7 @@ namespace PolishWarehouseData
         public int ColorNumber { get; set; }
         public int Coats { get; set; }
         public int Quantity { get; set; }
+        public string Location { get; set; }
     
         public virtual Brand Brand { get; set; }
         public virtual Color Color { get; set; }

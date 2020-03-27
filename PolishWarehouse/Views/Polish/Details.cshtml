@@ -127,11 +127,31 @@
                                         <br />
                                         <input type="number" id="Quantity" name="Quantity" placeholder="Quantity" class="form-control" value="@(polish.Quantity.HasValue ? polish.Quantity.Value : 1)" />
                                     </div>
+                                    <div class="col-md-3">
+                                        <label for="Location">Helmer</label>
+                                        <br />
+                                        <input type="text" id="LocationPosOne" name="LocationPosOne" placeholder="Helmer" class="form-control" value="@polish.LocationPosOne" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Location">Drawer</label>
+                                        <br />
+                                        <input type="text" id="LocationPosTwo" name="LocationPosTwo" placeholder="Drawer" class="form-control" value="@polish.LocationPosTwo" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="HasBeenTried">Has been tried?</label>
+                                        <br />
+                                        <label class="switch">
+                                            <input id="HasBeenTried" name="HasBeenTried" value="true" type="checkbox" @(polish.HasBeenTried ? "checked" : "")>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
                                     <div class="col-md-6">
                                         <label for="submit"></label>
                                         <br />
                                         <input type="submit" class="btn btn-default" value="Save" />
-                                        @Html.ActionLink("Print", "PrintDetails", new { id = polish.ID },new { target = "_blank", @class = "btn btn-default" })
+                                        @Html.ActionLink("Print", "PrintDetails", new { id = polish.ID }, new { target = "_blank", @class = "btn btn-default" })
                                     </div>
                                 </div>
                             </div>
@@ -181,16 +201,7 @@
                                 <br />
                                 <input type="text" id="GiftFromName" name="GiftFromName" placeholder="Name" class="form-control" value="@polish.GiftFromName" />
                             </div>
-                            <div class="col-md-4">
-                                <label for="HasBeenTried">Has been tried?</label>
-                                <br />
-                                <label class="switch">
-                                    <input id="HasBeenTried" name="HasBeenTried" value="true" type="checkbox" @(polish.HasBeenTried ? "checked" : "")>
-                                    <span class="slider round"></span>
-                                </label>
-                            </div>
-                            <div class="col-md-2">
-                            </div>
+                            
                         </div>
                         <div class="row">
                             <div class="col-md-12">

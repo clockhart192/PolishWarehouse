@@ -10,14 +10,169 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading panel-heading-private">
-                    <h3>Polish List</h3>
+                    <h3>
+                        <a data-toggle="collapse" data-target="#AdvancedSearch" href="#" class="collapsed">Advanced Search</a>
+                    </h3>
                 </div>
-                <div class="panel-collapse" id="Polishcollapse">
+                <div class="panel-collapse collapse" id="AdvancedSearch">
                     <div class="panel-body">
                         <div class="row margin-top-5">
-                            <div class="col-md-12 table-responsive">
-                                <table class="table table-hover table-condensed datatable" id="polishtable" style="display:none;">
-                                    <thead>
+                            <div class="col-md-12">
+                                @using (Html.BeginForm("Index", "Polish", FormMethod.Get))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="filter">Polish Name</label>
+                                            <br />
+                                            <input id="filter-PolishName" name="PolishName" class="form-control" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="filter">Brand Name</label>
+                                            <br />
+                                            <input id="filter-BrandNames" name="BrandNames" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="filter">Color Name</label>
+                                            <br />
+                                            <input id="filter-ColorNames" name="ColorNames" class="form-control" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="filter">Color Number</label>
+                                            <br />
+                                            <input type="number" id="filter-ColorNumbers" name="ColorNumbers" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="filter">Secondary Color</label>
+                                            <br />
+                                            <input id="filter-SecondaryColors" name="SecondaryColors" class="form-control" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="filter">Glitter Color</label>
+                                            <br />
+                                            <input id="filter-GlitterColors" name="GlitterColors" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="filter">Polish Type</label>
+                                            <br />
+                                            <input id="filter-Types" name="Types" class="form-control" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="filter">Coats</label>
+                                            <br />
+                                            <input id="filter-Coats" type="number" name="Coats" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="filter">Location</label>
+                                            <br />
+                                            <input id="filter-Location" name="Location" class="form-control" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="filter">Tried?</label>
+                                            <br />
+                                            <label class="switch">
+                                                <input id="filter-HasBeenTried" name="HasBeenTried" value="true" type="checkbox">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="filter">Was Gift?</label>
+                                            <br />
+                                            <label class="switch">
+                                                <input id="filter-WasGift" name="WasGift" value="true" type="checkbox">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label for="filter">Description</label>
+                                            <br />
+                                            <textarea id="filter-Description" name="Description" class="form-control"></textarea>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label for="submit"></label>
+                                            <br />
+                                            <input type="submit" class="btn btn-default" value="Filter" />
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row margin-top-5">
+        <div class="panel panel-default">
+            <div class="panel-heading panel-heading-private">
+                <h3>Polish List</h3>
+            </div>
+            <div class="panel-collapse" id="Polishcollapse">
+                <div class="panel-body">
+                    <div class="row margin-top-5">
+                        <div class="col-md-12 table-responsive">
+                            <table class="table table-hover table-condensed datatable" id="polishtable" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        @foreach (var configuration in displayConfiguration)
+                                        {
+                                            if (configuration.Value)
+                                            {
+                                                switch (configuration.Key)
+                                                {
+                                                    case "BrandName":
+                                                        <th>Brand</th>
+                                                        break;
+                                                    case "PolishName":
+                                                        <th>Name</th>
+                                                        break;
+                                                    case "Description":
+                                                        <th class="hidden-xs">Description</th>
+                                                        break;
+                                                    case "Label":
+                                                        <th>Label</th>
+                                                        break;
+                                                    case "Coats":
+                                                        <th class="hidden-xs">Coats</th>
+                                                        break;
+                                                    case "Location":
+                                                        <th class="hidden-xs">Location</th>
+                                                        break;
+                                                    case "HasBeenTried":
+                                                        <th class="hidden-xs">Tried</th>
+                                                        break;
+                                                    case "WasGift":
+                                                        <th class="hidden-xs">Gift</th>
+                                                        break;
+                                                    case "Notes":
+                                                        <th class="hidden-xs">Notes</th>
+                                                        break;
+                                                }
+                                            }
+                                        }
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var polish in Model)
+                                    {
                                         <tr>
                                             @foreach (var configuration in displayConfiguration)
                                             {
@@ -26,303 +181,265 @@
                                                     switch (configuration.Key)
                                                     {
                                                         case "BrandName":
-                                                            <th>Brand</th>
+                                                            <td>@polish.BrandName</td>
                                                             break;
                                                         case "PolishName":
-                                                            <th>Name</th>
+                                                            <td>@Html.ActionLink(polish.PolishName, "Details", new { id = polish.ID })</td>
                                                             break;
                                                         case "Description":
-                                                            <th class="hidden-xs">Description</th>
+                                                            <td class="hidden-xs">@polish.Description</td>
                                                             break;
                                                         case "Label":
-                                                            <th>Label</th>
+                                                            <td>@polish.Label</td>
                                                             break;
                                                         case "Coats":
-                                                            <th class="hidden-xs">Coats</th>
+                                                            <td class="hidden-xs text-center">@polish.Coats</td>
+                                                            break;
+                                                        case "Location":
+                                                            <td class="hidden-xs text-center">@polish.Location</td>
                                                             break;
                                                         case "HasBeenTried":
-                                                            <th class="hidden-xs">Tried</th>
+                                                            <td class="hidden-xs">
+                                                                <label class="switch">
+                                                                    <input id="HasBeenTried" name="HasBeenTried" value="true" type="checkbox" class="disabled" disabled @(polish.HasBeenTried ? "checked" : "")>
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                            </td>
                                                             break;
                                                         case "WasGift":
-                                                            <th class="hidden-xs">Gift</th>
+                                                            <td class="hidden-xs">
+                                                                <label class="switch">
+                                                                    <input id="WasGift" name="WasGift" value="true" type="checkbox" class="disabled" disabled @(polish.WasGift ? "checked" : "")>
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                            </td>
                                                             break;
                                                         case "Notes":
-                                                            <th class="hidden-xs">Notes</th>
+                                                            <td class="hidden-xs">@polish.Notes</td>
                                                             break;
                                                     }
                                                 }
                                             }
-                                            <th></th>
+                                            <td>
+                                                <div class="btn-group pull-right">
+                                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <b class="caret"></b>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#" onclick="Destash('@polish.ID'); return false;">Destash</a></li>
+                                                        <li class="disabled hide"><a class="dropdown-item" href="#" onclick="getDeleteModal(''); return false;">Delete</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var polish in Model)
-                                        {
-                                            <tr>
-                                                @foreach (var configuration in displayConfiguration)
-                                                {
-                                                    if (configuration.Value)
-                                                    {
-                                                        switch (configuration.Key)
-                                                        {
-                                                            case "BrandName":
-                                                                <td>@polish.BrandName</td>
-                                                                break;
-                                                            case "PolishName":
-                                                                <td>@Html.ActionLink(polish.PolishName, "Details", new { id = polish.ID })</td>
-                                                                break;
-                                                            case "Description":
-                                                                <td class="hidden-xs">@polish.Description</td>
-                                                                break;
-                                                            case "Label":
-                                                                <td>@polish.Label</td>
-                                                                break;
-                                                            case "Coats":
-                                                                <td class="hidden-xs">@polish.Coats</td>
-                                                                break;
-                                                            case "HasBeenTried":
-                                                                <td class="hidden-xs">
-                                                                    <label class="switch">
-                                                                        <input id="HasBeenTried" name="HasBeenTried" value="true" type="checkbox" class="disabled" disabled @(polish.HasBeenTried ? "checked" : "")>
-                                                                        <span class="slider round"></span>
-                                                                    </label>
-                                                                </td>
-                                                                break;
-                                                            case "WasGift":
-                                                                <td class="hidden-xs">
-                                                                    <label class="switch">
-                                                                        <input id="WasGift" name="WasGift" value="true" type="checkbox" class="disabled" disabled @(polish.WasGift ? "checked" : "")>
-                                                                        <span class="slider round"></span>
-                                                                    </label>
-                                                                </td>
-                                                                break;
-                                                            case "Notes":
-                                                                <td class="hidden-xs">@polish.Notes</td>
-                                                                break;
-                                                        }
-                                                    }
-                                                }
-                                                <td>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            Actions <b class="caret"></b>
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item" href="#" onclick="Destash('@polish.ID'); return false;">Destash</a></li>
-                                                            <li class="disabled hide"><a class="dropdown-item" href="#" onclick="getDeleteModal(''); return false;">Delete</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        @using (Html.BeginForm("DestashPolish", "Polish", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal fade" id="Destash" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Destash</h4>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="ID" id="destash-ID">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="destash-sellQty">Asking Price*</label>
+                                    <br />
+                                    <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" value="0" class="form-control" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="PolishName">Sell Qty*</label>
+                                    <br />
+                                    <input type="number" id="destash-sellQty" name="SellQty" value="1" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="destash-buyerName">Buyer Name</label>
+                                    <br />
+                                    <input type="text" id="destash-buyerName" name="BuyerName" placeholder="Name" class="form-control" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="destash-soldPrice">Sold Price</label>
+                                    <br />
+                                    <input type="number" id="destash-soldPrice" step="0.01" name="AskingPrice" value="0" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="destash-trackingNumber">Tracking</label>
+                                    <br />
+                                    <input type="text" id="destash-trackingNumber" name="TrackingNumber" placeholder="Tracking" class="form-control" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="destash-Status">Status</label>
+                                    <br />
+                                    <select id="destash-status" name="SaleStatus">
+                                        <option></option>
+                                        <option value="P">Pending</option>
+                                        <option value="S">Sold</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="Notes">Notes</label>
+                                    <br />
+                                    <textarea class="form-control" rows="5" id="destash-Notes" name="DestashNotes" placeholder="Notes"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="Notes">Internal Notes</label>
+                                    <br />
+                                    <textarea class="form-control" rows="5" id="destash-internalNotes" name="InternalNotes" placeholder="Internal Notes"></textarea>
+                                </div>
                             </div>
                         </div>
-
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-md-2"><button type="submit" id="Update-Btn" class="btn btn-default margin-top-5">Save</button></div>
+                                <div class="col-md-8"></div>
+                                <div class="col-md-2"><button class="btn btn-danger margin-top-5" onclick="$('#Details').modal('hide'); return false;">Close</button></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        }
 
-            @using (Html.BeginForm("DestashPolish", "Polish", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <div class="modal fade" id="Destash" role="dialog">
-                    <div class="modal-dialog">
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Destash</h4>
-                            </div>
-                            <div class="modal-body">
-                                <input type="hidden" name="ID" id="destash-ID">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="destash-sellQty">Asking Price*</label>
-                                        <br />
-                                        <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" value="0" class="form-control" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="PolishName">Sell Qty*</label>
-                                        <br />
-                                        <input type="number" id="destash-sellQty" name="SellQty" value="1" class="form-control" />
-                                    </div>
+        @using (Html.BeginForm("BulkDestashPolish", "Polish", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal fade" id="Destash" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Destash</h4>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="ID" id="destash-ID">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="destash-sellQty">Asking Price*</label>
+                                    <br />
+                                    <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" value="0" class="form-control" />
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="destash-buyerName">Buyer Name</label>
-                                        <br />
-                                        <input type="text" id="destash-buyerName" name="BuyerName" placeholder="Name" class="form-control" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="destash-soldPrice">Sold Price</label>
-                                        <br />
-                                        <input type="number" id="destash-soldPrice" step="0.01" name="AskingPrice" value="0" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="destash-trackingNumber">Tracking</label>
-                                        <br />
-                                        <input type="text" id="destash-trackingNumber" name="TrackingNumber" placeholder="Tracking" class="form-control" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="destash-Status">Status</label>
-                                        <br />
-                                        <select id="destash-status" name="SaleStatus">
-                                            <option></option>
-                                            <option value="P">Pending</option>
-                                            <option value="S">Sold</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="Notes">Notes</label>
-                                        <br />
-                                        <textarea class="form-control" rows="5" id="destash-Notes" name="DestashNotes" placeholder="Notes"></textarea>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="Notes">Internal Notes</label>
-                                        <br />
-                                        <textarea class="form-control" rows="5" id="destash-internalNotes" name="InternalNotes" placeholder="Internal Notes"></textarea>
-                                    </div>
+                                <div class="col-md-6">
+                                    <label for="PolishName">Sell Qty*</label>
+                                    <br />
+                                    <input type="number" id="destash-sellQty" name="SellQty" value="1" class="form-control" />
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <div class="row">
-                                    <div class="col-md-2"><button type="submit" id="Update-Btn" class="btn btn-default margin-top-5">Save</button></div>
-                                    <div class="col-md-8"></div>
-                                    <div class="col-md-2"><button class="btn btn-danger margin-top-5" onclick="$('#Details').modal('hide'); return false;">Close</button></div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="destash-buyerName">Buyer Name</label>
+                                    <br />
+                                    <input type="text" id="destash-buyerName" name="BuyerName" placeholder="Name" class="form-control" />
                                 </div>
+                                <div class="col-md-6">
+                                    <label for="destash-soldPrice">Sold Price</label>
+                                    <br />
+                                    <input type="number" id="destash-soldPrice" step="0.01" name="AskingPrice" value="0" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="destash-trackingNumber">Tracking</label>
+                                    <br />
+                                    <input type="text" id="destash-trackingNumber" name="TrackingNumber" placeholder="Tracking" class="form-control" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="destash-Status">Status</label>
+                                    <br />
+                                    <select id="destash-status" name="SaleStatus">
+                                        <option></option>
+                                        <option value="P">Pending</option>
+                                        <option value="S">Sold</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="Notes">Notes</label>
+                                    <br />
+                                    <textarea class="form-control" rows="5" id="destash-Notes" name="DestashNotes" placeholder="Notes"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="Notes">Internal Notes</label>
+                                    <br />
+                                    <textarea class="form-control" rows="5" id="destash-internalNotes" name="InternalNotes" placeholder="Internal Notes"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-md-2"><button type="submit" id="Update-Btn" class="btn btn-default margin-top-5">Save</button></div>
+                                <div class="col-md-8"></div>
+                                <div class="col-md-2"><button class="btn btn-danger margin-top-5" onclick="$('#Details').modal('hide'); return false;">Close</button></div>
                             </div>
                         </div>
                     </div>
                 </div>
-            }
+            </div>
+        }
+        <script>
+            $(document).ready(function () {
+                /* Custom filtering function to force search to find within the text */
+                $.fn.dataTable.ext.search.push(
+                    function (settings, data, dataIndex) {
+                        var search = $("#polishtable_filter input").val().toLowerCase();
+                        var brand = data[0].toLowerCase();
+                        var name = data[1].toLowerCase();
+                        var desc = data[2].toLowerCase();
+                        var label = data[3].toLowerCase();
 
-            @using (Html.BeginForm("BulkDestashPolish", "Polish", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <div class="modal fade" id="Destash" role="dialog">
-                    <div class="modal-dialog">
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Destash</h4>
-                            </div>
-                            <div class="modal-body">
-                                <input type="hidden" name="ID" id="destash-ID">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="destash-sellQty">Asking Price*</label>
-                                        <br />
-                                        <input type="number" id="destash-askingPrice" step="0.01" name="AskingPrice" value="0" class="form-control" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="PolishName">Sell Qty*</label>
-                                        <br />
-                                        <input type="number" id="destash-sellQty" name="SellQty" value="1" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="destash-buyerName">Buyer Name</label>
-                                        <br />
-                                        <input type="text" id="destash-buyerName" name="BuyerName" placeholder="Name" class="form-control" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="destash-soldPrice">Sold Price</label>
-                                        <br />
-                                        <input type="number" id="destash-soldPrice" step="0.01" name="AskingPrice" value="0" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="destash-trackingNumber">Tracking</label>
-                                        <br />
-                                        <input type="text" id="destash-trackingNumber" name="TrackingNumber" placeholder="Tracking" class="form-control" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="destash-Status">Status</label>
-                                        <br />
-                                        <select id="destash-status" name="SaleStatus">
-                                            <option></option>
-                                            <option value="P">Pending</option>
-                                            <option value="S">Sold</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="Notes">Notes</label>
-                                        <br />
-                                        <textarea class="form-control" rows="5" id="destash-Notes" name="DestashNotes" placeholder="Notes"></textarea>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="Notes">Internal Notes</label>
-                                        <br />
-                                        <textarea class="form-control" rows="5" id="destash-internalNotes" name="InternalNotes" placeholder="Internal Notes"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <div class="row">
-                                    <div class="col-md-2"><button type="submit" id="Update-Btn" class="btn btn-default margin-top-5">Save</button></div>
-                                    <div class="col-md-8"></div>
-                                    <div class="col-md-2"><button class="btn btn-danger margin-top-5" onclick="$('#Details').modal('hide'); return false;">Close</button></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-            <script>
-                $(document).ready(function () {
-                    /* Custom filtering function to force search to find within the text */
-                    $.fn.dataTable.ext.search.push(
-                        function (settings, data, dataIndex) {
-                            var search = $("#polishtable_filter input").val().toLowerCase();
-                            var brand = data[0].toLowerCase();
-                            var name = data[1].toLowerCase();
-                            var desc = data[2].toLowerCase();
-                            var label = data[3].toLowerCase();
+                        return (brand.indexOf(search) >= 0) ||
+                            (name.indexOf(search) >= 0) ||
+                            //(desc.indexOf(search) >= 0) ||
+                            (label.indexOf(search) >= 0);
+                    }
+                );
 
-                            return (brand.indexOf(search) >= 0) ||
-                                (name.indexOf(search) >= 0) ||
-                                //(desc.indexOf(search) >= 0) ||
-                                (label.indexOf(search) >= 0);
-                        }
-                    );
-
-                    $('#polishtable').dataTable({
-                        "pageLength": 100,
-                        "deferRender": true,
-                        "stateSave": true,
-                        "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
-                        "initComplete": function (settings, json) {
-                            $("#polishtable").show();
-                        }
-                    });
+                $('#polishtable').dataTable({
+                    "pageLength": 100,
+                    "deferRender": true,
+                    "stateSave": true,
+                    "lengthMenu": [[10, 25, 50, 100, 150, 200, -1], [10, 25, 50, 100, 150, 200, "All"]],
+                    "initComplete": function (settings, json) {
+                        $("#polishtable").show();
+                    }
                 });
+            });
 
-                function getDeleteModal(id) {
-                    $("#delete-ID").val(id);
-                    $("#Delete").modal("show");
-                }
-                function Destash(id) {
-                    $("#destash-ID").val(id);
-                    $("#destash-sellQty").val(1);
-                    $("#destash-askingPrice").val(null);
-                    $("#destash-soldPrice").val(null);
-                    $("#destash-trackingNumber").val(null);
-                    $("#destash-status").val(null);
-                    $("#Destash").modal("show");
-                }
-            </script>
-        </div>
+            function getDeleteModal(id) {
+                $("#delete-ID").val(id);
+                $("#Delete").modal("show");
+            }
+            function Destash(id) {
+                $("#destash-ID").val(id);
+                $("#destash-sellQty").val(1);
+                $("#destash-askingPrice").val(null);
+                $("#destash-soldPrice").val(null);
+                $("#destash-trackingNumber").val(null);
+                $("#destash-status").val(null);
+                $("#Destash").modal("show");
+            }
+        </script>
     </div>
 }
 else

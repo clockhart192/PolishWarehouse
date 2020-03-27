@@ -145,6 +145,7 @@
           <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="HasBeenTried" Type="bit" Nullable="false" />
           <Property Name="WasGift" Type="bit" Nullable="false" />
+          <Property Name="Location" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Polishes_AdditionalInfo">
           <Key>
@@ -1055,6 +1056,7 @@
           <NavigationProperty Name="Polishes_DestashInfo" Relationship="PolishWarehouseModel.FK_Polishes_DestashInfo_Polish_ID" FromRole="Polish" ToRole="Polishes_DestashInfo" />
           <NavigationProperty Name="Polishes_AdditionalInfo" Relationship="PolishWarehouseModel.FK_Polishes_AdditionalInfo_Polish_ID" FromRole="Polish" ToRole="Polishes_AdditionalInfo" />
           <NavigationProperty Name="Polishes_Images" Relationship="PolishWarehouseModel.FK_Polishes_Images_Polish_ID" FromRole="Polish" ToRole="Polishes_Images" />
+          <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Polishes_PolishTypes">
           <Key>
@@ -2082,6 +2084,7 @@
           <EntitySetMapping Name="Polishes">
             <EntityTypeMapping TypeName="PolishWarehouseModel.Polish">
               <MappingFragment StoreEntitySet="Polishes">
+                <ScalarProperty Name="Location" ColumnName="Location" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="Coats" ColumnName="Coats" />
                 <ScalarProperty Name="ColorNumber" ColumnName="ColorNumber" />
