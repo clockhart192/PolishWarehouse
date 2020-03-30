@@ -4,6 +4,8 @@
     Dictionary<string, bool> displayConfiguration = ViewBag.DisplayConfiguration;
     ViewBag.Title = "Polish List";
 
+    var polishTypes = ViewBag.PolishTypes;
+
     @Html.Partial("MessageControl")
 
     <div class="row">
@@ -63,7 +65,13 @@
                                         <div class="col-md-6">
                                             <label for="filter">Polish Type</label>
                                             <br />
-                                            <input id="filter-Types" name="Types" class="form-control" />
+                                            <input list="typeList" id="filter-types" name="Types" class="form-control" placeholder="Polish Type">
+                                            <datalist id="typeList">
+                                                @foreach (var type in polishTypes)
+                                                {
+                                                    <option value="@type.Name"></option>
+                                                }
+                                            </datalist>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="filter">Coats</label>
@@ -101,7 +109,7 @@
                                             <br />
                                             <textarea id="filter-Description" name="Description" class="form-control"></textarea>
                                         </div>
-                                        
+
                                     </div>
 
                                     <div class="row">
