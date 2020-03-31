@@ -428,6 +428,7 @@
     <Content Include="Views\Incoming\_PolishLine.cshtml" />
     <Content Include="Views\Incoming\_OtherLine.cshtml" />
     <Content Include="Views\Polish\PrintDetails.cshtml" />
+    <Content Include="Views\Polish\ClearSearch.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -14,6 +14,14 @@ namespace PolishWarehouse.Controllers
         #region Main
         public ActionResult Index(PolishFilterModel model)
         {
+            //Check for session Object
+            if (Session["AdvancedSearch"] != null && (model.isEmpty))
+
+                model = (PolishFilterModel)Session["AdvancedSearch"];
+            else
+                Session["AdvancedSearch"] = model;
+
+            ViewBag.AdvancedSearch = model;
             ViewBag.PrimaryColors = PolishModel.getPrimaryColors().OrderBy(c => c.Name);
             ViewBag.SecondaryColors = PolishModel.getSecondaryColors().OrderBy(c => c.Name);
             ViewBag.GlitterColors = PolishModel.getGlitterColors().OrderBy(c => c.Name);
@@ -44,82 +52,86 @@ namespace PolishWarehouse.Controllers
 
                 }).ToArray();
 
-                ///////////////ADVANED SEARCH SHENANIGANS////////////////////////////
-                if (!string.IsNullOrWhiteSpace(model.PolishName))
+                if (model != null)
                 {
-                    polishes = polishes.Where(polish => polish.PolishName.Contains(model.PolishName)).ToArray();
-                }
-                if (!string.IsNullOrWhiteSpace(model.Description))
-                {
-                    polishes = polishes.Where(polish => polish.Description.Contains(model.Description)).ToArray();
-                }
-                if (model.BrandNames != null && model.BrandNames.Length > 0)
-                {
-                    polishes = polishes.Where(polish => model.BrandNames.Contains(polish.BrandName)).ToArray();
-                }
-                if (model.ColorNames != null && model.ColorNames.Length > 0)
-                {
-                    polishes = polishes.Where(polish => model.ColorNames.Contains(polish.ColorName)).ToArray();
-                }
-                if (!string.IsNullOrWhiteSpace(model.Types))
-                {
-                    var type = PolishModel.getPolishTypes().SingleOrDefault(p => p.Name.Contains(model.Types));
-                    polishes = polishes.Where(polish => polish.Types.Contains(type)).ToArray();
-                }
-                if (!string.IsNullOrWhiteSpace(model.SecondaryColors))
-                {
-                    var color = PolishModel.getSecondaryColors().SingleOrDefault(p => p.Name.Contains(model.SecondaryColors));
-                    polishes = polishes.Where(polish => polish.SecondaryColors.Contains(color)).ToArray();
-                }
-                if (!string.IsNullOrWhiteSpace(model.GlitterColors))
-                {
-                    var color = PolishModel.getGlitterColors().SingleOrDefault(p => p.Name.Contains(model.GlitterColors));
-                    polishes = polishes.Where(polish => polish.GlitterColors.Contains(color)).ToArray();
-                }
-                if (model.ColorNumbers.HasValue)
-                {
-                    polishes = polishes.Where(polish => polish.ColorNumber == model.ColorNumbers.Value).ToArray();
-                }
-                //if (model.Types != null && model.Types.Length > 0)
-                //{
-                //    polishes = polishes.Where(polish => model.Types.Intersect(polish.Types).Any()).ToArray();
-                //}
-                //if (model.SecondaryColors != null && model.SecondaryColors.Length > 0)
-                //{
-                //    polishes = polishes.Where(polish => model.SecondaryColors.Intersect(polish.SecondaryColors).Any()).ToArray();
-                //}
-                //if (model.GlitterColors != null && model.GlitterColors.Length > 0)
-                //{
-                //    polishes = polishes.Where(polish => model.GlitterColors.Intersect(polish.GlitterColors).Any()).ToArray();
-                //}
-                //if (model.ColorNumbers != null && model.ColorNumbers.Length > 0)
-                //{
-                //    polishes = polishes.Where(polish => model.ColorNumbers.Contains(polish.ColorNumber)).ToArray();
-                //}
-                if (model.HasBeenTried.HasValue)
-                {
-                    polishes = polishes.Where(polish => polish.HasBeenTried == model.HasBeenTried.Value).ToArray();
-                }
-                if (model.WasGift.HasValue)
-                {
-                    polishes = polishes.Where(polish => polish.WasGift == model.WasGift.Value).ToArray();
-                }
-                if (model.Coats.HasValue)
-                {
-                    polishes = polishes.Where(polish => polish.Coats == model.Coats.Value).ToArray();
+                    ///////////////ADVANED SEARCH SHENANIGANS////////////////////////////
+                    if (!string.IsNullOrWhiteSpace(model.PolishName))
+                    {
+                        polishes = polishes.Where(polish => polish.PolishName.ToUpperInvariant().Contains(model.PolishName.ToUpperInvariant())).ToArray();
+                    }
+                    if (!string.IsNullOrWhiteSpace(model.Description))
+                    {
+                        polishes = polishes.Where(polish => polish.Description.ToUpperInvariant().Contains(model.Description.ToUpperInvariant())).ToArray();
+                    }
+                    if (model.BrandNames != null && model.BrandNames.Length > 0)
+                    {
+                        polishes = polishes.Where(polish => model.BrandNames.ToUpperInvariant().Contains(polish.BrandName.ToUpperInvariant())).ToArray();
+                    }
+                    if (model.ColorNames != null && model.ColorNames.Length > 0)
+                    {
+                        polishes = polishes.Where(polish => model.ColorNames.ToUpperInvariant().Contains(polish.ColorName.ToUpperInvariant())).ToArray();
+                    }
+                    if (!string.IsNullOrWhiteSpace(model.Types))
+                    {
+                        var type = PolishModel.getPolishTypes().SingleOrDefault(p => p.Name.ToUpperInvariant().Contains(model.Types.ToUpperInvariant()));
+                        polishes = polishes.Where(polish => polish.Types.Contains(type)).ToArray();
+                    }
+                    if (!string.IsNullOrWhiteSpace(model.SecondaryColors))
+                    {
+                        var color = PolishModel.getSecondaryColors().SingleOrDefault(p => p.Name.ToUpperInvariant().Contains(model.SecondaryColors.ToUpperInvariant()));
+                        polishes = polishes.Where(polish => polish.SecondaryColors.Contains(color)).ToArray();
+                    }
+                    if (!string.IsNullOrWhiteSpace(model.GlitterColors))
+                    {
+                        var color = PolishModel.getGlitterColors().SingleOrDefault(p => p.Name.ToUpperInvariant().Contains(model.GlitterColors.ToUpperInvariant()));
+                        polishes = polishes.Where(polish => polish.GlitterColors.Contains(color)).ToArray();
+                    }
+                    if (model.ColorNumbers.HasValue)
+                    {
+                        polishes = polishes.Where(polish => polish.ColorNumber == model.ColorNumbers.Value).ToArray();
+                    }
+                    //if (model.Types != null && model.Types.Length > 0)
+                    //{
+                    //    polishes = polishes.Where(polish => model.Types.Intersect(polish.Types).Any()).ToArray();
+                    //}
+                    //if (model.SecondaryColors != null && model.SecondaryColors.Length > 0)
+                    //{
+                    //    polishes = polishes.Where(polish => model.SecondaryColors.Intersect(polish.SecondaryColors).Any()).ToArray();
+                    //}
+                    //if (model.GlitterColors != null && model.GlitterColors.Length > 0)
+                    //{
+                    //    polishes = polishes.Where(polish => model.GlitterColors.Intersect(polish.GlitterColors).Any()).ToArray();
+                    //}
+                    //if (model.ColorNumbers != null && model.ColorNumbers.Length > 0)
+                    //{
+                    //    polishes = polishes.Where(polish => model.ColorNumbers.Contains(polish.ColorNumber)).ToArray();
+                    //}
+                    if (model.FilterByHasBeenTried)
+                    {
+                        polishes = polishes.Where(polish => polish.HasBeenTried == model.HasBeenTried).ToArray();
+                    }
+                    if (model.FilterByWasGift)
+                    {
+                        polishes = polishes.Where(polish => polish.WasGift == model.WasGift).ToArray();
+                    }
+                    if (model.Coats.HasValue)
+                    {
+                        polishes = polishes.Where(polish => polish.Coats == model.Coats.Value).ToArray();
+                    }
+
+                    polishes = polishes.OrderBy(p => p.BrandName).ThenBy(p => p.PolishName).ToArray();
+                    ///////////////END ADVANED SEARCH SHENANIGANS////////////////////////////
+
+                    //if (cheatCode == "upupdowndownleftrightleftrightbastart")
+                    //{
+                    //    if (Convert.ToBoolean(Utilities.GetConfigurationValue("Konami Code Active")))
+                    //    {
+                    //        Utilities.ReSaveAllImages();
+                    //        TempData["Messages"] = "Konami Code Activated!";
+                    //    }
+                    //}
                 }
 
-                polishes = polishes.OrderBy(p => p.BrandName).ThenBy(p => p.PolishName).ToArray();
-                ///////////////END ADVANED SEARCH SHENANIGANS////////////////////////////
-
-                //if (cheatCode == "upupdowndownleftrightleftrightbastart")
-                //{
-                //    if (Convert.ToBoolean(Utilities.GetConfigurationValue("Konami Code Active")))
-                //    {
-                //        Utilities.ReSaveAllImages();
-                //        TempData["Messages"] = "Konami Code Activated!";
-                //    }
-                //}
 
                 string dispConfig = Utilities.GetConfigurationValue("Private List Display Configuration");
                 var dict = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, bool>>(dispConfig);
@@ -127,6 +139,12 @@ namespace PolishWarehouse.Controllers
 
                 return View(polishes);
             }
+        }
+
+        public ActionResult ClearSearch()
+        {
+            Session["AdvancedSearch"] = null;
+            return RedirectToAction("Index", new PolishFilterModel());
         }
 
         public ActionResult IndexStampingPlates(string cheatCode)

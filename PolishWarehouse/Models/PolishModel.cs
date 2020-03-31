@@ -1348,8 +1348,10 @@ namespace PolishWarehouse.Models
         //public string Label { get; set; }
         public int? Coats { get; set; }
         //public int? Quantity { get; set; }
-        public bool? HasBeenTried { get; set; }
-        public bool? WasGift { get; set; }
+        public bool FilterByHasBeenTried { get; set; } = false;
+        public bool HasBeenTried { get; set; } = false;
+        public bool FilterByWasGift { get; set; } = false;
+        public bool WasGift { get; set; } = false;
         //public string GiftFromName { get; set; }
         //public string Notes { get; set; }
         public string SecondaryColors { get; set; }
@@ -1359,6 +1361,7 @@ namespace PolishWarehouse.Models
         //public int[] GlitterColorsIDs { get; set; }
         //public int[] TypesIDs { get; set; }
         public string Location { get; set; }
+        public bool isEmpty { get; set; } = true;
         //public string LocationPosOne { get; set; }
         //public string LocationPosTwo { get; set; }
     }
