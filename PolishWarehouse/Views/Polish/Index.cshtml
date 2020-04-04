@@ -12,9 +12,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading panel-heading-private">
+                <div  data-toggle="collapse" data-target="#AdvancedSearch" style="cursor:pointer;" class="panel-heading panel-heading-private">
                     <h3>
-                        <a data-toggle="collapse" data-target="#AdvancedSearch" href="#" class="collapsed">Advanced Search</a>
+                        <a href="#" class="collapsed">Advanced Search</a>
                     </h3>
                 </div>
                 <div class="panel-collapse collapse" id="AdvancedSearch">
@@ -26,14 +26,14 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <input type="hidden" name="isEmpty" id="filter-isEmpty" value="false">
-                                            <label for="filter">Polish Name</label>
-                                            <br />
-                                            <input id="filter-PolishName" name="PolishName" class="form-control" value="@advancedSearch.PolishName" />
-                                        </div>
-                                        <div class="col-md-6">
                                             <label for="filter">Brand Name</label>
                                             <br />
                                             <input id="filter-BrandNames" name="BrandNames" class="form-control" value="@advancedSearch.BrandNames" />
+                                        </div>
+                                        <div class="col-md-6">
+										 <label for="filter">Polish Name</label>
+                                            <br />
+                                            <input id="filter-PolishName" name="PolishName" class="form-control" value="@advancedSearch.PolishName" />
                                         </div>
                                     </div>
 
