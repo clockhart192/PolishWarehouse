@@ -28,7 +28,10 @@ namespace PolishWarehouse.Models
         public string Notes { get; set; }
         public Color[] SecondaryColors { get; set; }
         public Color[] GlitterColors { get; set; }
+        public ColorModel[] SecondaryColorModels { get; set; }
+        public ColorModel[] GlitterColorModels { get; set; }
         public PolishType[] Types { get; set; }
+        public PolishTypeModel[] TypeModels { get; set; }
         public int[] SecondaryColorsIDs { get; set; }
         public int[] GlitterColorsIDs { get; set; }
         public int[] TypesIDs { get; set; }

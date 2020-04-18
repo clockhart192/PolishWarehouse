@@ -7,6 +7,8 @@
     var polishTypes = ViewBag.PolishTypes;
     var advancedSearch = ViewBag.AdvancedSearch ?? new PolishWarehouse.Models.PolishFilterModel();
 
+    var startingPos = advancedSearch.isEmpty ? "collapse" : "in";
+
     @Html.Partial("MessageControl")
 
     <div class="row">
@@ -17,7 +19,7 @@
                         <a href="#" class="collapsed">Advanced Search</a>
                     </h3>
                 </div>
-                <div class="panel-collapse collapse" id="AdvancedSearch">
+                <div class='panel-collapse @startingPos' id="AdvancedSearch">
                     <div class="panel-body">
                         <div class="row margin-top-5">
                             <div class="col-md-12">
@@ -67,16 +69,16 @@
                                         <div class="col-md-6">
                                             <label for="filter">Polish Type</label>
                                             <br />
-                                            <input list="typeList" id="filter-types" name="Types" class="form-control" placeholder="Polish Type">
+                                            <input list="typeList" id="filter-types" name="Types" class="form-control" placeholder="Polish Type" value='@(string.IsNullOrWhiteSpace(advancedSearch.Types) ? "" : advancedSearch.Types)'>
                                             <datalist id="typeList">
                                                 @foreach (var type in polishTypes)
                                                 {
                                                     string sel = "";
                                                     if (advancedSearch.Types != null)
                                                     {
-                                                        if (string.IsNullOrWhiteSpace(advancedSearch.Types.Name))
+                                                        if (!string.IsNullOrWhiteSpace(advancedSearch.Types))
                                                         {
-                                                            if (type.Name == advancedSearch.Types.Name)
+                                                            if (type.Name.ToUpperInvariant() == advancedSearch.Types.ToUpperInvariant())
                                                             {
                                                                 sel = "selected";
                                                             }
